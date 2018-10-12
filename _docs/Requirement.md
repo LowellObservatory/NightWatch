@@ -11,3 +11,4 @@ and etc.
 4. *NightWatchman* will display the most recent measurment of seeing as well as a plot of seeing vs time.
 5. *NightWatchman* will display information about which instruments are being used and who is using them.
 6. *NightWatchman* will display science images and guiding image as they arrive from the instruments.
+7. *NightWatchman* will display all sky camera images.
