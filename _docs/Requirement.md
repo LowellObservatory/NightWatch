@@ -5,7 +5,7 @@ to get a quick insight into weather, seeing, instruments being used, facility in
 and etc.
 
 1. *NightWatchman* will display various current satellite maps and radar maps of weather conditions in the region.
-2. *NightWatchman* will display "Facility Summary" information including pointing, target name, time, filters
+2. *NightWatchman* will display "Facility Summary" information including pointing, target name, time, filters,
    guide mode, and perhaps a few warnings like sun distance and dome occultation.
 3. *NightWatchman* will display plots of temperature, humidity, dew point, wind speed, wind gusts, wind direction.
 4. *NightWatchman* will display the most recent measurment of seeing as well as a plot of seeing vs time.
