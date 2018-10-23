@@ -10,3 +10,6 @@
 5. Interactive plots in Django possible using Bokeh with the Bokeh Server.
 
    [examples of Bokeh Server plots](https://bokeh.pydata.org/en/latest/docs/gallery.html)
+
+6. Propose that the resulting product has a 'darker' theme (black/dark background) to
+   not cause additional bright-light-like shine while observing.
