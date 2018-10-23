@@ -7,3 +7,4 @@
 3. Also, there is the possibility that some of the other software developed in the
    future (besides the DOL) will be developed as interactive websites (LOUI replacement, perhaps?).
 4. Propose that we DO build some interactivity into *NightWatchman*, in spite of the requirements.
+5. Interactive plots in Django possible using Bokeh with the Bokeh Server.
