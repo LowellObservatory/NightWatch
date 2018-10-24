@@ -1,4 +1,4 @@
-1. Clearly, the ability to use *NightWatchman* at remote site is important.
+1. Clearly, the ability to use *NightWatch* at remote site is important.
    Perhaps even looking at it with a phone isn't out of the question.
 
 2. The answer to "why do we need this" was "it will make it much easier to monitor this information for all users".
@@ -23,12 +23,12 @@
 
 11. We might want to have a "light" version of the program for users with low bandwith connections to the internet.
 
-12. *NightWatchman* may be useful at the mesa, including the 42" and 31" (or its replacement).
+12. *NightWatch* may be useful at the mesa, including the 42" and 31" (or its replacement).
 
-13. *NightWatchman* should display a video feed from the two dome camera as this will allow users to see if any of
+13. *NightWatch* should display a video feed from the two dome camera as this will allow users to see if any of
     the calibration lamps have been left on.
 
-14. In the warnings section, *NightWatchman* should display any warnings about disk space on the various computers
+14. In the warnings section, *NightWatch* should display any warnings about disk space on the various computers
     getting too full.  There should also be weather warnings.
 
 15. If we can fit everything on one of the screens in the control room at the DCT then the two screens we have
