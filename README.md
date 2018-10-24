@@ -1,4 +1,4 @@
-# NightWatchman
+# NightWatch
 
 ![logo](https://github.com/LowellObservatory/NightWatchman/blob/master/_images/nw_color_400.jpg "Logo")
 
