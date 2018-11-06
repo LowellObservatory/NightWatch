@@ -111,7 +111,7 @@ data['working_day'] = (data['day_of_week'] >= 0) & (data['day_of_week'] <= 4)
 # If there's any rain at all, mark that!
 data['raining'] = data['rain'] > 0.0
 
-#data[['temp', 'humidity', 'wind']].plot()
+# for now, just use matplotlib for the plot, will switch to bokeh.
 ax = plt.gca()
 data.plot(kind='line',x='date',y='temp', ax=ax)
 data.plot(kind='line',x='date',y='humidity', ax=ax)
