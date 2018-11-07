@@ -7,6 +7,11 @@
 3. Also, there is the possibility that some of the other software developed in the
    future (besides the DOL) will be developed as interactive websites (LOUI replacement, perhaps?).
 4. Propose that we DO build some interactivity into *NightWatch*, in spite of the requirements.
+   
+   -  From some of the initial prototypes, itseems evident that it will be necessary
+      to adjust plot limits in-situ rather than deal with hard coded values
+      or zooming in/out until it's ok enough.
+
 5. Interactive plots in Django possible using Bokeh with the Bokeh Server.
 
    [examples of Bokeh Server plots](https://bokeh.pydata.org/en/latest/docs/gallery.html)
