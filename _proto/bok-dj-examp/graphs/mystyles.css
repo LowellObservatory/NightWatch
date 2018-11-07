@@ -1,0 +1,10 @@
+.grid-item {
+  float: left;
+  width: 50px;
+  height: 50px;
+  background: #e6e5e4;
+  border: 2px solid #b6b5b4;
+}
+
+.grid-item--width2 { width: 100px; }
+.grid-item--height2 { height: 100px; }
