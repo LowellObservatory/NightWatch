@@ -6,3 +6,7 @@ Download the files into a directory called "ohlc".  Then run "bokeh serve --show
 of "ohlc" and a browser window or new tab will pop up and will be showing a continuously updateing graph containing
 fake random data.
 
+If we want to make this graph available to the Django webserver for embedding into a web page we have to allow
+websocket connection from Django.  This is done by starting the server like this:
+
+bokeh  serve ohlc/ --allow-websocket-origin=127.0.0.1:8000
