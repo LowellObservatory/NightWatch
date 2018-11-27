@@ -8,4 +8,5 @@ The files are named bishop00001.jpg and etc.
 
 "showImage.html" is a very small web page that displays the above mentioned "updateMovie.gif" and updates itself every 60
 seconds to grab the new movie.  There is some code in there to fool the web browsers so they don't just reload the cached
-image.
+image. (When the web page is first loaded, it displays the most recent image from a web cam in ocean beach, CA, but soon
+updates to the most recent Bishop animated GIF.)
