@@ -106,3 +106,6 @@ venv.bak/
 
 # vscode/dev personalizations
 .vscode/
+
+# Specific sensitive files
+dbconn.conf
