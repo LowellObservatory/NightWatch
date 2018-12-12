@@ -27,7 +27,7 @@ from bokeh.plotting import figure, output_file, save, ColumnDataSource
 def commonPlot(r, figlabels):
     """
     """
-    tools = "pan, wheel_zoom, box_zoom, crosshair, reset"
+    tools = "pan, wheel_zoom, box_zoom, crosshair, reset, save"
 
     if figlabels is not None:
         title = figlabels[0]
@@ -74,6 +74,8 @@ def makePatches(r, y1lim):
 def plotLineWithPoints(p, cds, sname, slabel, color,
                        hcolor=None, yrname=None):
     """
+    Assumes that you have both 'index' and sname as columns in your
+    ColumnDataSource! slabel is then used for the Legend and tooltip labels.
     """
     # NOTE: The way my polling code is set up, mode='after' is the correct
     #   step mode since I get the result and then sleep for an interval
@@ -145,8 +147,8 @@ def makeInstTempPlot(r, outfile, themefile, cwheel,
 
     ht = HoverTool()
     ht.tooltips = [("Time", "@index{%F %T}"),
-                   ("T1", "@T1"),
-                   ("T2", "@T2")]
+                   (y1label, "@T1"),
+                   (y2label, "@T2")]
     ht.formatters = {'index': 'datetime'}
     ht.show_arrow = False
     ht.point_policy = 'follow_mouse'

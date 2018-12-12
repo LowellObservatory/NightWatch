@@ -68,10 +68,15 @@ def queryConstructor(dbinfo, dtime=48):
 
         # Same for tags, if any
         tn = dbinfo['tagn'].strip()
-        tv = dbinfo['tagv'].split(',')
+        if tn.lower() == "none":
+            tn = None
+            tv = []
+        if tn is not None:
+            tv = dbinfo['tagv'].split(',')
+            # Cleanup a little more
+            tv = [each.strip() for each in tv]
 
-        # Cleanup
-        tv = [each.strip() for each in tv]
+        # Final cleanup
         f = [each.strip() for each in f]
 
         # TODO: Someone should write a query validator to make sure
@@ -101,31 +106,35 @@ def queryConstructor(dbinfo, dtime=48):
         return query, f
 
 
-def getInstTempsDataFrame(host, querystr, port=8086,
-                          dbuser='rand', dbpass='pass',
-                          dbname='DBname'):
+def getResultsDataFrame(host, querystr, port=8086,
+                        dbuser='rand', dbpass='pass',
+                        dbname='DBname'):
     """
+    Attempts to distinguish queries that have results grouped by a tag
+    vs. those which are just of multiple fields. May be buggy still.
     """
     print(querystr)
 
     idfc = DataFrameClient(host, port, dbuser, dbpass, dbname)
 
-    # results = idfc.query(q1)
     results = idfc.query(querystr)
 
     betterResults = {}
-    betterCols = {}
     # results is a dict of dataframes, but it's a goddamn mess. Clean it up.
     for rkey in results.keys():
-        # rkey is now a tuple of the metric name and the tag + value pair
-        #
-        # Someone tell me again why Pandas is so great?
-        #   I suppose it could be jankiness in influxdb-python?
-        #   This magic 'tval' line below is seriously dumb though.
-        #
-        tval = rkey[1][0][1]
-        dat = results[rkey]
-        betterResults.update({tval: dat})
+        # If you had a tag that you "GROUP BY" in the query, you'll now have
+        #   a tuple of the metric name and the tag + value pair. If you had
+        #   no tag to group by, you'll have just the flat result.
+        if isinstance(rkey, tuple):
+            # Someone tell me again why Pandas is so great?
+            #   I suppose it could be jankiness in influxdb-python?
+            #   This magic 'tval' line below is seriously dumb though.
+            tval = rkey[1][0][1]
+            dat = results[rkey]
+            betterResults.update({tval: dat})
+        elif isinstance(rkey, str):
+            dat = results[rkey]
+            betterResults.update({rkey: dat})
 
     # This is at least a little better
     return betterResults
@@ -134,6 +143,7 @@ def getInstTempsDataFrame(host, querystr, port=8086,
 if __name__ == '__main__':
     conffile = './dbconn.conf'
     dbconfig = parseConfFile(conffile)
+    qrange = 36
 
     themefile = "./bokeh_dark_theme.yml"
 
@@ -141,32 +151,42 @@ if __name__ == '__main__':
 
     # Could easily be looped here
     tdb = dbconfig['insttemps']
-    q, flds = queryConstructor(tdb, dtime=24)
+    tq, flds = queryConstructor(tdb, dtime=qrange)
 
-    r = getInstTempsDataFrame(tdb['host'], q,
-                              port=tdb['port'],
-                              dbuser=tdb['user'],
-                              dbpass=tdb['pasw'],
-                              dbname=tdb['dnme'])
+    td = getResultsDataFrame(tdb['host'], tq,
+                             port=tdb['port'],
+                             dbuser=tdb['user'],
+                             dbpass=tdb['pasw'],
+                             dbname=tdb['dnme'])
 
     # Cycle thru the different tag values
-    for rkey in r.keys():
-        outfile = "./junk_%s.html" % (rkey)
+    for key in td.keys():
+        outfile = "./junk_%s.html" % (key)
 
-        print("Plotting for %s" % (rkey))
-        ptitle = "%s Temperatures" % (rkey)
+        print("Plotting for %s" % (key))
+        ptitle = "%s Temperatures" % (key)
         figlabels = [ptitle,
                      'Time (UTC)',
-                     'CCD Temp (C)',
-                     'Aux Temp (C)']
+                     'CCD Temp',
+                     'Aux Temp']
 
-        if rkey == "deveny":
+        if key == "deveny":
             y1range = [-115, -105]
             y2range = [-10, 30]
-        if rkey == "lemi":
+        if key == "lemi":
             y1range = [-125, -115]
             y2range = [-10, 40]
 
-        bplot.makeInstTempPlot(r[rkey], outfile, themefile, dset,
+        bplot.makeInstTempPlot(td[key], outfile, themefile, dset,
                                y1lim=y1range, y2lim=y2range,
                                figlabels=figlabels)
+
+    wdb = dbconfig['weather']
+    wq, wflds = queryConstructor(wdb, dtime=qrange)
+    wd = getResultsDataFrame(wdb['host'], wq,
+                             port=wdb['port'],
+                             dbuser=wdb['user'],
+                             dbpass=wdb['pasw'],
+                             dbname=wdb['dnme'])
+
+    print()
