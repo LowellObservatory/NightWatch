@@ -28,3 +28,5 @@ attrs:
         dimensions: 'height'
         line_color: '#E24D42'
         line_alpha: 0.75
+    BoxZoomTool:
+        dimensions: 'width'
