@@ -161,3 +161,67 @@ def makeInstTempPlot(r, outfile, themefile, cwheel,
     save(p)
 
     print("Bokeh plot saved as %s" % (outfile))
+
+
+def makeWeatherPlots(r, outfile, themefile, cwheel,
+                     figlabels=None, y1lim=None, y2lim=None):
+    """
+    """
+    output_file(outfile)
+    theme = Theme(filename=themefile)
+
+    p, title, xlabel, y1label, y2label = commonPlot(r, figlabels)
+
+    if y1lim is None:
+        y1lim = [r.airTemp_C.values.min, r.airTemp_C.values.max]
+    p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
+
+    if y2lim is None:
+        y2lim = [r.relativeHumidity.values.min, r.relativeHumidity.values.max]
+    p.extra_y_ranges = {"humidity": Range1d(start=y2lim[0],
+                                            end=y2lim[1])}
+    p.add_layout(LinearAxis(y_range_name="humidity",
+                            axis_label=y2label), 'right')
+
+    # Hack! But it works. Need to do this *before* you create cds below!
+    ix, iy = makePatches(r, y1lim)
+
+    # The "master" data source to be used for plotting
+    mds = dict(index=r.index, Temp=r.airTemp_C, Humi=r.relativeHumidity,
+               ix=ix, iy=iy)
+    cds = ColumnDataSource(mds)
+
+    # Make the plots/lines!
+    l1, s1 = plotLineWithPoints(p, cds, "Temp", y1label, cwheel[0])
+    l2, s2 = plotLineWithPoints(p, cds, "Humi", y2label, cwheel[1],
+                                yrname="humidity")
+
+    # HACK HACK HACK HACK HACK
+    #   Apply the patches to carry the tooltips
+    simg = p.patches('ix', 'iy', source=cds,
+                     fill_color=None,
+                     fill_alpha=0.0,
+                     line_color=None)
+
+    # Make the hovertool only follow this line (bit of a hack)
+    htline = simg
+
+    # Customize the active tools
+    p.toolbar.autohide = True
+
+    ht = HoverTool()
+    ht.tooltips = [("Time", "@index{%F %T}"),
+                   (y1label, "@Temp"),
+                   (y2label, "@Humi")]
+    ht.formatters = {'index': 'datetime'}
+    ht.show_arrow = False
+    ht.point_policy = 'follow_mouse'
+    ht.line_policy = 'nearest'
+    ht.renderers = [htline]
+    p.add_tools(ht)
+
+    # Actually apply the theme to the panel
+    curdoc().theme = theme
+    save(p)
+
+    print("Bokeh plot saved as %s" % (outfile))

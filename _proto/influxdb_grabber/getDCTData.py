@@ -133,8 +133,7 @@ def getResultsDataFrame(host, querystr, port=8086,
             dat = results[rkey]
             betterResults.update({tval: dat})
         elif isinstance(rkey, str):
-            dat = results[rkey]
-            betterResults.update({rkey: dat})
+            betterResults = results[rkey]
 
     # This is at least a little better
     return betterResults
@@ -189,4 +188,14 @@ if __name__ == '__main__':
                              dbpass=wdb['pasw'],
                              dbname=wdb['dnme'])
 
+    outfile = "./junk_weather.html"
+    y1range = [-15, 15]
+    y2range = [0, 100]
+    figlabels = ["WRS Weather Information",
+                 'Time (UTC)',
+                 'Temperature',
+                 'Humidity']
+    bplot.makeWeatherPlots(wd, outfile, themefile, dset,
+                           y1lim=y1range, y2lim=y2range,
+                           figlabels=figlabels)
     print()
