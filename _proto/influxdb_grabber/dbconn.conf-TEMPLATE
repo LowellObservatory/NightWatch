@@ -7,4 +7,5 @@ pasw = readOnlyUserPassword
 dnme = YourSpecificDatabaseName
 mnme = YourSpecificMetricName
 flds = MetricField, CanBeMultiple
-tags = MetricTag, CanBeMultiple
+tagn = MetricTag
+tagv = TagValue1, TagValue2

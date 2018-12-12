@@ -24,8 +24,8 @@ from influxdb.exceptions import InfluxDBClientError
 
 from ligmos import utils
 
-import mplPlot as mplplot
 import bokehPlot as bplot
+import colorWheelies as cwheels
 
 
 def parseConfFile(filename):
@@ -127,9 +127,6 @@ def getInstTempsDataFrame(host, querystr, port=8086,
         dat = results[rkey]
         betterResults.update({tval: dat})
 
-    # results = pd.concat(results, axis=1)
-    # cols = results.columns.droplevel()
-
     # This is at least a little better
     return betterResults
 
@@ -140,9 +137,11 @@ if __name__ == '__main__':
 
     themefile = "./bokeh_dark_theme.yml"
 
+    dset, sset = cwheels.getColors()
+
     # Could easily be looped here
     tdb = dbconfig['insttemps']
-    q, flds = queryConstructor(tdb)
+    q, flds = queryConstructor(tdb, dtime=24)
 
     r = getInstTempsDataFrame(tdb['host'], q,
                               port=tdb['port'],
@@ -161,9 +160,13 @@ if __name__ == '__main__':
                      'CCD Temp (C)',
                      'Aux Temp (C)']
 
-        y1range = [-115, -105]
-        y2range = [-10, 30]
+        if rkey == "deveny":
+            y1range = [-115, -105]
+            y2range = [-10, 30]
+        if rkey == "lemi":
+            y1range = [-125, -115]
+            y2range = [-10, 40]
 
-        bplot.makeInstTempPlot(r[rkey], outfile, themefile,
+        bplot.makeInstTempPlot(r[rkey], outfile, themefile, dset,
                                y1lim=y1range, y2lim=y2range,
                                figlabels=figlabels)
