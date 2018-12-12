@@ -110,9 +110,6 @@ def getInstTempsDataFrame(host, querystr, port=8086,
 
     idfc = DataFrameClient(host, port, dbuser, dbpass, dbname)
 
-    q1 = """SELECT "T1", "T2" FROM "InstrumentTelemetry" """
-    q1 += """WHERE ("name" = 'deveny') AND (time > now() - 48h)"""
-
     # results = idfc.query(q1)
     results = idfc.query(querystr)
 
