@@ -1,0 +1,13 @@
+[module1]
+title = Module1 Title
+queries = q_shouldMatch_dbqueriesTags, can_be_multiples
+qrange = 24
+pymodule = pythonFunctionNameThatDoesTheWork
+enabled = True
+
+[module2]
+title = Module2 Title
+queries = q_shouldMatch_dbqueriesTags, can_be_multiples
+qrange = 24
+pymodule = pythonFunctionNameThatDoesTheWork
+enabled = False

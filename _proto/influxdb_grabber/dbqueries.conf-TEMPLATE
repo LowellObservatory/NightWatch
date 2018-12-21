@@ -1,0 +1,25 @@
+[database-influx]
+host = hostname
+port = 8086
+type = influxdb
+tabl = dbTableName
+user = dbusername
+pasw = dbpassword
+
+
+[q_name1]
+db = database-influx
+mn = Metric1.Name
+fn = fieldName1, fieldName2, fieldName3
+dl = fieldName1DataLabel, fieldName2DataLabel, fieldName3DataLabel
+tn = None
+tv = None
+
+
+[q_name2]
+db = database-influx
+mn = Metric2.Name
+fn = fieldName1, fieldName2
+dn = fieldName1DataLabel, fieldName2DataLabel
+tn = tagName
+tv = tagValue1, tagValue2

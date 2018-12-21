@@ -109,3 +109,5 @@ venv.bak/
 
 # Specific sensitive files
 dbconn.conf
+modules.conf
+dbqueries.conf
