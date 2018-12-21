@@ -83,13 +83,13 @@ def plotLineWithPoints(p, cds, sname, slabel, color,
         hcolor = '#E24D42'
 
     if yrname is None:
-        l = p.step('index', sname, line_width=1, source=cds, mode='after',
+        l = p.step('index', sname, line_width=2, source=cds, mode='after',
                    color=color, legend=slabel, name=slabel)
         s = p.scatter('index', sname, size=8, source=cds,
                       color=color, legend=slabel, name=slabel,
                       alpha=0., hover_alpha=1., hover_color=hcolor)
     else:
-        l = p.step('index', sname, line_width=1, source=cds, mode='after',
+        l = p.step('index', sname, line_width=2, source=cds, mode='after',
                    y_range_name=yrname,
                    color=color, legend=slabel, name=slabel)
         s = p.scatter('index', sname, size=8, source=cds,
@@ -188,12 +188,13 @@ def makeWeatherPlots(r, outfile, themefile, cwheel,
 
     # The "master" data source to be used for plotting
     mds = dict(index=r.index, Temp=r.airTemp_C, Humi=r.relativeHumidity,
-               ix=ix, iy=iy)
+               Dewp=r.dewPointCurrentValue, ix=ix, iy=iy)
     cds = ColumnDataSource(mds)
 
     # Make the plots/lines!
     l1, s1 = plotLineWithPoints(p, cds, "Temp", y1label, cwheel[0])
-    l2, s2 = plotLineWithPoints(p, cds, "Humi", y2label, cwheel[1],
+    l2, s2 = plotLineWithPoints(p, cds, "Dewp", y1label, cwheel[1])
+    l3, s3 = plotLineWithPoints(p, cds, "Humi", y2label, cwheel[2],
                                 yrname="humidity")
 
     # HACK HACK HACK HACK HACK
@@ -211,8 +212,10 @@ def makeWeatherPlots(r, outfile, themefile, cwheel,
 
     ht = HoverTool()
     ht.tooltips = [("Time", "@index{%F %T}"),
-                   (y1label, "@Temp"),
-                   (y2label, "@Humi")]
+                   ("AirTemp", "@Temp C"),
+                   ("Humidity", "@Humi %"),
+                   ("DewPoint", "@Dewp C")
+                   ]
     ht.formatters = {'index': 'datetime'}
     ht.show_arrow = False
     ht.point_policy = 'follow_mouse'

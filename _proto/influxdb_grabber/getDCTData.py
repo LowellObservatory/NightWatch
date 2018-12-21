@@ -15,8 +15,6 @@ Further description.
 
 from __future__ import division, print_function, absolute_import
 
-import configparser as conf
-
 import numpy as np
 import pandas as pd
 from influxdb import DataFrameClient
@@ -26,26 +24,6 @@ from ligmos import utils
 
 import bokehPlot as bplot
 import colorWheelies as cwheels
-
-
-def parseConfFile(filename):
-    """
-    """
-    try:
-        config = conf.SafeConfigParser()
-        config.read_file(open(filename, 'r'))
-    except IOError as err:
-        config = None
-        print(str(err))
-        return config
-
-    sections = config.sections()
-    tsections = ' '.join(sections)
-
-    print("Found the following sections in the configuration file:")
-    print("%s\n" % tsections)
-
-    return config
 
 
 def queryConstructor(dbinfo, dtime=48):
@@ -193,8 +171,8 @@ if __name__ == '__main__':
     y2range = [0, 100]
     figlabels = ["WRS Weather Information",
                  'Time (UTC)',
-                 'Temperature',
-                 'Humidity']
+                 'Temperature (C)',
+                 'Humidity (%)']
     bplot.makeWeatherPlots(wd, outfile, themefile, dset,
                            y1lim=y1range, y2lim=y2range,
                            figlabels=figlabels)
