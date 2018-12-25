@@ -23,8 +23,15 @@ class moduleConfig():
         self.qrange = 1.
         self.pymodule = None
 
-    def assignConf(self, conf):
-        pass
+    def combineConfs(self, queries):
+        qdict = {}
+        for q in self.queries:
+            try:
+                qdict.update({q: queries[q]})
+            except KeyError:
+                print("Query %s is undefined! Skipping it..." % (q))
+
+        self.queries = qdict
 
 
 class databaseConfig():
@@ -46,8 +53,32 @@ class databaseQuery():
         self.tn = None
         self.tv = None
 
-    def assignConf(self, conf):
-        pass
+
+def assignConf(obj, conf):
+    for key in obj.__dict__:
+        try:
+            kval = conf[key]
+            kval = kval.strip().split(",")
+            kval = [kv.strip() for kv in kval]
+
+            # kval is now definitely a list
+            nkval = []
+            for val in kval:
+                if val.lower() == "none":
+                    nkval.append(None)
+                else:
+                    nkval.append(val)
+
+            # If there's just one object then return it flat
+            if len(nkval) == 1:
+                nkval = nkval[0]
+            setattr(obj, key, nkval)
+        except KeyError:
+            print("Improper config!")
+            print("Missing key %s" % (key))
+            setattr(obj, key, None)
+
+    return obj
 
 
 def parseConfFile(filename, enableCheck=True):
@@ -90,53 +121,50 @@ def checkEnabled(conf):
     return enset
 
 
+def alignDBConfig(queries):
+    """
+    """
+    dbs = {}
+    vqs = {}
+    for sec in queries:
+        if sec.lower().startswith("database-"):
+            idb = assignConf(databaseConfig(), queries[sec])
+            dbs.update({sec: idb})
+        elif sec.lower() != 'default':
+            dbq = assignConf(databaseQuery(), queries[sec])
+            try:
+                dbkey = queries[sec]['db']
+                dbq.db = dbs[dbkey]
+            except AttributeError:
+                print("FATAL ERROR: database %s not specified!" % (dbkey))
+                dbq = None
+            vqs.update({sec: dbq})
+
+    return vqs
+
+
 def groupConfFiles(queries, modules):
     """
     """
     loopableSet = []
     allQueries = []
     for sect in modules.keys():
-        mod = moduleConfig()
-        # Loop over all the defined properies in the class that we'll carry
-        #   This means that stuff in the conf. files but NOT in the class
-        #   will be ignored! Beware.
-        for prop in mod.__dict__:
-            try:
-                setattr(mod, prop, modules[sect][prop])
-            except AttributeError:
-                print("Attribute %s not found for %s!" % (prop, sect))
+        # Parse the conf file section
+        mod = assignConf(moduleConfig(), modules[sect])
 
-        # Now check that the queries defined actually exist and clean
-        #   those up into something more usable
-        qlist = [each.strip() for each in mod.queries.split(",")]
+        # Assign the query objects to the module class now
+        mod.combineConfs(queries)
 
-        # Do this as an explicit loop since we can better warn/scream
-        #   Set up each specified database query
-        vq = []
-        for q in qlist:
-            query = databaseQuery()
-            for qprop in query.__dict__:
-                try:
-                    setattr(query, qprop, queries[q][qprop])
-                except AttributeError:
-                    print("ERROR: %s undefined for query %s!" % (qprop, q))
-                    print("Aborting query.")
-                    query = None
-
-            if query is None:
-                print("Bad query defined! '%s' not found." % (q))
-                print("Module %s (%s) is now disabled!" % (mod.title, sect))
-                mod = None
-                break
-            else:
-                vq.append(query)
+        # Sanity checks
+        if mod.queries == {}:
+            # This means we didn't find any valid queries so we'll skip
+            #   the module entirely so we don't crash out
+            mod = None
 
         # Did we survive?
         if mod is not None:
-            mod.queries = qlist
             loopableSet.append(mod)
-            allQueries += vq
-
+            allQueries += mod.queries.values()
 
     return loopableSet, set(allQueries)
 
@@ -148,14 +176,13 @@ if __name__ == "__main__":
     # Parse the text file
     qs = parseConfFile(qconff, enableCheck=False)
 
-    # Now associate the database connection info with each query so it can
-    #   be more easily looped and itterated
-    # qs = alignDBConfig(qs)
+    # Associate the database queries with the proper database connection class
+    qs = alignDBConfig(qs)
 
     # Parse the text file and check if any sections are disabled
     ms = parseConfFile(mconff, enableCheck=True)
 
-    # Associate the database queries with the module definitions
+    # Now combine the moduels and queries into stuff we can itterate over
     modules, queries = groupConfFiles(qs, ms)
 
     # 'modules' is now a list of moduleConfig objects. If any of the entries
@@ -164,4 +191,7 @@ if __name__ == "__main__":
     # 'queries' is a list of all the active database sections associated
     #   with the individual modules. It's technically a set, so no dupes.
     print(modules)
-    print([q.mn for q in queries])
+    print([q.fn for q in queries])
+
+    # Now we're ready for an actual loop! Do the queries, then the modules.
+    pass
