@@ -63,13 +63,20 @@ def queryConstructor(dbinfo, dtime=48, debug=False):
         query = 'SELECT'
         if isinstance(dbinfo.fn, list):
             for i, each in enumerate(dbinfo.fn):
-                query += ' "%s"' % (each.strip())
+                # Catch possible fn/dn mismatch
+                try:
+                    query += ' "%s" AS "%s"' % (each.strip(), dbinfo.dn[i])
+                except IndexError:
+                    query += ' "%s"' % (each.strip())
                 if i != len(dbinfo.fn)-1:
                     query += ','
                 else:
                     query += ' '
         else:
-            query += ' "%s" ' % (dbinfo.fn)
+            if dbinfo.dn is not None:
+                query += ' "%s" AS "%s" ' % (dbinfo.fn, dbinfo.dn)
+            else:
+                query += ' "%s" ' % (dbinfo.fn)
 
         query += 'FROM "%s"' % (dbinfo.mn)
         query += ' WHERE time > now() - %02dh' % (dtime)
@@ -93,7 +100,7 @@ def queryConstructor(dbinfo, dtime=48, debug=False):
 
 def getResultsDataFrame(host, querystr, port=8086,
                         dbuser='rand', dbpass='pass',
-                        dbname='DBname'):
+                        dbname='DBname', datanames=None):
     """
     Attempts to distinguish queries that have results grouped by a tag
     vs. those which are just of multiple fields. May be buggy still.
