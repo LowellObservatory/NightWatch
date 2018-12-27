@@ -50,7 +50,6 @@ def main(qconff, mconff, theme='dark'):
                                      datanames=q.dn)
         qdata.update({iq: td})
 
-    print()
     print("%d queries complete!" % (len(qdata)))
 
     # Cycle thru each module and generate it
@@ -63,10 +62,13 @@ def main(qconff, mconff, theme='dark'):
             pdata.update({qtag: qdata[qtag]})
 
         # A neat party trick:
-        #   Grab the actual function reference from the bplot module by
-        #   getting the specified named attribute. Then we can call
+        #   Grab the actual function reference by getting the named
+        #   attribute of an import (bplot). Then we can call
         #   'thingLonger' with the args to actually do it.
-        thingLonger = getattr(bplot, m.pymodule)
+        try:
+            thingLonger = getattr(bplot, m.pymodule)
+        except AttributeError:
+            print("FATAL ERROR: Module %s not found!" % (m.pymodule))
         print()
 
     # # Cycle thru the different tag values
