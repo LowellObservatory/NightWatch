@@ -24,18 +24,14 @@ from bokeh.models.formatters import DatetimeTickFormatter
 from bokeh.plotting import figure, output_file, save, ColumnDataSource
 
 
-def commonPlot(r, figlabels):
+def commonPlot(r, ldict):
     """
     """
     tools = "pan, wheel_zoom, box_zoom, crosshair, reset, save"
 
-    if figlabels is not None:
-        title = figlabels[0]
-        xlabel = figlabels[1]
-        y1label = figlabels[2]
-        y2label = figlabels[3]
-    else:
-        title, xlabel, y1label, y2label = '', '', '', ''
+    title = ldict['title']
+    xlabel = ldict['xlabel']
+    y1label = ldict['y1label']
 
     p = figure(title=title, x_axis_type='datetime',
                x_axis_label=xlabel, y_axis_label=y1label,
@@ -44,7 +40,7 @@ def commonPlot(r, figlabels):
     # Make the x-range the maximum data time span to start
     p.x_range = Range1d(start=r.index[0], end=r.index[-1])
 
-    return p, title, xlabel, y1label, y2label
+    return p
 
 
 def makePatches(r, y1lim):
@@ -100,102 +96,111 @@ def plotLineWithPoints(p, cds, sname, slabel, color,
     return l, s
 
 
-def makeInstTempPlot(r, outfile, themefile, cwheel,
-                     figlabels=None, y1lim=None, y2lim=None):
+# def makeInstTempPlot(r, outfile, themefile, cwheel,
+#                      figlabels=None, y1lim=None, y2lim=None):
+#     """
+#     """
+#     output_file(outfile)
+#     theme = Theme(filename=themefile)
+
+#     p, title, xlabel, y1label, y2label = commonPlot(r, figlabels)
+
+#     if y1lim is None:
+#         y1lim = [r.T1.values.min, r.T1.values.max]
+#     p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
+
+#     if y2lim is None:
+#         y2lim = [r.T2.values.min, r.T2.values.max]
+#     p.extra_y_ranges = {"externalTemps": Range1d(start=y2lim[0],
+#                                                  end=y2lim[1])}
+#     p.add_layout(LinearAxis(y_range_name="externalTemps",
+#                             axis_label=y2label), 'right')
+
+#     # Hack! But it works. Need to do this *before* you create cds below!
+#     ix, iy = makePatches(r, y1lim)
+
+#     # The "master" data source to be used for plotting
+#     mds = dict(index=r.index, T1=r.T1, T2=r.T2, ix=ix, iy=iy)
+#     cds = ColumnDataSource(mds)
+
+#     # Make the plots/lines!
+#     l1, s1 = plotLineWithPoints(p, cds, "T1", y1label, cwheel[0])
+#     l2, s2 = plotLineWithPoints(p, cds, "T2", y2label, cwheel[1],
+#                                 yrname="externalTemps")
+
+#     # HACK HACK HACK HACK HACK
+#     #   Apply the patches to carry the tooltips
+#     simg = p.patches('ix', 'iy', source=cds,
+#                      fill_color=None,
+#                      fill_alpha=0.0,
+#                      line_color=None)
+
+#     # Make the hovertool only follow this line (bit of a hack)
+#     htline = simg
+
+#     # Customize the active tools
+#     p.toolbar.autohide = True
+
+#     ht = HoverTool()
+#     ht.tooltips = [("Time", "@index{%F %T}"),
+#                    (y1label, "@T1"),
+#                    (y2label, "@T2")]
+#     ht.formatters = {'index': 'datetime'}
+#     ht.show_arrow = False
+#     ht.point_policy = 'follow_mouse'
+#     ht.line_policy = 'nearest'
+#     ht.renderers = [htline]
+#     p.add_tools(ht)
+
+#     # Actually apply the theme to the panel
+#     curdoc().theme = theme
+#     save(p)
+
+#     print("Bokeh plot saved as %s" % (outfile))
+
+
+def makeWeatherPlots(indat, outfile, themefile, cwheel):
     """
     """
+
+    y1lim = [-15, 15]
+    y2lim = [0, 100]
+
+    # Get the keys that define the input dataset
+    r = indat['q_wrs']
     output_file(outfile)
     theme = Theme(filename=themefile)
 
-    p, title, xlabel, y1label, y2label = commonPlot(r, figlabels)
+    ldict = {'title': "WRS Weather Information",
+             'xlabel': "Time (UTC)",
+             'y1label': "Temperature (C)",
+             'y2label': "Humidity (%)"}
+
+    p = commonPlot(r, ldict)
 
     if y1lim is None:
-        y1lim = [r.T1.values.min, r.T1.values.max]
+        y1lim = [r.AirTemp.values.min, r.AirTemp.values.max]
     p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
 
     if y2lim is None:
-        y2lim = [r.T2.values.min, r.T2.values.max]
-    p.extra_y_ranges = {"externalTemps": Range1d(start=y2lim[0],
-                                                 end=y2lim[1])}
-    p.add_layout(LinearAxis(y_range_name="externalTemps",
-                            axis_label=y2label), 'right')
-
-    # Hack! But it works. Need to do this *before* you create cds below!
-    ix, iy = makePatches(r, y1lim)
-
-    # The "master" data source to be used for plotting
-    mds = dict(index=r.index, T1=r.T1, T2=r.T2, ix=ix, iy=iy)
-    cds = ColumnDataSource(mds)
-
-    # Make the plots/lines!
-    l1, s1 = plotLineWithPoints(p, cds, "T1", y1label, cwheel[0])
-    l2, s2 = plotLineWithPoints(p, cds, "T2", y2label, cwheel[1],
-                                yrname="externalTemps")
-
-    # HACK HACK HACK HACK HACK
-    #   Apply the patches to carry the tooltips
-    simg = p.patches('ix', 'iy', source=cds,
-                     fill_color=None,
-                     fill_alpha=0.0,
-                     line_color=None)
-
-    # Make the hovertool only follow this line (bit of a hack)
-    htline = simg
-
-    # Customize the active tools
-    p.toolbar.autohide = True
-
-    ht = HoverTool()
-    ht.tooltips = [("Time", "@index{%F %T}"),
-                   (y1label, "@T1"),
-                   (y2label, "@T2")]
-    ht.formatters = {'index': 'datetime'}
-    ht.show_arrow = False
-    ht.point_policy = 'follow_mouse'
-    ht.line_policy = 'nearest'
-    ht.renderers = [htline]
-    p.add_tools(ht)
-
-    # Actually apply the theme to the panel
-    curdoc().theme = theme
-    save(p)
-
-    print("Bokeh plot saved as %s" % (outfile))
-
-
-def makeWeatherPlots(r, outfile, themefile, cwheel,
-                     figlabels=None, y1lim=None, y2lim=None):
-    """
-    """
-    output_file(outfile)
-    theme = Theme(filename=themefile)
-
-    p, title, xlabel, y1label, y2label = commonPlot(r, figlabels)
-
-    if y1lim is None:
-        y1lim = [r.airTemp_C.values.min, r.airTemp_C.values.max]
-    p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
-
-    if y2lim is None:
-        y2lim = [r.relativeHumidity.values.min, r.relativeHumidity.values.max]
-    p.extra_y_ranges = {"humidity": Range1d(start=y2lim[0],
-                                            end=y2lim[1])}
+        y2lim = [r.Humidity.values.min, r.Humidity.values.max]
+    p.extra_y_ranges = {"humidity": Range1d(start=y2lim[0], end=y2lim[1])}
     p.add_layout(LinearAxis(y_range_name="humidity",
-                            axis_label=y2label), 'right')
+                            axis_label=ldict['y2label']), 'right')
 
     # Hack! But it works. Need to do this *before* you create cds below!
     ix, iy = makePatches(r, y1lim)
 
     # The "master" data source to be used for plotting
-    mds = dict(index=r.index, Temp=r.airTemp_C, Humi=r.relativeHumidity,
-               Dewp=r.dewPointCurrentValue, ix=ix, iy=iy)
+    mds = dict(index=r.index, AirTemp=r.AirTemp, Humidity=r.Humidity,
+               DewPoint=r.DewPoint, ix=ix, iy=iy)
     cds = ColumnDataSource(mds)
 
     # Make the plots/lines!
-    l1, s1 = plotLineWithPoints(p, cds, "Temp", y1label, cwheel[0])
-    l2, s2 = plotLineWithPoints(p, cds, "Dewp", y1label, cwheel[1])
-    l3, s3 = plotLineWithPoints(p, cds, "Humi", y2label, cwheel[2],
-                                yrname="humidity")
+    plotLineWithPoints(p, cds, "AirTemp", ldict['y1label'], cwheel[0])
+    plotLineWithPoints(p, cds, "DewPoint", ldict['y1label'], cwheel[1])
+    plotLineWithPoints(p, cds, "Humidity", ldict['y2label'], cwheel[2],
+                       yrname="humidity")
 
     # HACK HACK HACK HACK HACK
     #   Apply the patches to carry the tooltips
@@ -204,7 +209,7 @@ def makeWeatherPlots(r, outfile, themefile, cwheel,
                      fill_alpha=0.0,
                      line_color=None)
 
-    # Make the hovertool only follow this line (bit of a hack)
+    # Make the hovertool only follow the patches (still a hack)
     htline = simg
 
     # Customize the active tools
@@ -212,9 +217,9 @@ def makeWeatherPlots(r, outfile, themefile, cwheel,
 
     ht = HoverTool()
     ht.tooltips = [("Time", "@index{%F %T}"),
-                   ("AirTemp", "@Temp C"),
-                   ("Humidity", "@Humi %"),
-                   ("DewPoint", "@Dewp C")
+                   ("AirTemp", "@AirTemp{0.0} C"),
+                   ("Humidity", "@Humidity %"),
+                   ("DewPoint", "@DewPoint{0.0} C")
                    ]
     ht.formatters = {'index': 'datetime'}
     ht.show_arrow = False

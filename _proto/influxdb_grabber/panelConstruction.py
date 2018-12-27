@@ -35,8 +35,9 @@ def main(qconff, mconff, theme='dark'):
         print("dark theme it is, then.")
         themefile = "./bokeh_dark_theme.yml"
 
-    # Get the default color sets; second one is sorted by hue
-    dset, sset = cwheels.getColors()
+    # Get the default color sets; second one is sorted by hue but
+    #   I'm ditching it since I'm not using it
+    dset, _ = cwheels.getColors()
 
     qdata = {}
     for iq in quer.keys():
@@ -69,7 +70,13 @@ def main(qconff, mconff, theme='dark'):
             thingLonger = getattr(bplot, m.pymodule)
         except AttributeError:
             print("FATAL ERROR: Module %s not found!" % (m.pymodule))
-        print()
+
+        outfile = "./junk_weather.html"
+        thingLonger(pdata, outfile, themefile, dset)
+
+    # bplot.makeWeatherPlots(wd, outfile, themefile, dset,
+
+    # print())
 
     # # Cycle thru the different tag values
     # for key in td.keys():
@@ -100,18 +107,6 @@ def main(qconff, mconff, theme='dark'):
     #                              dbuser=wdb['user'],
     #                              dbpass=wdb['pasw'],
     #                              dbname=wdb['dnme'])
-
-    # outfile = "./junk_weather.html"
-    # y1range = [-15, 15]
-    # y2range = [0, 100]
-    # figlabels = ["WRS Weather Information",
-    #              'Time (UTC)',
-    #              'Temperature (C)',
-    #              'Humidity (%)']
-    # bplot.makeWeatherPlots(wd, outfile, themefile, dset,
-    #                        y1lim=y1range, y2lim=y2range,
-    #                        figlabels=figlabels)
-    # print()
 
 
 if __name__ == "__main__":
