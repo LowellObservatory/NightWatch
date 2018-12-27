@@ -133,6 +133,7 @@ def alignDBConfig(queries):
             dbs.update({sec: idb})
         elif sec.lower() != 'default':
             dbq = assignConf(databaseQuery(), queries[sec])
+            dbq.key = sec
             try:
                 dbkey = queries[sec]['db']
                 dbq.db = dbs[dbkey]
@@ -167,8 +168,14 @@ def groupConfFiles(queries, modules):
             loopableSet.append(mod)
             allQueries += mod.queries.values()
 
-    return loopableSet, set(allQueries)
+        # Turn the unique set of queries into something a little easier to
+        #   interact and associate with later on in the codes
+        qS = set(allQueries)
+        qDict = {}
+        for q in qS:
+            qDict.update({q.key: q})
 
+    return loopableSet, qDict
 
 def parser(qconff, mconff):
     """
