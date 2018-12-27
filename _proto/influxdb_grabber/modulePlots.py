@@ -19,7 +19,7 @@ import numpy as np
 from bokeh.io import curdoc
 from bokeh.themes import Theme
 from bokeh.models import Plot, Range1d, LinearAxis, DatetimeAxis, \
-                         HoverTool, CrosshairTool, CustomJSHover, Quad
+    HoverTool, CrosshairTool, CustomJSHover, Quad
 from bokeh.models.formatters import DatetimeTickFormatter
 from bokeh.plotting import figure, output_file, save, ColumnDataSource
 

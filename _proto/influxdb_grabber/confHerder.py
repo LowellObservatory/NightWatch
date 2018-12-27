@@ -177,6 +177,7 @@ def groupConfFiles(queries, modules):
 
     return loopableSet, qDict
 
+
 def parser(qconff, mconff):
     """
     """

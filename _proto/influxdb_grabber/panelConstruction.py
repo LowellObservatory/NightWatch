@@ -17,7 +17,7 @@ import pandas as pd
 
 import confHerder as ch
 import dbQueries as dbq
-import bokehPlot as bplot
+import modulePlots as bplot
 import colorWheelies as cwheels
 
 
@@ -58,7 +58,7 @@ def main(qconff, mconff, theme='dark'):
         # Gather up the query data into a single dict so we don't
         #   have to encode absolutely everything in every single plot/page
         pdata = {}
-        for k, qtag in enumerate(m.queries.keys()):
+        for qtag in m.queries.keys():
             pdata.update({qtag: qdata[qtag]})
 
         # A neat party trick:
