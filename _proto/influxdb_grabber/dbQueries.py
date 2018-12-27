@@ -86,7 +86,7 @@ def queryConstructor(dbinfo, dtime=48, debug=False):
             else:
                 # If we're here, there was only 1 tag value so we don't need
                 #   to GROUP BY anything
-                query += '"%s"=\'%s\'' % (tn, tv)
+                query += '"%s"=\'%s\')' % (tn, tv)
 
         return query
 
