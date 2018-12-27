@@ -19,7 +19,7 @@ import numpy as np
 from bokeh.io import curdoc
 from bokeh.themes import Theme
 from bokeh.models import Plot, Range1d, LinearAxis, DatetimeAxis, \
-    HoverTool, CrosshairTool, CustomJSHover, Quad
+    HoverTool, CrosshairTool, CustomJSHover, Quad, Legend, LegendItem
 from bokeh.models.formatters import DatetimeTickFormatter
 from bokeh.plotting import figure, output_file, save, ColumnDataSource
 
@@ -67,9 +67,13 @@ def makePatches(r, y1lim):
     return ix, iy
 
 
-def plotLineWithPoints(p, cds, sname, slabel, color,
+def plotLineWithPoints(p, cds, sname, color,
                        hcolor=None, yrname=None):
     """
+    p: plot object
+    cds: ColumnDataSource
+    sname: source name (in cds)
+    slabel: series label (for legend)
     Assumes that you have both 'index' and sname as columns in your
     ColumnDataSource! slabel is then used for the Legend and tooltip labels.
     """
@@ -80,17 +84,17 @@ def plotLineWithPoints(p, cds, sname, slabel, color,
 
     if yrname is None:
         l = p.step('index', sname, line_width=2, source=cds, mode='after',
-                   color=color, legend=slabel, name=slabel)
+                   color=color, name=sname)
         s = p.scatter('index', sname, size=8, source=cds,
-                      color=color, legend=slabel, name=slabel,
+                      color=color, name=sname,
                       alpha=0., hover_alpha=1., hover_color=hcolor)
     else:
         l = p.step('index', sname, line_width=2, source=cds, mode='after',
                    y_range_name=yrname,
-                   color=color, legend=slabel, name=slabel)
+                   color=color, name=sname)
         s = p.scatter('index', sname, size=8, source=cds,
                       y_range_name=yrname,
-                      color=color, legend=slabel, name=slabel,
+                      color=color, name=sname,
                       alpha=0., hover_alpha=1., hover_color=hcolor)
 
     return l, s
@@ -184,8 +188,8 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
 
     if y2lim is None:
         y2lim = [r.Humidity.values.min, r.Humidity.values.max]
-    p.extra_y_ranges = {"humidity": Range1d(start=y2lim[0], end=y2lim[1])}
-    p.add_layout(LinearAxis(y_range_name="humidity",
+    p.extra_y_ranges = {"y2": Range1d(start=y2lim[0], end=y2lim[1])}
+    p.add_layout(LinearAxis(y_range_name="y2",
                             axis_label=ldict['y2label']), 'right')
 
     # Hack! But it works. Need to do this *before* you create cds below!
@@ -197,10 +201,16 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
     cds = ColumnDataSource(mds)
 
     # Make the plots/lines!
-    plotLineWithPoints(p, cds, "AirTemp", ldict['y1label'], cwheel[0])
-    plotLineWithPoints(p, cds, "DewPoint", ldict['y1label'], cwheel[1])
-    plotLineWithPoints(p, cds, "Humidity", ldict['y2label'], cwheel[2],
-                       yrname="humidity")
+    l1, _ = plotLineWithPoints(p, cds, "AirTemp", cwheel[0])
+    l2, _ = plotLineWithPoints(p, cds, "DewPoint", cwheel[1])
+    l3, _ = plotLineWithPoints(p, cds, "Humidity", cwheel[2], yrname="y2")
+
+    li1 = LegendItem(label="AirTemp", renderers=[l1])
+    li2 = LegendItem(label="DewPoint", renderers=[l2])
+    li3 = LegendItem(label="Humidity", renderers=[l3])
+    legend = Legend(items=[li1, li2, li3], location='bottom_left',
+                    orientation='horizontal')
+    p.add_layout(legend)
 
     # HACK HACK HACK HACK HACK
     #   Apply the patches to carry the tooltips
