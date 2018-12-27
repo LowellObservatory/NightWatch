@@ -20,7 +20,7 @@ class moduleConfig():
     def __init__(self):
         self.title = ''
         self.queries = None
-        self.qrange = 1.
+        self.drange = 1
         self.pymodule = None
 
     def combineConfs(self, queries):
@@ -52,6 +52,7 @@ class databaseQuery():
         self.dn = None
         self.tn = None
         self.tv = None
+        self.rn = 24
 
 
 def assignConf(obj, conf):
@@ -169,10 +170,9 @@ def groupConfFiles(queries, modules):
     return loopableSet, set(allQueries)
 
 
-if __name__ == "__main__":
-    qconff = 'dbqueries.conf'
-    mconff = 'modules.conf'
-
+def parser(qconff, mconff):
+    """
+    """
     # Parse the text file
     qs = parseConfFile(qconff, enableCheck=False)
 
@@ -190,8 +190,6 @@ if __name__ == "__main__":
     #   was obliterated completely and will be ignored!
     # 'queries' is a list of all the active database sections associated
     #   with the individual modules. It's technically a set, so no dupes.
-    print(modules)
-    print([q.fn for q in queries])
+    # Now we're ready for an actual loop! But let someone else do it.
 
-    # Now we're ready for an actual loop! Do the queries, then the modules.
-    pass
+    return modules, queries

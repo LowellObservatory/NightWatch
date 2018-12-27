@@ -14,6 +14,7 @@ fn = fieldName1, fieldName2, fieldName3
 dl = fieldName1DataLabel, fieldName2DataLabel, fieldName3DataLabel
 tn = None
 tv = None
+rn = 1
 
 
 [q_name2]
@@ -23,3 +24,4 @@ fn = fieldName1, fieldName2
 dn = fieldName1DataLabel, fieldName2DataLabel
 tn = tagName
 tv = tagValue1, tagValue2
+rn = 36

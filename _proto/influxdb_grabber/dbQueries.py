@@ -22,66 +22,73 @@ from influxdb.exceptions import InfluxDBClientError
 
 from ligmos import utils
 
-import bokehPlot as bplot
-import colorWheelies as cwheels
 
-
-def queryConstructor(dbinfo, dtime=48):
+def queryConstructor(dbinfo, dtime=48, debug=False):
     """
+    dbinfo is type databaseQuery, which includes databaseConfig as
+    dbinfo.db.  More info in 'confHerder'.
+
     dtime is time from present (in hours) to query back
 
     Allows grouping of the results by a SINGLE tag with multiple values.
     No checking if you want all values for a given tag, so be explicit for now.
     """
-    if dbinfo['type'].lower() == 'influxdb':
+    if isinstance(dtime, str):
+        try:
+            dtime = int(dtime)
+        except ValueError:
+            print("Can't convert %s to int!" % (dtime))
+            dtime = 1
+
+    if dbinfo.db.type.lower() == 'influxdb':
         print("Constructing influxdb query...")
-        print("Searching for %s in %s.%s on %s:%s" % (dbinfo['flds'],
-                                                      dbinfo['dnme'],
-                                                      dbinfo['mnme'],
-                                                      dbinfo['host'],
-                                                      dbinfo['port']))
+        if debug is False:
+            print("Searching for %s in %s.%s on %s:%s" % (dbinfo.fn,
+                                                          dbinfo.db.tabl,
+                                                          dbinfo.mn,
+                                                          dbinfo.db.host,
+                                                          dbinfo.db.port))
 
-        # Split up the fields into something iterable
-        f = dbinfo['flds'].split(',')
-
-        # Same for tags, if any
-        tn = dbinfo['tagn'].strip()
-        if tn.lower() == "none":
-            tn = None
-            tv = []
+        # Some renames since this was adapted from an earlier version
+        tn = dbinfo.tn
         if tn is not None:
-            tv = dbinfo['tagv'].split(',')
-            # Cleanup a little more
-            tv = [each.strip() for each in tv]
-
-        # Final cleanup
-        f = [each.strip() for each in f]
+            tv = dbinfo.tv
+        else:
+            tv = []
 
         # TODO: Someone should write a query validator to make sure
         #   this can't run amok.  For now, make sure the user has
         #   only READ ONLY privileges to the database in question!!!
         print("")
         query = 'SELECT'
-        for i, each in enumerate(f):
-            query += ' "%s"' % (each.strip())
-            if i != len(f)-1:
-                query += ','
-            else:
-                query += ' '
+        if isinstance(dbinfo.fn, list):
+            for i, each in enumerate(dbinfo.fn):
+                query += ' "%s"' % (each.strip())
+                if i != len(dbinfo.fn)-1:
+                    query += ','
+                else:
+                    query += ' '
+        else:
+            query += ' "%s" ' % (dbinfo.fn)
 
-        query += 'FROM "%s"' % (dbinfo['mnme'])
+        query += 'FROM "%s"' % (dbinfo.mn)
         query += ' WHERE time > now() - %02dh' % (dtime)
 
         if tv != []:
             query += ' AND ('
-            for i, each in enumerate(tv):
-                query += '"%s"=\'%s\'' % (tn, each.strip())
+            if isinstance(dbinfo.tv, list):
+                for i, each in enumerate(tv):
+                    query += '"%s"=\'%s\'' % (tn, each.strip())
 
-                if i != len(tv)-1:
-                    query += ' OR '
-            query += ') GROUP BY "%s"' % (tn)
+                    if i != len(tv)-1:
+                        query += ' OR '
+                query += ') GROUP BY "%s"' % (tn)
+            else:
+                # If we're here, there was only 1 tag value so we don't need
+                #   to GROUP BY anything
+                query += '"%s"=\'%s\'' % (tn, tv)
 
-        return query, f
+        return query
 
 
 def getResultsDataFrame(host, querystr, port=8086,
@@ -115,65 +122,3 @@ def getResultsDataFrame(host, querystr, port=8086,
 
     # This is at least a little better
     return betterResults
-
-
-if __name__ == '__main__':
-    conffile = './dbconn.conf'
-    dbconfig = parseConfFile(conffile)
-    qrange = 36
-
-    themefile = "./bokeh_dark_theme.yml"
-
-    dset, sset = cwheels.getColors()
-
-    # Could easily be looped here
-    tdb = dbconfig['insttemps']
-    tq, flds = queryConstructor(tdb, dtime=qrange)
-
-    td = getResultsDataFrame(tdb['host'], tq,
-                             port=tdb['port'],
-                             dbuser=tdb['user'],
-                             dbpass=tdb['pasw'],
-                             dbname=tdb['dnme'])
-
-    # Cycle thru the different tag values
-    for key in td.keys():
-        outfile = "./junk_%s.html" % (key)
-
-        print("Plotting for %s" % (key))
-        ptitle = "%s Temperatures" % (key)
-        figlabels = [ptitle,
-                     'Time (UTC)',
-                     'CCD Temp',
-                     'Aux Temp']
-
-        if key == "deveny":
-            y1range = [-115, -105]
-            y2range = [-10, 30]
-        if key == "lemi":
-            y1range = [-125, -115]
-            y2range = [-10, 40]
-
-        bplot.makeInstTempPlot(td[key], outfile, themefile, dset,
-                               y1lim=y1range, y2lim=y2range,
-                               figlabels=figlabels)
-
-    wdb = dbconfig['weather']
-    wq, wflds = queryConstructor(wdb, dtime=qrange)
-    wd = getResultsDataFrame(wdb['host'], wq,
-                             port=wdb['port'],
-                             dbuser=wdb['user'],
-                             dbpass=wdb['pasw'],
-                             dbname=wdb['dnme'])
-
-    outfile = "./junk_weather.html"
-    y1range = [-15, 15]
-    y2range = [0, 100]
-    figlabels = ["WRS Weather Information",
-                 'Time (UTC)',
-                 'Temperature (C)',
-                 'Humidity (%)']
-    bplot.makeWeatherPlots(wd, outfile, themefile, dset,
-                           y1lim=y1range, y2lim=y2range,
-                           figlabels=figlabels)
-    print()
