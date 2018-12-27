@@ -71,7 +71,7 @@ def main(qconff, mconff, theme='dark'):
         except AttributeError:
             print("FATAL ERROR: Module %s not found!" % (m.pymodule))
 
-        outfile = "./junk_weather.html"
+        outfile = m.outname
         thingLonger(pdata, outfile, themefile, dset)
 
     # bplot.makeWeatherPlots(wd, outfile, themefile, dset,

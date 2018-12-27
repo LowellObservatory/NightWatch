@@ -22,6 +22,8 @@ class moduleConfig():
         self.queries = None
         self.drange = 1
         self.pymodule = None
+        self.outname = None
+        self.enabled = False
 
     def combineConfs(self, queries):
         qdict = {}
