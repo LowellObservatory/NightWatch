@@ -13,6 +13,8 @@
 
 from __future__ import division, print_function, absolute_import
 
+from collections import OrderedDict
+
 import pandas as pd
 
 import confHerder as ch
@@ -39,7 +41,7 @@ def main(qconff, mconff, theme='dark'):
     #   I'm ditching it since I'm not using it
     dset, _ = cwheels.getColors()
 
-    qdata = {}
+    qdata = OrderedDict()
     for iq in quer.keys():
         q = quer[iq]
         query = dbq.queryConstructor(q, dtime=q.rn)
@@ -58,7 +60,7 @@ def main(qconff, mconff, theme='dark'):
         print(m.title)
         # Gather up the query data into a single dict so we don't
         #   have to encode absolutely everything in every single plot/page
-        pdata = {}
+        pdata = OrderedDict()
         for qtag in m.queries.keys():
             pdata.update({qtag: qdata[qtag]})
 

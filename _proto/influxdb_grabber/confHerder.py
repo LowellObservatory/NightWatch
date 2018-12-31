@@ -14,6 +14,7 @@
 from __future__ import division, print_function, absolute_import
 
 import configparser as conf
+from collections import OrderedDict
 
 
 class moduleConfig():
@@ -26,7 +27,7 @@ class moduleConfig():
         self.enabled = False
 
     def combineConfs(self, queries):
-        qdict = {}
+        qdict = OrderedDict()
         for q in self.queries:
             try:
                 qdict.update({q: queries[q]})
@@ -112,7 +113,7 @@ def parseConfFile(filename, enableCheck=True):
 def checkEnabled(conf):
     """
     """
-    enset = {}
+    enset = OrderedDict()
     for sect in conf.sections():
         en = False
         for key in conf[sect].keys():
@@ -127,8 +128,8 @@ def checkEnabled(conf):
 def alignDBConfig(queries):
     """
     """
-    dbs = {}
-    vqs = {}
+    dbs = OrderedDict()
+    vqs = OrderedDict()
     for sec in queries:
         if sec.lower().startswith("database-"):
             idb = assignConf(databaseConfig(), queries[sec])
@@ -173,7 +174,7 @@ def groupConfFiles(queries, modules):
         # Turn the unique set of queries into something a little easier to
         #   interact and associate with later on in the codes
         qS = set(allQueries)
-        qDict = {}
+        qDict = OrderedDict()
         for q in qS:
             qDict.update({q.key: q})
 
