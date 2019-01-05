@@ -28,6 +28,12 @@ class moduleConfig():
 
     def combineConfs(self, queries):
         qdict = OrderedDict()
+        # Take care of single query configurations; otherwise the following
+        #   loop would shred the string into its component characters and
+        #   would obviously not work
+        if isinstance(self.queries, str):
+            self.queries = [self.queries]
+
         for q in self.queries:
             try:
                 qdict.update({q: queries[q]})
