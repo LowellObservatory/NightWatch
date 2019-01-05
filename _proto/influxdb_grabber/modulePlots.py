@@ -16,6 +16,8 @@ Further description.
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
+import datetime as dt
+
 from bokeh.io import curdoc
 from bokeh.themes import Theme
 from bokeh.models import Plot, Range1d, LinearAxis, DatetimeAxis, \
@@ -171,7 +173,10 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
     y2lim = [0, 100]
 
     # Get the keys that define the input dataset
+    #   TODO: make the first defined tag the "primary" meaning X1/Y1 plot
+    #         ...but I can't quite figure out the abstraction well enough.
     r = indat['q_wrs']
+    r2 = indat['q_mounttemp']
     output_file(outfile)
     theme = Theme(filename=themefile)
 
@@ -181,10 +186,13 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
              'y2label': "Humidity (%)"}
 
     p = commonPlot(r, ldict)
+    timeNow = dt.datetime.utcnow()
+    tWindow = dt.timedelta(hours=24)
 
     if y1lim is None:
         y1lim = [r.AirTemp.values.min, r.AirTemp.values.max]
     p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
+    p.x_range = Range1d(start=timeNow-tWindow, end=timeNow)
 
     if y2lim is None:
         y2lim = [r.Humidity.values.min, r.Humidity.values.max]
@@ -195,21 +203,27 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
     # Hack! But it works. Need to do this *before* you create cds below!
     ix, iy = makePatches(r, y1lim)
 
-    # The "master" data source to be used for plotting
+    # The "master" data source to be used for plotting.
+    #    I wish there was a way of abstracting this but I'm not *quite*
+    #    clever enough with a baby imminent. Make the dict in a loop using
+    #    the data keys? I dunno. "Future Work" for sure.
     mds = dict(index=r.index, AirTemp=r.AirTemp, Humidity=r.Humidity,
-               DewPoint=r.DewPoint, ix=ix, iy=iy)
+               DewPoint=r.DewPoint, MountTemp=r2.MountTemp,
+               ix=ix, iy=iy)
     cds = ColumnDataSource(mds)
 
     # Make the plots/lines!
     l1, _ = plotLineWithPoints(p, cds, "AirTemp", cwheel[0])
     l2, _ = plotLineWithPoints(p, cds, "DewPoint", cwheel[1])
     l3, _ = plotLineWithPoints(p, cds, "Humidity", cwheel[2], yrname="y2")
+    l4, _ = plotLineWithPoints(p, cds, "MountTemp", cwheel[3])
 
     li1 = LegendItem(label="AirTemp", renderers=[l1])
     li2 = LegendItem(label="DewPoint", renderers=[l2])
     li3 = LegendItem(label="Humidity", renderers=[l3])
-    legend = Legend(items=[li1, li2, li3], location='bottom_left',
-                    orientation='horizontal')
+    li4 = LegendItem(label="MountTemp", renderers=[l4])
+    legend = Legend(items=[li1, li2, li3, li4], location='top_left',
+                    orientation='horizontal', spacing=15)
     p.add_layout(legend)
 
     # HACK HACK HACK HACK HACK
@@ -228,8 +242,9 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
     ht = HoverTool()
     ht.tooltips = [("Time", "@index{%F %T}"),
                    ("AirTemp", "@AirTemp{0.0} C"),
+                   ("MountTemp", "@MountTemp{0.0} C"),
                    ("Humidity", "@Humidity %"),
-                   ("DewPoint", "@DewPoint{0.0} C")
+                   ("DewPoint", "@DewPoint{0.0} C"),
                    ]
     ht.formatters = {'index': 'datetime'}
     ht.show_arrow = False
