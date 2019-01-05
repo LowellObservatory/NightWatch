@@ -21,9 +21,113 @@ import datetime as dt
 from bokeh.io import curdoc
 from bokeh.themes import Theme
 from bokeh.models import Plot, Range1d, LinearAxis, DatetimeAxis, \
-    HoverTool, CrosshairTool, CustomJSHover, Quad, Legend, LegendItem
+    HoverTool, CrosshairTool, CustomJSHover, Quad, Legend, LegendItem, \
+    DataTable, TableColumn
 from bokeh.models.formatters import DatetimeTickFormatter
 from bokeh.plotting import figure, output_file, save, ColumnDataSource
+
+
+class valJudgement(object):
+    def __init__(self):
+        self.label = None
+        self.value = None
+        self.timestamp = None
+        self.tooOld = False
+
+    def judgeAge(self, maxage=None,
+                 comptime=None):
+        # Need to put everything into Numpy datetime64/timedelta64 objects
+        #   to allow easier interoperations
+        if maxage is None:
+            maxage = dt.timedelta(minutes=5.5)
+            maxage = np.timedelta64(maxage)
+
+        if comptime is None:
+            comptime = np.datetime64(dt.datetime.utcnow())
+
+        delta = comptime - self.timestamp
+        if delta > maxage:
+            self.tooOld = True
+        else:
+            self.tooOld = False
+
+
+def getLast(p1, lastIdx=None, comptime=None):
+    """
+    """
+    if lastIdx is None:
+        # Get the last valid position/value in the dataframe
+        lastIdx = p1.last_valid_index()
+
+    retObj = valJudgement()
+    retObj.label = p1.name
+    retObj.value = p1[lastIdx]
+
+    # Use datetime64 to avoid an annoying nanoseconds warning when
+    #   using just regular .to_pydatetime()
+    retObj.timestamp = lastIdx.to_datetime64()
+    retObj.judgeAge(comptime=comptime)
+
+    return retObj
+
+
+def deshred(plist, delim=":", name=None, lastIdx=None,
+            comptime=None, last=True):
+    """
+    NOTE: p1 thru 3 are expected to be Pandas dataframes
+    """
+    if comptime is None:
+        comptime = np.datetime64(dt.datetime.utcnow())
+
+    if last is True:
+        retStr = ""
+        for i, each in enumerate(plist):
+            # Made this a function so I can reuse it elsewhere
+            retVal = getLast(each, lastIdx=lastIdx)
+
+            # Smoosh it all together; if it's the last value, don't
+            #   add the delim since it's not needed at the end of the str
+            if i == len(plist) - 1:
+                delim = ""
+
+            try:
+                retStr += "%02d%s" % (retVal.value, delim)
+            except TypeError:
+                # This means we probably had heterogeneous datatypes so just
+                #   print them all as strings to move on quickly
+                retStr += "%s%s" % (retVal.value, delim)
+
+        # Pack everything up for returning it all as one object
+        fObj = valJudgement()
+        if name is None:
+            fObj.label = retVal.label
+        else:
+            fObj.label = name
+        fObj.value = retStr
+        fObj.timestamp = retVal.timestamp
+        fObj.judgeAge(comptime=comptime)
+
+        return fObj
+    else:
+        # Should do a sort of a zip dance here to combine the multiple
+        #   dataframes into a single dataframe with the delim; would save some
+        #   CPU cycles if I did this just after the query so the plotting
+        #   routine doesn't have to do it, but that sounds a lot like
+        #   "Version 2.0" sort of talk.
+        raise NotImplementedError
+
+
+def checkForEmptyData(indat):
+    """
+    """
+    # Check to make sure we actually have data ...
+    abort = False
+    for q in indat:
+        if len(indat[q]) == 0:
+            abort = True
+            break
+
+    return abort
 
 
 def commonPlot(r, ldict):
@@ -164,11 +268,99 @@ def plotLineWithPoints(p, cds, sname, color,
 
 #     print("Bokeh plot saved as %s" % (outfile))
 
+def assembleFacSum(indat):
+    """
+    """
+    # Common "now" time to compare everything against
+    now = np.datetime64(dt.datetime.utcnow())
+
+    # Now the tedious bit - reassemble the shredded parameters like RA/Dec/etc.
+    #   Whomever designed the TCS XML...know that I'm not a fan of your work.
+    #
+    # 'deshred' will automatically take the last entry and return a
+    #   non-annoying version with its timestamp for later display.
+    #
+    # First, get the last valid index in the q_tcssv dataframe and use that
+    #   for all the TCS queries to make sure it's at least consistent
+    tcsLastIdx = indat['q_tcssv'].cRA_h.last_valid_index()
+
+    # CURRENT coords
+    cRA = deshred([indat['q_tcssv'].cRA_h,
+                  indat['q_tcssv'].cRA_m,
+                  indat['q_tcssv'].cRA_s], delim=":", lastIdx=tcsLastIdx,
+                  name="cRA", comptime=now)
+    cDec = deshred([indat['q_tcssv'].cDec_d,
+                   indat['q_tcssv'].cDec_m,
+                   indat['q_tcssv'].cDec_s], delim=":", lastIdx=tcsLastIdx,
+                   name="cDec", comptime=now)
+    cEpoch = deshred([indat['q_tcssv'].cEqP,
+                     indat['q_tcssv'].cEqY,
+                     indat['q_tcssv'].cFrame], delim="", lastIdx=tcsLastIdx,
+                     name="cEpoch", comptime=now)
+    # DEMAND coords
+    dRA = deshred([indat['q_tcssv'].dRA_h,
+                  indat['q_tcssv'].dRA_m,
+                  indat['q_tcssv'].dRA_s], delim=":", lastIdx=tcsLastIdx,
+                  name="dRA", comptime=now)
+    dDec = deshred([indat['q_tcssv'].dDec_d,
+                   indat['q_tcssv'].dDec_m,
+                   indat['q_tcssv'].dDec_s], delim=":", lastIdx=tcsLastIdx,
+                   name="dDec", comptime=now)
+    dEpoch = deshred([indat['q_tcssv'].dEqP,
+                     indat['q_tcssv'].dEqY,
+                     indat['q_tcssv'].dFrame], delim="", lastIdx=tcsLastIdx,
+                     name="dEpoch", comptime=now)
+
+    airmass = getLast(indat['q_tcssv'].Airmass, lastIdx=tcsLastIdx,
+                      comptime=now)
+    targname = getLast(indat['q_tcssv'].TargetName, lastIdx=tcsLastIdx,
+                       comptime=now)
+    guidemode = getLast(indat['q_tcssv'].GuideMode, lastIdx=tcsLastIdx,
+                        comptime=now)
+    sundist = getLast(indat['q_tcssv'].SunDistance, lastIdx=tcsLastIdx,
+                      comptime=now)
+    moondist = getLast(indat['q_tcssv'].MoonDistance, lastIdx=tcsLastIdx,
+                       comptime=now)
+    mirrorcov = getLast(indat['q_tcssv'].MirrorCover, lastIdx=tcsLastIdx,
+                        comptime=now)
+
+    # These are from other data sources, so get their values too
+    domeshut = getLast(indat['q_tcslois'].DomeShutter, comptime=now)
+    instcover = getLast(indat['q_cubeinstcover'].InstCover, comptime=now)
+
+    cubeLastIdx = indat['q_cubefolds'].ThruPort.last_valid_index()
+    portT = getLast(indat['q_cubefolds'].ThruPort, lastIdx=cubeLastIdx,
+                    comptime=now)
+    portA = getLast(indat['q_cubefolds'].PortA, lastIdx=cubeLastIdx,
+                    comptime=now)
+    portB = getLast(indat['q_cubefolds'].PortB, lastIdx=cubeLastIdx,
+                    comptime=now)
+    portC = getLast(indat['q_cubefolds'].PortC, lastIdx=cubeLastIdx,
+                    comptime=now)
+    portD = getLast(indat['q_cubefolds'].PortD, lastIdx=cubeLastIdx,
+                    comptime=now)
+
+    # Finally done! Now put it all into a table for nice display
+    tableDat = {}
+
+    return tableDat
+
 
 def makeFacSum(indat, outfile, themefile, cwheel):
     """
     """
-    pass
+    #
+    # TODO:
+    #   I should *really* think about incorporating this into the other modules
+    #
+    abort = checkForEmptyData(indat)
+    if abort is True:
+        print("No data found! Aborting.")
+        return None
+
+    tdat = assembleFacSum(indat)
+
+    print()
 
 
 def makeWindPlots(indat, outfile, themefile, cwheel):

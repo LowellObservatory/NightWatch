@@ -76,10 +76,6 @@ def main(qconff, mconff, theme='dark'):
         outfile = m.outname
         thingLonger(pdata, outfile, themefile, dset)
 
-    # bplot.makeWeatherPlots(wd, outfile, themefile, dset,
-
-    # print())
-
     # # Cycle thru the different tag values
     # for key in td.keys():
     #     outfile = "./junk_%s.html" % (key)
@@ -101,14 +97,6 @@ def main(qconff, mconff, theme='dark'):
     #     bplot.makeInstTempPlot(td[key], outfile, themefile, dset,
     #                            y1lim=y1range, y2lim=y2range,
     #                            figlabels=figlabels)
-
-    # wdb = dbconfig['weather']
-    # wq, wflds = dbq.queryConstructor(wdb, dtime=qrange)
-    # wd = dbq.getResultsDataFrame(wdb['host'], wq,
-    #                              port=wdb['port'],
-    #                              dbuser=wdb['user'],
-    #                              dbpass=wdb['pasw'],
-    #                              dbname=wdb['dnme'])
 
 
 if __name__ == "__main__":
