@@ -165,6 +165,96 @@ def plotLineWithPoints(p, cds, sname, color,
 #     print("Bokeh plot saved as %s" % (outfile))
 
 
+def makeFacSum(indat, outfile, themefile, cwheel):
+    """
+    """
+    pass
+
+
+def makeWindPlots(indat, outfile, themefile, cwheel):
+    """
+    """
+
+    y1lim = [0, 15]
+
+    r = indat['q_wrs']
+    output_file(outfile)
+    theme = Theme(filename=themefile)
+
+    ldict = {'title': "WRS Wind Information",
+             'xlabel': "Time (UTC)",
+             'y1label': "Wind Speed (m/s)"}
+
+    p = commonPlot(r, ldict)
+    timeNow = dt.datetime.utcnow()
+    tWindow = dt.timedelta(hours=24)
+
+    if y1lim is None:
+        y1lim = [r.WindSpeedMin.values.min,
+                 r.WindSpeedMax.values.max]
+    p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
+    p.x_range = Range1d(start=timeNow-tWindow, end=timeNow)
+
+    # Hack! But it works. Need to do this *before* you create cds below!
+    ix, iy = makePatches(r, y1lim)
+
+    # The "master" data source to be used for plotting.
+    #    I wish there was a way of abstracting this but I'm not *quite*
+    #    clever enough with a baby imminent. Make the dict in a loop using
+    #    the data keys? I dunno. "Future Work" for sure.
+    mds = dict(index=r.index,
+               WindSpeed=r.WindSpeed,
+               WindSpeedMin=r.WindSpeedMin,
+               WindSpeedMax=r.WindSpeedMax,
+               WindDir=r.WindDir,
+               ix=ix, iy=iy)
+    cds = ColumnDataSource(mds)
+
+    # Make the plots/lines!
+    l1, _ = plotLineWithPoints(p, cds, "WindSpeed", cwheel[0])
+    l2, _ = plotLineWithPoints(p, cds, "WindSpeedMin", cwheel[1])
+    l3, _ = plotLineWithPoints(p, cds, "WindSpeedMax", cwheel[2])
+
+    li1 = LegendItem(label="WindSpeed", renderers=[l1])
+    li2 = LegendItem(label="WindSpeedMin", renderers=[l2])
+    li3 = LegendItem(label="WindSpeedMax", renderers=[l3])
+    legend = Legend(items=[li1, li2, li3], location='top_left',
+                    orientation='horizontal', spacing=15)
+    p.add_layout(legend)
+
+    # HACK HACK HACK HACK HACK
+    #   Apply the patches to carry the tooltips
+    simg = p.patches('ix', 'iy', source=cds,
+                     fill_color=None,
+                     fill_alpha=0.0,
+                     line_color=None)
+
+    # Make the hovertool only follow the patches (still a hack)
+    htline = simg
+
+    # Customize the active tools
+    p.toolbar.autohide = True
+
+    ht = HoverTool()
+    ht.tooltips = [("Time", "@index{%F %T}"),
+                   ("WindSpeed", "@WindSpeed{0.0} m/s"),
+                   ("WindSpeedMin", "@WindSpeedMin{0.0} m/s"),
+                   ("WindSpeedMax", "@WindSpeedMax{0.0} m/s")
+                   ]
+    ht.formatters = {'index': 'datetime'}
+    ht.show_arrow = False
+    ht.point_policy = 'follow_mouse'
+    ht.line_policy = 'nearest'
+    ht.renderers = [htline]
+    p.add_tools(ht)
+
+    # Actually apply the theme to the panel
+    curdoc().theme = theme
+    save(p)
+
+    print("Bokeh plot saved as %s" % (outfile))
+
+
 def makeWeatherPlots(indat, outfile, themefile, cwheel):
     """
     """
