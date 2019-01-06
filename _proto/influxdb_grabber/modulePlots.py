@@ -15,11 +15,14 @@ Further description.
 
 from __future__ import division, print_function, absolute_import
 
+from collections import OrderedDict
+
 import numpy as np
 import datetime as dt
 
-from bokeh.io import curdoc
 from bokeh.themes import Theme
+from bokeh.layouts import widgetbox
+from bokeh.io import curdoc, output_file, show
 from bokeh.models import Plot, Range1d, LinearAxis, DatetimeAxis, \
     HoverTool, CrosshairTool, CustomJSHover, Quad, Legend, LegendItem, \
     DataTable, TableColumn
@@ -206,69 +209,7 @@ def plotLineWithPoints(p, cds, sname, color,
     return l, s
 
 
-# def makeInstTempPlot(r, outfile, themefile, cwheel,
-#                      figlabels=None, y1lim=None, y2lim=None):
-#     """
-#     """
-#     output_file(outfile)
-#     theme = Theme(filename=themefile)
-
-#     p, title, xlabel, y1label, y2label = commonPlot(r, figlabels)
-
-#     if y1lim is None:
-#         y1lim = [r.T1.values.min, r.T1.values.max]
-#     p.y_range = Range1d(start=y1lim[0], end=y1lim[1])
-
-#     if y2lim is None:
-#         y2lim = [r.T2.values.min, r.T2.values.max]
-#     p.extra_y_ranges = {"externalTemps": Range1d(start=y2lim[0],
-#                                                  end=y2lim[1])}
-#     p.add_layout(LinearAxis(y_range_name="externalTemps",
-#                             axis_label=y2label), 'right')
-
-#     # Hack! But it works. Need to do this *before* you create cds below!
-#     ix, iy = makePatches(r, y1lim)
-
-#     # The "master" data source to be used for plotting
-#     mds = dict(index=r.index, T1=r.T1, T2=r.T2, ix=ix, iy=iy)
-#     cds = ColumnDataSource(mds)
-
-#     # Make the plots/lines!
-#     l1, s1 = plotLineWithPoints(p, cds, "T1", y1label, cwheel[0])
-#     l2, s2 = plotLineWithPoints(p, cds, "T2", y2label, cwheel[1],
-#                                 yrname="externalTemps")
-
-#     # HACK HACK HACK HACK HACK
-#     #   Apply the patches to carry the tooltips
-#     simg = p.patches('ix', 'iy', source=cds,
-#                      fill_color=None,
-#                      fill_alpha=0.0,
-#                      line_color=None)
-
-#     # Make the hovertool only follow this line (bit of a hack)
-#     htline = simg
-
-#     # Customize the active tools
-#     p.toolbar.autohide = True
-
-#     ht = HoverTool()
-#     ht.tooltips = [("Time", "@index{%F %T}"),
-#                    (y1label, "@T1"),
-#                    (y2label, "@T2")]
-#     ht.formatters = {'index': 'datetime'}
-#     ht.show_arrow = False
-#     ht.point_policy = 'follow_mouse'
-#     ht.line_policy = 'nearest'
-#     ht.renderers = [htline]
-#     p.add_tools(ht)
-
-#     # Actually apply the theme to the panel
-#     curdoc().theme = theme
-#     save(p)
-
-#     print("Bokeh plot saved as %s" % (outfile))
-
-def assembleFacSum(indat):
+def assembleFacSumTCS(indat):
     """
     """
     # Common "now" time to compare everything against
@@ -321,6 +262,47 @@ def assembleFacSum(indat):
                       comptime=now)
     moondist = getLast(indat['q_tcssv'].MoonDistance, lastIdx=tcsLastIdx,
                        comptime=now)
+
+    # Finally done! Now put it all into a list so it can be passed
+    #   back a little easier and taken from there
+    tableDat = [now, targname,
+                cRA, cDec, cEpoch,
+                dRA, dDec, dEpoch,
+                airmass, guidemode,
+                sundist, moondist]
+
+    values = []
+    labels = []
+    for i, each in enumerate(tableDat):
+        if i == 0:
+            values.append(str(each))
+            labels.append("LastUpdated")
+        else:
+            values.append(each.value)
+            labels.append(each.label)
+
+    mds = dict(labels=labels, values=values)
+    cds = ColumnDataSource(mds)
+
+    return cds
+
+
+def assembleFacSumLPI(indat):
+    """
+    """
+    # Common "now" time to compare everything against
+    now = np.datetime64(dt.datetime.utcnow())
+
+    # Now the tedious bit - reassemble the shredded parameters like RA/Dec/etc.
+    #   Whomever designed the TCS XML...know that I'm not a fan of your work.
+    #
+    # 'deshred' will automatically take the last entry and return a
+    #   non-annoying version with its timestamp for later display.
+    #
+    # First, get the last valid index in the q_tcssv dataframe and use that
+    #   for all the TCS queries to make sure it's at least consistent
+    tcsLastIdx = indat['q_tcssv'].cRA_h.last_valid_index()
+
     mirrorcov = getLast(indat['q_tcssv'].MirrorCover, lastIdx=tcsLastIdx,
                         comptime=now)
 
@@ -328,8 +310,8 @@ def assembleFacSum(indat):
     domeshut = getLast(indat['q_tcslois'].DomeShutter, comptime=now)
     instcover = getLast(indat['q_cubeinstcover'].InstCover, comptime=now)
 
-    cubeLastIdx = indat['q_cubefolds'].ThruPort.last_valid_index()
-    portT = getLast(indat['q_cubefolds'].ThruPort, lastIdx=cubeLastIdx,
+    cubeLastIdx = indat['q_cubefolds'].PortThru.last_valid_index()
+    portT = getLast(indat['q_cubefolds'].PortThru, lastIdx=cubeLastIdx,
                     comptime=now)
     portA = getLast(indat['q_cubefolds'].PortA, lastIdx=cubeLastIdx,
                     comptime=now)
@@ -340,13 +322,42 @@ def assembleFacSum(indat):
     portD = getLast(indat['q_cubefolds'].PortD, lastIdx=cubeLastIdx,
                     comptime=now)
 
-    # Finally done! Now put it all into a table for nice display
-    tableDat = {}
+    # Finally done! Now put it all into a list so it can be passed
+    #   back a little easier and taken from there
+    tableDat = [now,
+                domeshut, mirrorcov, instcover,
+                portT, portA, portB, portC, portD]
 
-    return tableDat
+    values = []
+    labels = []
+    for i, each in enumerate(tableDat):
+        if i == 0:
+            values.append(str(each))
+            labels.append("LastUpdated")
+        elif each.label == "InstCover":
+            # Special conversion to text for this one
+            if each.value == 0:
+                values.append("Closed")
+            else:
+                values.append("Open")
+            labels.append(each.label)
+        elif each.label.startswith("Port"):
+            if each.value == 0:
+                values.append("Inactive")
+            else:
+                values.append("Active")
+            labels.append(each.label)
+        else:
+            values.append(each.value)
+            labels.append(each.label)
+
+    mds = dict(labels=labels, values=values)
+    cds = ColumnDataSource(mds)
+
+    return cds
 
 
-def makeFacSum(indat, outfile, themefile, cwheel):
+def makeFacSumLPI(indat, outfile, themefile, cwheel):
     """
     """
     #
@@ -358,9 +369,46 @@ def makeFacSum(indat, outfile, themefile, cwheel):
         print("No data found! Aborting.")
         return None
 
-    tdat = assembleFacSum(indat)
-
+    cds = assembleFacSumLPI(indat)
     print()
+
+    cols = []
+    for c in cds.column_names:
+        print(c)
+        col = TableColumn(field=c, title=c)
+        cols.append(col)
+
+    # Now actually construct the table
+    output_file(outfile)
+    dtab = DataTable(columns=cols, source=cds)
+    show(widgetbox(dtab))
+
+
+def makeFacSumTCS(indat, outfile, themefile, cwheel):
+    """
+    """
+    #
+    # TODO:
+    #   I should *really* think about incorporating this into the other modules
+    #
+    abort = checkForEmptyData(indat)
+    if abort is True:
+        print("No data found! Aborting.")
+        return None
+
+    cds = assembleFacSumTCS(indat)
+    print()
+
+    cols = []
+    for c in cds.column_names:
+        print(c)
+        col = TableColumn(field=c, title=c)
+        cols.append(col)
+
+    # Now actually construct the table
+    output_file(outfile)
+    dtab = DataTable(columns=cols, source=cds)
+    show(widgetbox(dtab))
 
 
 def makeWindPlots(indat, outfile, themefile, cwheel):
