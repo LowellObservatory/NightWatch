@@ -411,7 +411,7 @@ def makeFacSumTCS(indat, outfile, themefile, cwheel):
     show(widgetbox(dtab))
 
 
-def makeWindPlots(indat, outfile, themefile, cwheel):
+def makeWindPlots(indat, themefile, cwheel, outfile=None):
     """
     """
 
@@ -490,12 +490,14 @@ def makeWindPlots(indat, outfile, themefile, cwheel):
 
     # Actually apply the theme to the panel
     curdoc().theme = theme
-    save(p)
+    if outfile is not None:
+        save(p)
+        print("Bokeh plot saved as %s" % (outfile))
 
-    print("Bokeh plot saved as %s" % (outfile))
+    return p
 
 
-def makeWeatherPlots(indat, outfile, themefile, cwheel):
+def makeWeatherPlots(indat, themefile, cwheel, outfile=None):
     """
     """
 
@@ -585,6 +587,8 @@ def makeWeatherPlots(indat, outfile, themefile, cwheel):
 
     # Actually apply the theme to the panel
     curdoc().theme = theme
-    save(p)
+    if outfile is not None:
+        save(p)
+        print("Bokeh plot saved as %s" % (outfile))
 
-    print("Bokeh plot saved as %s" % (outfile))
+    return p

@@ -23,3 +23,7 @@ Following along from https://docs.djangoproject.com/en/2.2/intro/tutorial01/
 
 "nightwatch" is the *project*, containing the "dctplots" *app* along with
 the GOES-16 reprojection stuff as a separate *whateverthing*.
+
+The layout is starting to irritate me a little bit, due to all the
+warnings/caveats about namespaces; e.g. I'm tired of making directories
+like nightwatch/dctplots/templates/dctplots.
