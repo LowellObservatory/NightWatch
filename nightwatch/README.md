@@ -16,3 +16,10 @@ Same goes for Packery (https://packery.metafizzy.co/):
 <!-- or -->
 <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
 ```
+
+### Dev. Notes
+
+Following along from https://docs.djangoproject.com/en/2.2/intro/tutorial01/
+
+"nightwatch" is the *project*, containing the "dctplots" *app* along with
+the GOES-16 reprojection stuff as a separate *whateverthing*.
