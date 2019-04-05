@@ -1,4 +1,13 @@
-## Setup notes:
+# Requirements
+
+django >= 2.1.2
+channels >= 2.1.7
+python >= 3.6
+
+...probably other stuff too.  Will fill this in more once I have it
+containerized and defined.
+
+## Setup notes
 
 Isotope (https://isotope.metafizzy.co/) downloaded on 2019 04 04,
 or they can be linked directly from the CDN, a la:
