@@ -1,14 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
     <title>Isotope Masonry Layout</title>
 
     <!-- StyleSheets -->
-    <link rel="stylesheet" href="/static/css/stylestest.css">
-    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/stylestest.css' %}">
+    <!-- <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" type="text/css" /> -->
 
 </head>
 <body>
@@ -22,37 +23,41 @@
   <div class="example">
 
     <div class="item weather item-w2 item-h2">
-<embed src="https://weather.cod.edu/satrad/exper/?parms=local-Arizona-natcolor-24-1-100-1&checked=map&colorbar=undefined" style="width:800px; height:400px;">
+      <embed src="https://weather.cod.edu/satrad/exper/?parms=local-Arizona-natcolor-24-1-100-1&checked=map&colorbar=undefined" style="width:800px; height:400px;">
     </div>
 
     <div class="item graphs item-h2">
-      {{ script4 | safe }}
+      <img src="http://nightwatch.lowell.edu/goes16/nows/g16aws_latest.gif">
+      <!-- {{ script4 | safe }} -->
     </div>
 
     <div class="item graphs item-w2">
-      {{ script | safe }}
-      {{ div | safe }}
+      <img src="http://nightwatch.lowell.edu/goes16/nows/g16aws_latest.png">
+      <!-- {{ script | safe }}
+      {{ div | safe }} -->
     </div>
 
     <div class="item graphs item-h2">
-      {{ script3 | safe }}
+      <img src="http://nightwatch.lowell.edu/dctwebcams/dct/gate.jpg">
+      <!-- {{ script3 | safe }} -->
     </div>
 
     <div class="item graphs item-w2">
-      {{ script2 | safe }}
-      {{ div2 | safe }}
+      <img src="http://nightwatch.lowell.edu/dctwebcams/dct/tel_bldg.jpg">
+      <!-- {{ script2 | safe }}
+      {{ div2 | safe }} -->
     </div>
 
   </div>
 
     <!-- JavaScipts -->
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/isotope.pkgd.min.js"></script>
-    <script src="/static/js/functiontest.js"></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.js"></script>
-    <script type="text/javascript">
-        Bokeh.set_log_level("info");
-    </script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/functiontest.js' %}"></script>
+    <!-- <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.js"></script> -->
+    <!-- <script type="text/javascript"> -->
+        <!-- Bokeh.set_log_level("info"); -->
+    <!-- </script> -->
 
 </body>
 </html>

@@ -19,4 +19,7 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dctplots/', include('dctplots.urls')),
+
+    # If there's no explicit path given, default to the dctplots app
+    path('', include('dctplots.urls'))
 ]
