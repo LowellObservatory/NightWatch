@@ -9,10 +9,14 @@
 
     <!-- StyleSheets -->
     <link rel="stylesheet" href="{% static 'css/stylestest.css' %}">
+
+    <!-- HAniS stuff -->
+    <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
     <!-- <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" type="text/css" /> -->
 
 </head>
-<body>
+<body onload="HAniS.setup(hancon, 'handiv')">
 
   <ul id="filterNav" class="filters-list">
       <li data-filter="*">All Items</li>
@@ -23,7 +27,7 @@
   <div class="example">
 
     <div class="item weather item-w2 item-h2">
-      <embed src="https://weather.cod.edu/satrad/exper/?parms=local-Arizona-natcolor-24-1-100-1&checked=map&colorbar=undefined" style="width:800px; height:400px;">
+      <div id="handiv">
     </div>
 
     <div class="item graphs item-h2">
