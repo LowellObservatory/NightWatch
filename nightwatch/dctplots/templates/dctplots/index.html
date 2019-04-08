@@ -18,38 +18,123 @@
 </head>
 <body onload="HAniS.setup(hancon, 'handiv')">
 
+  <center>
   <ul id="filterNav" class="filters-list">
-      <li data-filter="*">All Items</li>
-      <li data-filter=".graphs">Graphs</li>
-      <li data-filter=".weather">Weather</li>
-   </ul>
+    <li data-filter="*">All Items</li>
+    <li data-filter=".graphs">Graphs</li>
+    <li data-filter=".weather">Weather</li>
+    <li data-filter=".dctcams">DCT Webcams</li>
+  </ul>
+  </center>
 
   <div class="example">
 
-    <div class="item weather item-w2 item-h2">
-      <div id="handiv">
-    </div>
+    <!-- The layout is based on blocks, and 'w' and 'h' followed by a number
+    indicate how many of those blocks the div is to occupy. -->
 
-    <div class="item graphs item-h2">
+    <!-- HAniS weather sequence displayer -->
+    <!-- https://www.ssec.wisc.edu/hanis/ -->
+    <div class="item weather item-h5 item-w2" id="handiv"></div>
+
+    <!-- <div class="item graphs item-h2">
       <img src="http://nightwatch.lowell.edu/goes16/nows/g16aws_latest.gif">
-      <!-- {{ script4 | safe }} -->
-    </div>
+      {{ script4 | safe }}
+    </div> -->
 
-    <div class="item graphs item-w2">
+    <!-- <div class="item graphs item-w2">
       <img src="http://nightwatch.lowell.edu/goes16/nows/g16aws_latest.png">
-      <!-- {{ script | safe }}
-      {{ div | safe }} -->
-    </div>
+      {{ script | safe }}
+      {{ div | safe }}
+    </div> -->
 
-    <div class="item graphs item-h2">
-      <img src="http://nightwatch.lowell.edu/dctwebcams/dct/gate.jpg">
+    <!-- Camera -->
+    <script>
+    function refreshgate() {
+      var newImage = "http://dctsleeperservice:8080/dctwebcams/dct/gate.jpg#" + new Date().getTime();
+      document.getElementById("gate").innerHTML =
+        "<img src=" + newImage + "></img>";
+      }
+      window.setInterval(refreshgate, 10000);
+    </script>
+
+    <div class="item dctcams item-h2 item-w2" id="gate">
+      <img src='http://dctsleeperservice:8080/dctwebcams/dct/gate.jpg'></img>
       <!-- {{ script3 | safe }} -->
     </div>
 
-    <div class="item graphs item-w2">
-      <img src="http://nightwatch.lowell.edu/dctwebcams/dct/tel_bldg.jpg">
-      <!-- {{ script2 | safe }}
-      {{ div2 | safe }} -->
+    <!-- Camera -->
+    <script>
+    function refreshgenset() {
+      var newImage = "http://dctsleeperservice:8080/dctwebcams/dct/genset.jpg#" + new Date().getTime();
+      document.getElementById("genset").innerHTML =
+        "<img src=" + newImage + "></img>";
+      }
+      window.setInterval(refreshgenset, 10000);
+    </script>
+
+    <div class="item dctcams item-h2 item-w2" id="genset">
+      <img src='http://dctsleeperservice:8080/dctwebcams/dct/genset.jpg'></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshhelium() {
+      var newImage = "http://dctsleeperservice:8080/dctwebcams/dct/heliumcomp.jpg#" + new Date().getTime();
+      document.getElementById("heliumcomp").innerHTML =
+        "<img src=" + newImage + "></img>";
+      }
+      window.setInterval(refreshhelium, 10000);
+    </script>
+
+    <div class="item dctcams item-h2 item-w2" id="heliumcomp">
+      <img src='http://dctsleeperservice:8080/dctwebcams/dct/heliumcomp.jpg'></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshobs() {
+      var newImage = "http://dctsleeperservice:8080/dctwebcams/dct/obs_level.jpg#" + new Date().getTime();
+      document.getElementById("obslevel").innerHTML =
+        "<img src=" + newImage + "></img>";
+      }
+      window.setInterval(refreshobs, 10000);
+    </script>
+
+    <div class="item dctcams item-h2 item-w2" id="obslevel">
+      <img src='http://dctsleeperservice:8080/dctwebcams/dct/obs_level.jpg'></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshbldg() {
+      var newImage = "http://dctsleeperservice:8080/dctwebcams/dct/tel_bldg.jpg#" + new Date().getTime();
+      document.getElementById("telbldg").innerHTML =
+        "<img src=" + newImage + "></img>";
+      }
+      window.setInterval(refreshbldg, 10000);
+    </script>
+
+    <div class="item dctcams item-h1 item-w1" id="telbldg">
+      <img src='http://dctsleeperservice:8080/dctwebcams/dct/tel_bldg.jpg'></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshyard() {
+      var newImage = "http://dctsleeperservice:8080/dctwebcams/dct/util_yard.jpg#" + new Date().getTime();
+      document.getElementById("utilyard").innerHTML =
+        "<img src=" + newImage + "></img>";
+      }
+      window.setInterval(refreshyard, 10000);
+    </script>
+
+    <div class="item dctcams item-h1 item-w1" id="utilyard">
+      <img src='http://dctsleeperservice:8080/dctwebcams/dct/util_yard.jpg'></img>
+      <!-- {{ script3 | safe }} -->
     </div>
 
   </div>

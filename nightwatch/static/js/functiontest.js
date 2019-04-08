@@ -1,7 +1,7 @@
 (function ($) {
   var $container = $('.example'),
     colWidth = function () {
-      var w = $container.width(), 
+      var w = $container.width(),
         columnNum = 1,
         columnWidth = 0;
       if (w > 1200) {
