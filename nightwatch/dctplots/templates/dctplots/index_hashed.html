@@ -1,0 +1,202 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Isotope - filtering with URL hash</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'css/stylehash.css' %}">
+
+  <!-- HAniS stuff -->
+  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
+  <script>
+    function refreshWebcamImg(iname, eid) {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/" + iname + "#" + new Date().getTime();
+      document.getElementById(eid).innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshWebcamImg, 10000);
+  </script>
+
+</head>
+
+<body onload="HAniS.setup(hancon, 'handiv')">
+  <h1>Lowell Observatory - NightWatch - v0.1</h1>
+
+  <div class="button-group filter-button-group">
+    <button class="button is-checked" data-filter="*">Default View</button>
+    <button class="button" data-filter=".weather">Weather</button>
+    <button class="button" data-filter=".dct">DCT Status</button>
+    <button class="button" data-filter=".dctcams">DCT Webcams</button>
+    <button class="button" data-filter="*">Everything</button>
+  </div>
+
+  <div class="grid">
+
+    <!-- HAniS weather sequence displayer -->
+    <!-- https://www.ssec.wisc.edu/hanis/ -->
+    <div class="element-item weather data-category=weather" id="handiv" style="width:700px; height:900px"></div>
+    <!-- <div class="element-item weather data-category=weather" id="handiv" style="width:700px;"></div> -->
+
+    <!-- Camera -->
+    <!-- <script>
+    function refreshgate() {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/gate.jpg#" + new Date().getTime();
+      document.getElementById("gate").innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshgate, 10000);
+    </script> -->
+
+    <div class="element-item dctcams data-category=dctcams" id="gate">
+      <img src='http://dctsleeperservice:8080/webcams/dct/gate.jpg' height='300'></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshgenset() {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/genset.jpg#" + new Date().getTime();
+      document.getElementById("genset").innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshgenset, 10000);
+    </script>
+
+    <div class="element-item dctcams data-category=dctcams" id="genset">
+      <img src='http://dctsleeperservice:8080/webcams/dct/genset.jpg' height="300"></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshhelium() {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/heliumcomp.jpg#" + new Date().getTime();
+      document.getElementById("heliumcomp").innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshhelium, 10000);
+    </script>
+
+    <div class="element-item dctcams data-category=dctcams" id="heliumcomp">
+      <img src='http://dctsleeperservice:8080/webcams/dct/heliumcomp.jpg' height="300"></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshobs() {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/obs_level.jpg#" + new Date().getTime();
+      document.getElementById("obslevel").innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshobs, 10000);
+    </script>
+
+    <div class="element-item dctcams data-category=dctcams" id="obslevel">
+      <img src='http://dctsleeperservice:8080/webcams/dct/obs_level.jpg' height="300"></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshbldg() {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/tel_bldg.jpg#" + new Date().getTime();
+      document.getElementById("telbldg").innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshbldg, 10000);
+    </script>
+
+    <div class="element-item dctcams data-category=dctcams" id="telbldg">
+      <img src='http://dctsleeperservice:8080/webcams/dct/tel_bldg.jpg' height="300"></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+    <!-- Camera -->
+    <script>
+    function refreshyard() {
+      var newImage = "http://dctsleeperservice:8080/webcams/dct/util_yard.jpg#" + new Date().getTime();
+      document.getElementById("utilyard").innerHTML =
+        "<img src=" + newImage + " height='300'></img>";
+      }
+      window.setInterval(refreshyard, 10000);
+    </script>
+
+    <div class="element-item dctcams data-category=dctcams" id="utilyard">
+      <img src='http://dctsleeperservice:8080/webcams/dct/util_yard.jpg' height="300"></img>
+      <!-- {{ script3 | safe }} -->
+    </div>
+
+
+
+
+
+
+
+
+    <!-- <div class="element-item transition metal " data-category="transition">
+      <h3 class="name">Mercury</h3>
+      <p class="symbol">Hg</p>
+      <p class="number">80</p>
+      <p class="weight">200.59</p>
+    </div> -->
+    <!-- <div class="element-item metalloid " data-category="metalloid">
+      <h3 class="name">Tellurium</h3>
+      <p class="symbol">Te</p>
+      <p class="number">52</p>
+      <p class="weight">127.6</p>
+    </div> -->
+    <!-- <div class="element-item post-transition metal " data-category="post-transition">
+      <h3 class="name">Bismuth</h3>
+      <p class="symbol">Bi</p>
+      <p class="number">83</p>
+      <p class="weight">208.980</p>
+    </div> -->
+    <!-- <div class="element-item alkali metal " data-category="alkali">
+      <h3 class="name">Potassium</h3>
+      <p class="symbol">K</p>
+      <p class="number">19</p>
+      <p class="weight">39.0983</p>
+    </div> -->
+    <!-- <div class="element-item alkaline-earth metal " data-category="alkaline-earth">
+      <h3 class="name">Calcium</h3>
+      <p class="symbol">Ca</p>
+      <p class="number">20</p>
+      <p class="weight">40.078</p>
+    </div> -->
+    <!-- <div class="element-item lanthanoid metal inner-transition " data-category="lanthanoid">
+      <h3 class="name">Ytterbium</h3>
+      <p class="symbol">Yb</p>
+      <p class="number">70</p>
+      <p class="weight">173.054</p>
+    </div>
+    <div class="element-item noble-gas nonmetal " data-category="noble-gas">
+      <h3 class="name">Argon</h3>
+      <p class="symbol">Ar</p>
+      <p class="number">18</p>
+      <p class="weight">39.948</p>
+    </div>
+    <div class="element-item diatomic nonmetal " data-category="diatomic">
+      <h3 class="name">Nitrogen</h3>
+      <p class="symbol">N</p>
+      <p class="number">7</p>
+      <p class="weight">14.007</p>
+    </div> -->
+    <!-- <div class="element-item actinoid metal inner-transition " data-category="actinoid">
+      <h3 class="name">Plutonium</h3>
+      <p class="symbol">Pu</p>
+      <p class="number">94</p>
+      <p class="weight">(244)</p>
+    </div> -->
+  </div>
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+  <script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
+  <script  src="{% static 'js/indexhash.js' %}"></script>
+
+</body>
+</html>

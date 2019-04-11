@@ -1,5 +1,5 @@
 var hancon = {
-    dwell : "200",
+    dwell : "175",
     pause : "2000",
     auto_refresh : "1",
 
@@ -16,6 +16,11 @@ var hancon = {
     background_static : "n",
 
     controls : "startstop,speed,step,refresh,looprock,toggle",
-    controls_style : "padding:5px;background-color:green;",
-    // controls_tooltip : "Start/Stop the animation, Step one frame, Refresh images",
+    controls_style : "padding:10px; display:flex;",
+    controls_tooltip : "Start/Stop, Speed Control, Single Step , Refresh, Rock Forwards/Backwards,",
+
+    buttons_style : "flex:auto; margin:3px;",
+
+    toggle_size : "20, 10, 5",
+    toggle_colors : "#005914, red, orange",
   };
