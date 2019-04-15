@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Cache-Control"
         content="max-age=0, must-revalidate, no-store">
-  <title>Isotope - filtering with URL hash</title>
+  <title>NightWatch - DCT</title>
 
   <!-- Overall page styling -->
   <link rel="stylesheet" href="{% static 'css/stylehash.css' %}">
@@ -17,6 +17,7 @@
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
 
+  <!-- Utilities -->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
   <script type="text/JavaScript">
@@ -84,6 +85,8 @@
         $.each(uradict, function(key, value) {
             console.log(key, value);
 
+            // Define the particular canvas for this element/key; will
+            //   be saved in a class so it can be properly called later
             var canvas = document.getElementById(key);
 
             if (canvas == null){
@@ -117,14 +120,17 @@
 </head>
 
 <body onload="HAniS.setup(hancon, 'handiv'); JavaScript:init();">
-  <h1>Lowell Observatory - NightWatch - v0.1</h1>
+  <div class="stamp navtitle">
+    <h1>NightWatch - v0.1</h1>
+    <h2>Lowell Observatory</h2>
 
-  <div class="button-group filter-button-group">
-    <button class="button is-checked" data-filter="*">Default View</button>
-    <button class="button" data-filter=".weather">Weather</button>
-    <button class="button" data-filter=".dct">DCT Status</button>
-    <button class="button" data-filter=".dctcams">DCT Webcams</button>
-    <button class="button" data-filter="*">Everything</button>
+    <div class="button-group filter-button-group">
+      <button class="button is-checked" data-filter="*">Default View</button>
+      <button class="button" data-filter=".weather">Weather</button>
+      <button class="button" data-filter=".dct">DCT Status</button>
+      <button class="button" data-filter=".dctcams">DCT Webcams</button>
+      <button class="button" data-filter="*">Everything</button>
+    </div>
   </div>
 
   <div class="grid">
@@ -166,6 +172,7 @@
        but since it was in the Isotope examples I'm leaving it in case
        there's a future version conflict -->
   <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script> -->
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
   <script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
   <script  src="{% static 'js/indexhash.js' %}"></script>
 

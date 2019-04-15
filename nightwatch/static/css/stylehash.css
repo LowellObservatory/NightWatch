@@ -8,6 +8,12 @@ body {
 
 h1 {
   text-align: center;
+  color: rgb(160, 160, 160);
+}
+
+h2 {
+  text-align: center;
+  color: rgb(160, 160, 160);
 }
 
 /* ---- button ---- */
@@ -75,10 +81,25 @@ h1 {
   border-radius: 0 0.5em 0.5em 0;
 }
 
-/* ---- grid ---- */
+/* ---- grid and stamp info---- */
+
+.stamp {
+  position: relative;
+  box-sizing: border-box;
+  background: rgb(0, 80, 185);
+  border-radius: 0.5em 0.5em 0.5em 0.5em;
+
+}
+
+.stamp.navtitle {
+  /* height: 200px; */
+  width: 600px;
+}
 
 .grid {
+  position: relative;
   border: 0px solid #333;
+  max-width: 1920px;
   /* margin: 0 auto; */
 }
 

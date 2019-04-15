@@ -1,18 +1,18 @@
 // external js: isotope.pkgd.js
 
-// filter functions
-var filterFns = {
-  // show if number is greater than 50
-  numberGreaterThan50: function() {
-    var number = $(this).find('.number').text();
-    return parseInt( number, 10 ) > 50;
-  },
-  // show if name ends with -ium
-  ium: function() {
-    var name = $(this).find('.name').text();
-    return name.match( /ium$/ );
-  }
-};
+// // filter functions
+// var filterFns = {
+//   // show if number is greater than 50
+//   numberGreaterThan50: function() {
+//     var number = $(this).find('.number').text();
+//     return parseInt( number, 10 ) > 50;
+//   },
+//   // show if name ends with -ium
+//   ium: function() {
+//     var name = $(this).find('.name').text();
+//     return name.match( /ium$/ );
+//   }
+// };
 
 function getHashFilter() {
   // get filter=filterName
@@ -36,9 +36,13 @@ var isIsotopeInit = false;
 
 function onHashchange() {
   var hashFilter = getHashFilter();
+
+  // Check to see if we've already inited Isotope; if so, just return
   if ( !hashFilter && isIsotopeInit ) {
     return;
   }
+
+  // If we haven't, say that we have and then set the options
   isIsotopeInit = true;
 
   // filter isotope
@@ -49,7 +53,10 @@ function onHashchange() {
     // Animation time; 15 ms
     stagger: 15,
 
+    // div class to actually act upon and arrange
     itemSelector: '.element-item',
+
+    stamp: '.stamp',
 
     layoutMode: 'masonry',
     masonry: {
@@ -61,7 +68,8 @@ function onHashchange() {
     },
 
     // use filterFns
-    filter: filterFns[ hashFilter ] || hashFilter
+    filter: hashFilter
+    // filter: filterFns[ hashFilter ] || hashFilter
 
   });
   // set selected class on button
@@ -73,6 +81,5 @@ function onHashchange() {
 
 $(window).on( 'hashchange', onHashchange );
 
-// trigger event handler to init Isotope
+// trigger event handler to init Isotope; but wait for the images
 onHashchange();
-
