@@ -120,17 +120,32 @@
 </head>
 
 <body onload="HAniS.setup(hancon, 'handiv'); JavaScript:init();">
-  <div class="stamp navtitle">
-    <h1>NightWatch - v0.1</h1>
-    <h2>Lowell Observatory</h2>
 
-    <div class="button-group filter-button-group">
-      <button class="button is-checked" data-filter="*">Default View</button>
-      <button class="button" data-filter=".weather">Weather</button>
-      <button class="button" data-filter=".dct">DCT Status</button>
-      <button class="button" data-filter=".dctcams">DCT Webcams</button>
-      <button class="button" data-filter="*">Everything</button>
-    </div>
+  <div class="stamp">
+    <!-- It's a bit ugly, but it works. Pure CSS table was too annoying. -->
+    <table class="tg">
+      <tr>
+        <td class="tg-title">NightWatch - DCT</td>
+        <td class="tg-logoblock" rowspan="2">
+          <!-- <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}" width=200px> -->
+          <img src="{% static 'images/MWest-DCT.png' %}" width=200px>
+        </td>
+      </tr>
+      <tr>
+        <td class="tg-byline">Lowell Observatory</td>
+      </tr>
+      <tr>
+        <td class="tg-navblock" colspan="2">
+          <div class="button-group filter-button-group">
+            <button class="button is-checked" data-filter="*">Default View</button>
+            <button class="button" data-filter=".weather">Weather</button>
+            <button class="button" data-filter=".dct">DCT Status</button>
+            <button class="button" data-filter=".dctcams">DCT Webcams</button>
+            <button class="button" data-filter="*">Everything</button>
+          </div>
+        </td>
+      </tr>
+    </table>
   </div>
 
   <div class="grid">
@@ -168,13 +183,14 @@
 
   </div>
 
-  <!-- Leaving this commented since we already import jquery in the header,
-       but since it was in the Isotope examples I'm leaving it in case
-       there's a future version conflict -->
-  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script> -->
+  <!-- Layout JS includes -->
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
   <script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
+
+  <script src="{% static 'js/packery-mode.pkgd.min.js' %}"></script>
+
   <script  src="{% static 'js/indexhash.js' %}"></script>
+
 
 </body>
 </html>

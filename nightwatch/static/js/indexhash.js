@@ -62,7 +62,7 @@ function onHashchange() {
     masonry: {
       // columnWidth: '.element-item',
       columnWidth: 10,
-      // horizontalOrder: true,
+      horizontalOrder: true,
       fitWidth: true,
       gutter: 0
     },
