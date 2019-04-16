@@ -39,6 +39,7 @@ function onHashchange() {
 
   // Check to see if we've already inited Isotope; if so, just return
   if ( !hashFilter && isIsotopeInit ) {
+    console.log("Hellooo....?");
     return;
   }
 
@@ -76,9 +77,11 @@ function onHashchange() {
     $filterButtonGroup.find('.is-checked').removeClass('is-checked');
     $filterButtonGroup.find('[data-filter="' + hashFilter + '"]').addClass('is-checked');
   }
+
+  console.log("New layout complete.")
 }
 
 $(window).on( 'hashchange', onHashchange );
 
-// trigger event handler to init Isotope; but wait for the images
+// trigger event handler to init Isotope
 onHashchange();
