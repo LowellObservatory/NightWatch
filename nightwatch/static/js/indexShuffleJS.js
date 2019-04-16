@@ -8,9 +8,7 @@ class Demo {
       sizer: element.querySelector('.my-sizer-element'),
       group: "home",
       // isCentered: true,
-
     });
-
 
     // Log events.
     this.addShuffleEventListeners();

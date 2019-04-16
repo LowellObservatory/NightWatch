@@ -1,152 +1,141 @@
 {% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
+
 <head>
-    <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
-    <title>Isotope Masonry Layout</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control"
+        content="max-age=0, must-revalidate, no-store">
+  <title>NightWatch - DCT</title>
 
-    <!-- StyleSheets -->
-    <link rel="stylesheet" href="{% static 'css/stylestest.css' %}">
+  <!-- Overall page styling -->
+  <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
 
-    <!-- HAniS stuff -->
-    <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
-    <!-- <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" type="text/css" /> -->
+  <!-- HAniS stuff -->
+  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
 
+  <!-- Utilities -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <!-- 7 Segment display clock -->
+  <script type="text/javascript" src="{% static 'js/excanvas.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/segment-display.js' %}"></script>
+  <script type="text/javascript">
+    var display = new SegmentDisplay("14segClock");
+    display.segmentCount    = 14;
+    display.cornerType      = 0;
+    display.digitHeight     = 20;
+    display.digitWidth      = 15;
+    display.digitDistance   = 2.5;
+    display.displayAngle    = 5.0;
+    display.segmentWidth    = 2.0;
+    display.segmentDistance = 0.1;
+
+    display.pattern         = "##:##:## ####";
+    display.colorOn         = "#3498db";
+    display.colorOff        = "#0a1e2b";
+    display.draw();
+
+    animate();
+
+    function animate() {
+      var time    = new Date();
+      var hours   = time.getUTCHours();
+      var minutes = time.getUTCMinutes();
+      var seconds = time.getUTCSeconds();
+      var value   = ((hours < 10) ? ' ' : '') + hours
+                  + ':' + ((minutes < 10) ? '0' : '') + minutes
+                  + ':' + ((seconds < 10) ? '0' : '') + seconds
+                  + "  UTC";
+      display.setValue(value);
+      window.setTimeout('animate()', 100);
+  }
+  </script>
 </head>
+
+<!-- Do I need to change the init() function now that
+     it's in canvasRefresher.js ? -->
 <body onload="HAniS.setup(hancon, 'handiv')">
 
-  <center>
-  <ul id="filterNav" class="filters-list">
-    <li data-filter="*">All Items</li>
-    <li data-filter=".graphs">Graphs</li>
-    <li data-filter=".weather">Weather</li>
-    <li data-filter=".dctcams">DCT Webcams</li>
-  </ul>
-  </center>
+  <div class="stamp">
+    <!-- It's a bit ugly, but it works. Pure CSS table was too annoying. -->
+    <table class="tg">
+      <tr>
+        <td class="tg-title" colspan="2">NightWatch - Lowell Observatory</td>
+      </tr>
+      <tr>
+        <td class="tg-title">
+          <canvas id='14segClock' width="260" height="40"></canvas>
+        </td>
+        <td class="tg-logoblock" rowspan="2">
+          <!-- <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}" width=200px> -->
+          <img src="{% static 'images/MWest-DCT.png' %}" width=200px>
+        </td>
+      </tr>
+      <tr>
+        <!-- <td class="tg-byline">Lowell Observatory</td> -->
+        <td class="tg-byline">4.3m DCT</td>
+      </tr>
+      <tr>
+        <td class="tg-navblock" colspan="2">
+          <div class="btn-group filters-group">
+            <button class="btn btn--primary active" data-filter="home">Home</button>
+            <button class="btn btn--primary" data-filter=".weather">Weather</button>
+            <button class="btn btn--primary" data-filter=".telescopeStatus">DCT Status</button>
+            <button class="btn btn--primary" data-filter=".webcams">DCT Webcams</button>
+            <button class="btn btn--primary" data-filter="*">Show All</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-  <div class="example">
-
-    <!-- The layout is based on blocks, and 'w' and 'h' followed by a number
-    indicate how many of those blocks the div is to occupy. -->
+  <div class="grid">
 
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
-    <div class="item weather item-h5 item-w2" id="handiv"></div>
+    <div class="element-item weather data-category=weather"
+         id="handiv" style="width:700px; height:900px"></div>
 
-    <!-- <div class="item graphs item-h2">
-      <img src="http://nightwatch.lowell.edu/goes16/nows/g16aws_latest.gif">
-      {{ script4 | safe }}
-    </div> -->
-
-    <!-- <div class="item graphs item-w2">
-      <img src="http://nightwatch.lowell.edu/goes16/nows/g16aws_latest.png">
-      {{ script | safe }}
-      {{ div | safe }}
-    </div> -->
-
-    <!-- Camera -->
-    <script>
-    function refreshgate() {
-      var newImage = "http://dctsleeperservice:8080/webcams/dct/gate.jpg#" + new Date().getTime();
-      document.getElementById("gate").innerHTML =
-        "<img src=" + newImage + "></img>";
-      }
-      window.setInterval(refreshgate, 10000);
-    </script>
-
-    <div class="item dctcams item-h2 item-w2" id="gate">
-      <img src='http://dctsleeperservice:8080/webcams/dct/gate.jpg'></img>
-      <!-- {{ script3 | safe }} -->
+    <!-- DCT Webcams -->
+    <!-- (es, I know I can template these in django) -->
+    <div class="element-item webcams data-category=webcams">
+      <canvas id="gate"></canvas>
     </div>
 
-    <!-- Camera -->
-    <script>
-    function refreshgenset() {
-      var newImage = "http://dctsleeperservice:8080/webcams/dct/genset.jpg#" + new Date().getTime();
-      document.getElementById("genset").innerHTML =
-        "<img src=" + newImage + "></img>";
-      }
-      window.setInterval(refreshgenset, 10000);
-    </script>
-
-    <div class="item dctcams item-h2 item-w2" id="genset">
-      <img src='http://dctsleeperservice:8080/webcams/dct/genset.jpg'></img>
-      <!-- {{ script3 | safe }} -->
+    <div class="element-item webcams data-category=webcams">
+      <canvas id="genset"></canvas>
     </div>
 
-    <!-- Camera -->
-    <script>
-    function refreshhelium() {
-      var newImage = "http://dctsleeperservice:8080/webcams/dct/heliumcomp.jpg#" + new Date().getTime();
-      document.getElementById("heliumcomp").innerHTML =
-        "<img src=" + newImage + "></img>";
-      }
-      window.setInterval(refreshhelium, 10000);
-    </script>
-
-    <div class="item dctcams item-h2 item-w2" id="heliumcomp">
-      <img src='http://dctsleeperservice:8080/webcams/dct/heliumcomp.jpg'></img>
-      <!-- {{ script3 | safe }} -->
+    <div class="element-item webcams data-category=webcams">
+      <canvas id="heliumcomp"></canvas>
     </div>
 
-    <!-- Camera -->
-    <script>
-    function refreshobs() {
-      var newImage = "http://dctsleeperservice:8080/webcams/dct/obs_level.jpg#" + new Date().getTime();
-      document.getElementById("obslevel").innerHTML =
-        "<img src=" + newImage + "></img>";
-      }
-      window.setInterval(refreshobs, 10000);
-    </script>
-
-    <div class="item dctcams item-h2 item-w2" id="obslevel">
-      <img src='http://dctsleeperservice:8080/webcams/dct/obs_level.jpg'></img>
-      <!-- {{ script3 | safe }} -->
+    <div class="element-item webcams data-category=webcams">
+      <canvas id="obslevel"></canvas>
     </div>
 
-    <!-- Camera -->
-    <script>
-    function refreshbldg() {
-      var newImage = "http://dctsleeperservice:8080/webcams/dct/tel_bldg.jpg#" + new Date().getTime();
-      document.getElementById("telbldg").innerHTML =
-        "<img src=" + newImage + "></img>";
-      }
-      window.setInterval(refreshbldg, 10000);
-    </script>
-
-    <div class="item dctcams item-h1 item-w1" id="telbldg">
-      <img src='http://dctsleeperservice:8080/webcams/dct/tel_bldg.jpg'></img>
-      <!-- {{ script3 | safe }} -->
+    <div class="element-item webcams data-category=webcams">
+      <canvas id="telbldg"></canvas>
     </div>
 
-    <!-- Camera -->
-    <script>
-    function refreshyard() {
-      var newImage = "http://dctsleeperservice:8080/webcams/dct/util_yard.jpg#" + new Date().getTime();
-      document.getElementById("utilyard").innerHTML =
-        "<img src=" + newImage + "></img>";
-      }
-      window.setInterval(refreshyard, 10000);
-    </script>
-
-    <div class="item dctcams item-h1 item-w1" id="utilyard">
-      <img src='http://dctsleeperservice:8080/webcams/dct/util_yard.jpg'></img>
-      <!-- {{ script3 | safe }} -->
+    <div class="element-item webcams data-category=webcams">
+      <canvas id="utilyard"></canvas>
     </div>
 
   </div>
 
-    <!-- JavaScipts -->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
-    <script src="{% static 'js/functiontest.js' %}"></script>
-    <!-- <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.js"></script> -->
-    <!-- <script type="text/javascript"> -->
-        <!-- Bokeh.set_log_level("info"); -->
-    <!-- </script> -->
+  <!-- Other utilities -->
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/canvasRefresher.js' %}"></script>
+
+  <!-- Layout specific -->
+  <script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
+  <script  src="{% static 'js/index.js' %}"></script>
+
 
 </body>
 </html>

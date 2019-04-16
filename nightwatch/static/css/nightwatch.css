@@ -1,0 +1,300 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: sans-serif;
+  color: rgb(160, 160, 160);
+  background-color: rgb(0, 0, 0);
+}
+
+/* ---- navigation/stamped box ---- */
+
+.stamp {
+  /* position: relative; */
+  display: inline-block;
+  /* width: 650px; */
+  box-sizing: border-box;
+  background: rgb(0, 10, 50);
+  border-radius: 0.5em 0.5em 0.5em 0.5em;
+}
+
+/* table crap */
+
+.tg {
+  color: #3498db;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none;
+}
+
+.tg td {
+  /* font-family: Arial, sans-serif; */
+  font-size: 14px;
+  padding: 10px 5px;
+  overflow: hidden;
+  word-break: normal;
+  border-style: solid;
+  border-width: 1px;
+  border: none;
+  border-color: black;
+}
+
+.tg th {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: normal;
+  overflow: hidden;
+  word-break: normal;
+  border-style: solid;
+  border-width: 1px;
+  border: none;
+  border-color: black;
+}
+
+.tg .tg-title {
+  font-size: 36px;
+  border-color: inherit;
+  text-align: center;
+  vertical-align: center
+}
+
+.tg .tg-byline {
+  font-size: 32px;
+  text-align: center;
+  vertical-align: center
+}
+
+.tg .tg-logoblock {
+  border-color: inherit;
+  text-align: center;
+  vertical-align: center
+}
+
+.tg .tg-navblock {
+  /* font-size: 20px; */
+  text-align: center;
+  vertical-align: center
+}
+
+/* ---- button ---- */
+
+.filter-label {
+  display: block;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 4px;
+  color: #95a5a6;
+}
+
+.filters-group {
+  padding: 0;
+  margin: 0 0 4px;
+  border: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .filters-group-wrap {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.btn-group:after, .btn-group:before {
+  content: " ";
+  display: table;
+}
+
+.btn-group:after {
+  clear: both;
+}
+
+.btn-group .btn {
+  float: left;
+  border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+  border-radius: 3px 0 0 3px;
+}
+
+.btn-group .btn:not(:first-child) {
+  margin-left: -1px;
+}
+
+.btn-group .btn:last-child {
+  border-radius: 0 3px 3px 0;
+}
+
+.btn-group label.btn input[type=radio] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+.btn {
+  display: inline-block;
+  padding: .75em .8em;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #34495e;
+  color: #34495e;
+  font-size: 1rem;
+  background-color: rgba(52, 73, 94, 0);
+  transition: .2s ease-out;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+@media (-moz-touch-enabled: 0), (pointer: fine) {
+  .btn:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: #34495e;
+  }
+}
+.btn:focus {
+  outline-width: 0;
+  box-shadow: 0 0 0 2px rgba(52, 73, 94, 0.4);
+}
+
+.btn.active, .btn:active {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  background-color: #34495e;
+}
+
+.btn:focus.active {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(52, 73, 94, 0.4);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: .7;
+  color: #34495e;
+  background-color: rgba(52, 73, 94, 0);
+}
+
+.btn--primary {
+  color: #3498db;
+  border-color: #3498db;
+  background-color: rgba(52, 152, 219, 0);
+}
+
+@media (-moz-touch-enabled: 0), (pointer: fine) {
+  .btn--primary:hover {
+    background-color: #3498db;
+  }
+}
+.btn--primary:focus {
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.4);
+}
+
+.btn--primary.active, .btn--primary:active {
+  background-color: #3498db;
+}
+
+.btn--primary:focus.active {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(52, 152, 219, 0.4);
+}
+
+.btn--primary:disabled {
+  color: #3498db;
+  background-color: rgba(52, 152, 219, 0);
+}
+
+@media screen and (max-width: 767px) {
+  .btn {
+    font-size: 0.875rem;
+  }
+}
+
+/* ---- grid layout ---- */
+
+.grid {
+  position: relative;
+  border: 0px solid #333;
+  /* max-width: 1920px; */
+  /* margin: 0 auto; */
+}
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .element-item ---- */
+
+.element-item {
+  position: relative;
+  float: left;
+  /* width: 100px; */
+  /* height: 100px; */
+  margin: 5px;
+  padding: 5px;
+  background: rgb(51, 51, 51);
+  color: #262524;
+}
+
+.element-item > * {
+  margin: 0;
+  padding: 0;
+}
+
+.element-item .name {
+  position: absolute;
+
+  left: 10px;
+  top: 60px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.element-item .symbol {
+  position: absolute;
+  left: 10px;
+  top: 0px;
+  font-size: 42px;
+  font-weight: bold;
+  color: white;
+}
+
+.element-item .number {
+  position: absolute;
+  right: 8px;
+  top: 5px;
+}
+
+.element-item .weight {
+  position: absolute;
+  left: 10px;
+  top: 76px;
+  font-size: 12px;
+}
+
+.element-item.weather  {
+  background: rgb(42, 42, 42);
+  padding-bottom: 5px;
+}
+
+.element-item.dctcams   {
+  background: rgb(0, 70, 0);
+}
+
+/* This allows styling of the HAniS control buttons. */
+/* Disabled for now because it's a bit ugly */
+
+/* #handiv button.startstop.stop{
+  background: rgb(185, 0, 0);
+} */
+
+/* #handiv button.startstop.start{
+  background: rgb(0, 185, 0);
+} */
+
+/* #handiv button:hover {
+  background-color: #0085b9;
+  text-shadow: 0 1px hsla(0, 0%, 100%, 0.5);
+  color: #222;
+} */

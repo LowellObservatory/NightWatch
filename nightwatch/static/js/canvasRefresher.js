@@ -92,5 +92,7 @@ function refreshAllImgs() {
     });
     setTimeout("refreshAllImgs()", refreshInterval);
     console.log("Updated all images! Timer reset.");
-
 }
+
+// Actually start the update process
+init();
