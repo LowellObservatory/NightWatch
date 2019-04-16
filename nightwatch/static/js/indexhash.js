@@ -60,7 +60,6 @@ function onHashchange() {
 
     layoutMode: 'masonry',
     masonry: {
-      // columnWidth: '.element-item',
       columnWidth: 10,
       horizontalOrder: true,
       fitWidth: true,
