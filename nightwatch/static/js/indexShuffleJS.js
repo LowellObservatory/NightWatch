@@ -7,7 +7,7 @@ class Demo {
       itemSelector: '.picture-item',
       sizer: element.querySelector('.my-sizer-element'),
       group: "home",
-      isCentered: true,
+      // isCentered: true,
 
     });
 

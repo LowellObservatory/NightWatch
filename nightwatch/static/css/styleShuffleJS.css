@@ -104,8 +104,8 @@ p {
 
 /*
   Shuffle needs either relative or absolute positioning on the container
-  It will set it for you, but it'll cause another style recalculation and layout.
-  AKA worse performance - so just set it here
+  It will set it for you, but it'll cause another style
+  recalculation and layout. AKA worse performance - so just set it here
  */
 .my-shuffle-container {
   position: relative;
@@ -119,9 +119,10 @@ p {
 }
 
 .picture-item {
-  height: 220px;
-  margin-top: 24px;
+  height: 250px;
+  margin-top: 5px;
 }
+
 .picture-item img {
   display: block;
   width: 100%;
@@ -137,7 +138,12 @@ p {
 }
 .picture-item--h2 {
   height: 464px;
-  /* 2x the height + 1 gutter */
+  /* 2x the height + 1 gutter on all sides */
+}
+
+.picture-item--h4 {
+  height: 884px;
+  /* 4x the height + 1 gutter on all sides */
 }
 
 .picture-item__inner {
@@ -472,6 +478,10 @@ p {
   padding-bottom: 56.25%;
 }
 
+.aspect--4x3 {
+  padding-bottom: 75.0%;
+}
+
 .col-1\@xs,
 .col-2\@xs,
 .col-3\@xs,
@@ -542,7 +552,7 @@ p {
   width: 100%;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 640px) {
   .col-1\@sm,
   .col-2\@sm,
   .col-3\@sm,
@@ -607,15 +617,15 @@ p {
   }
 
   .container {
-    padding-left: 7%;
-    padding-right: 7%;
+    padding-left: 3%;
+    padding-right: 3%;
   }
 
   .row {
-    max-width: 1200px;
+    max-width: 1920px;
   }
 }
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1280px) {
   .col-1\@md,
   .col-2\@md,
   .col-3\@md,
