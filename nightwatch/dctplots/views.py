@@ -35,4 +35,4 @@ def index(request):
     #                'script3': script3,
     #                'script4': script4})
 
-    return render(request, 'dctplots/index_hashed.html')
+    return render(request, 'dctplots/index_shufflejs.html')

@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control"
+        content="max-age=0, must-revalidate, no-store">
+  <title>NightWatch - DCT</title>
+
+  <!-- Overall page styling -->
+  <!-- <link rel="stylesheet" href="{% static 'css/stylehash.css' %}"> -->
+
+  <!-- HAniS stuff -->
+  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
+
+  <!-- Utilities -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="{% static 'css/styleShuffleJS.css' %}">
+</head>
+
+<body onload="HAniS.setup(hancon, 'handiv'); JavaScript:init();">
+
+  <div class="stamp">
+    <!-- It's a bit ugly, but it works. Pure CSS table was too annoying. -->
+    <table class="tg">
+      <tr>
+        <td class="tg-title">NightWatch - DCT</td>
+        <td class="tg-logoblock" rowspan="2">
+          <!-- <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}" width=200px> -->
+          <img src="{% static 'images/MWest-DCT.png' %}" width=200px>
+        </td>
+      </tr>
+      <tr>
+        <td class="tg-byline">Lowell Observatory</td>
+      </tr>
+      <tr>
+        <td class="tg-navblock" colspan="2">
+          <!-- Layout navigation buttons go here -->
+          <div class="container">
+              <div class="row">
+                <div class="col-12@sm filters-group-wrap">
+                  <div class="filters-group">
+                    <!-- <p class="filter-label">Filter</p> -->
+                    <div class="btn-group filter-options">
+                      <button class="btn btn--primary" data-group="home">Home</button>
+                      <button class="btn btn--primary" data-group="weather">Weather</button>
+                      <button class="btn btn--primary" data-group="telescopeStatus">DCT Status</button>
+                      <button class="btn btn--primary" data-group="webcams">Webcams</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+
+  <div class="container">
+    <div id="grid" class="row my-shuffle-container">
+      <figure class="col-3@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["home", "weather"]'
+        data-date-created="9999-01-01" data-title="GOES-16 AZ View">
+        <div class="picture-item__inner">
+          <!-- HAniS weather sequence displayer -->
+          <!-- https://www.ssec.wisc.edu/hanis/ -->
+          <div id="handiv" style="width:700px; height:900px"></div>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["home", "weather"]'
+        data-date-created="9999-01-01" data-title="DCT AllSky Camera">
+        <div class="picture-item__inner">
+          <canvas id="allsky"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["webcams"]'
+        data-date-created="9999-01-01" data-title="DCT Gate">
+        <div class="picture-item__inner">
+          <canvas id="gate"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["webcams"]'
+        data-date-created="9999-01-01" data-title="DCT Generator Panel">
+        <div class="picture-item__inner">
+          <canvas id="genset"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["webcams"]'
+        data-date-created="9999-01-01" data-title="DCT Helium Compressor">
+        <div class="picture-item__inner">
+          <canvas id="heliumcomp"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["home", "webcams"]'
+        data-date-created="9999-01-01" data-title="DCT Observing Level">
+        <div class="picture-item__inner">
+          <canvas id="obslevel"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["webcams"]'
+        data-date-created="9999-01-01" data-title="DCT Telescope Building">
+        <div class="picture-item__inner">
+          <canvas id="telbldg"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-6@xs col-8@sm col-6@md picture-item picture-item--overlay" data-groups='["webcams"]'
+        data-date-created="9999-01-01" data-title="DCT Utility Yard">
+        <div class="picture-item__inner">
+          <canvas id="utilyard"></canvas>
+        </div>
+      </figure>
+
+      <figure class="col-3@xs col-4@sm col-3@md picture-item" data-groups='["home"]' data-date-created="2017-01-12"
+        data-title="Astronaut Cat">
+        <div class="picture-item__inner">
+          <div class="aspect aspect--16x9">
+            <div class="aspect__inner">
+              <img
+                src="https://images.unsplash.com/photo-1484244233201-29892afe6a2c?ixlib=rb-0.3.5&auto=format&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=284&h=160&fit=crop&s=98423596f72d9f0913a4d44f0580a34c"
+                srcset="https://images.unsplash.com/photo-1484244233201-29892afe6a2c?ixlib=rb-0.3.5&auto=format&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=284&h=160&fit=crop&s=98423596f72d9f0913a4d44f0580a34c 1x, https://images.unsplash.com/photo-1484244233201-29892afe6a2c?ixlib=rb-0.3.5&auto=format&q=55&fm=jpg&dpr=2&crop=entropy&cs=tinysrgb&w=284&h=160&fit=crop&s=98423596f72d9f0913a4d44f0580a34c 2x"
+                alt="An intrigued cat sits in grass next to a flag planted in front of it with an astronaut space kitty sticker on beige fabric." />
+            </div>
+          </div>
+          <div class="picture-item__details">
+            <figcaption class="picture-item__title"><a href="https://unsplash.com/photos/FqkBXo2Nkq0" target="_blank"
+                rel="noopener">Astronaut Cat</a></figcaption>
+            <p class="picture-item__tags hidden@xs">animal</p>
+          </div>
+        </div>
+      </figure>
+
+      <div class="col-1@sm col-1@xs my-sizer-element"></div>
+    </div>
+  </div>
+
+  <!-- Other utilities -->
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/canvasRefresher.js' %}"></script>
+
+  <script src='https://unpkg.com/shufflejs@5'></script>
+  <script  src="{% static 'js/indexShuffleJS.js' %}"></script>
+
+</body>
+</html>
