@@ -103,9 +103,9 @@
         <td class="tg-navblock" colspan="2">
           <div class="btn-group filters-group">
             <button class="btn btn--primary active" data-filter="home">Home</button>
-            <button class="btn btn--primary" data-filter=".weather">Weather</button>
-            <button class="btn btn--primary" data-filter=".telescopeStatus">DCT Status</button>
-            <button class="btn btn--primary" data-filter=".webcams">DCT Webcams</button>
+            <button class="btn btn--primary" data-filter="weather">Weather</button>
+            <button class="btn btn--primary" data-filter="telescopeStatus">DCT Status</button>
+            <button class="btn btn--primary" data-filter="webcams">DCT Webcams</button>
             <button class="btn btn--primary" data-filter="*">Show All</button>
           </div>
         </td>
@@ -116,32 +116,32 @@
   <div class="grid">
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
-    <div class="element-item weather data-category=weather"
+    <div class="element-item weather" data-groups='["home", "weather"]'
          id="handiv" style="width:700px; height:900px"></div>
 
     <!-- DCT Webcams -->
     <!-- (es, I know I can template these in django) -->
-    <div class="element-item webcams data-category=webcams">
+    <div class="element-item webcams" data-groups='["webcams"]'>
       <canvas id="gate"></canvas>
     </div>
 
-    <div class="element-item webcams data-category=webcams">
+    <div class="element-item webcams" data-groups='["webcams"]'>
       <canvas id="genset"></canvas>
     </div>
 
-    <div class="element-item webcams data-category=webcams">
+    <div class="element-item webcams" data-groups='["webcams"]'>
       <canvas id="heliumcomp"></canvas>
     </div>
 
-    <div class="element-item webcams data-category=webcams">
+    <div class="element-item webcams" data-groups='["home", "webcams"]'>
       <canvas id="obslevel"></canvas>
     </div>
 
-    <div class="element-item webcams data-category=webcams">
+    <div class="element-item webcams" data-groups='["webcams"]'>
       <canvas id="telbldg"></canvas>
     </div>
 
-    <div class="element-item webcams data-category=webcams">
+    <div class="element-item webcams" data-groups='["webcams"]'>
       <canvas id="utilyard"></canvas>
     </div>
 
