@@ -10,6 +10,16 @@
         content="max-age=0, must-revalidate, no-store">
   <title>NightWatch - DCT</title>
 
+  <!-- Favicon crap -->
+  <!-- Used https://realfavicongenerator.net -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+  <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
   <!-- Overall page styling -->
   <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
   <link rel="stylesheet" media="screen"
@@ -62,7 +72,7 @@
 <body onload="HAniS.setup(hancon, 'handiv')">
 
   <div class="stamp">
-    <!-- It's a bit ugly, but it works. Pure CSS table was too annoying. -->
+    <!-- It's ugly, but works. Pure CSS ver. was more annoying than this is -->
     <table class="tg">
       <tr>
         <td class="tg-title" colspan="1">
@@ -104,7 +114,6 @@
   </div>
 
   <div class="grid">
-
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
     <div class="element-item weather data-category=weather"
