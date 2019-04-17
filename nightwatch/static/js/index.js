@@ -35,23 +35,28 @@ function filtFunc() {
   }
 }
 
-// jQuery loop over all elements that have the 'filters-group' class.
-//   This binds a click on a 'button' inside that group to an actual call
-//   to Isotope to filter based on the value/group specified in the 'button'
-//   that was clicked on, via the "data-filter" attribute on the button itself
-$('.filters-group').on( 'click', 'button', function() {
-  $grid.isotope();
-});
-
 // jQuery loop over all elements inside the 'btn-group' class.
 //   This will change the "active" class on the button that was clicked on
 //   and remove it from all the rest to show indication for navigation.
+//
+// NOTE: Need to keep this *above* the actual onclick assignment below.
+//   Otherwise, the filter event will be fired before changing the 'active'
+//   class on the button, which will cause the layout to be filtered based
+//   on the *previous* value and not the new one.  Tricksy.
 $('.btn-group').each( function( i, buttonGroup ) {
   var $buttonGroup = $( buttonGroup );
   $buttonGroup.on( 'click', 'button', function() {
     $buttonGroup.find('.active').removeClass('active');
     $( this ).addClass('active');
   });
+});
+
+// jQuery loop over all elements that have the 'filters-group' class.
+//   This binds a click on a 'button' inside that group to an actual call
+//   to Isotope to filter based on the value/group specified in the 'button'
+//   that was clicked on, via the "data-filter" attribute on the button itself
+$('.filters-group').on( 'click', 'button', function() {
+  $grid.isotope();
 });
 
 // Calling isotope() with no arguments triggers arrange(),
