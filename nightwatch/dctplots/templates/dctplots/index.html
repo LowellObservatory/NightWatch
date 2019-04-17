@@ -40,12 +40,12 @@
     var display = new SegmentDisplay("14segClock");
     display.segmentCount    = 14;
     display.cornerType      = 0;
-    display.digitHeight     = 20;
-    display.digitWidth      = 15;
+    display.digitHeight     = 25;
+    display.digitWidth      = 20;
     display.digitDistance   = 2.5;
     display.displayAngle    = 5.0;
-    display.segmentWidth    = 2.0;
-    display.segmentDistance = 0.1;
+    display.segmentWidth    = 3.0;
+    display.segmentDistance = 0.2;
 
     display.pattern         = "##:##:## ####";
     display.colorOn         = "#3498db";
@@ -120,29 +120,29 @@
          id="handiv" style="width:700px; height:900px"></div>
 
     <!-- DCT Webcams -->
-    <!-- (es, I know I can template these in django) -->
+    <!-- (Yes, I know I can template these in django) -->
+    <div class="element-item webcams" data-groups='["home", "webcams"]'>
+        <canvas id="obslevel" width=250px></canvas>
+      </div>
+
     <div class="element-item webcams" data-groups='["webcams"]'>
       <canvas id="gate"></canvas>
     </div>
 
     <div class="element-item webcams" data-groups='["webcams"]'>
-      <canvas id="genset"></canvas>
+      <canvas id="genset" width=250px></canvas>
     </div>
 
     <div class="element-item webcams" data-groups='["webcams"]'>
-      <canvas id="heliumcomp"></canvas>
-    </div>
-
-    <div class="element-item webcams" data-groups='["home", "webcams"]'>
-      <canvas id="obslevel"></canvas>
+      <canvas id="heliumcomp" width=250px></canvas>
     </div>
 
     <div class="element-item webcams" data-groups='["webcams"]'>
-      <canvas id="telbldg"></canvas>
+      <canvas id="telbldg" width=250px></canvas>
     </div>
 
     <div class="element-item webcams" data-groups='["webcams"]'>
-      <canvas id="utilyard"></canvas>
+      <canvas id="utilyard" width=250px></canvas>
     </div>
 
   </div>
