@@ -12,6 +12,8 @@
 
   <!-- Overall page styling -->
   <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
+  <link rel="stylesheet" media="screen"
+        href="https://fontlibrary.org/face/segment14" type="text/css"/>
 
   <!-- HAniS stuff -->
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
@@ -22,7 +24,8 @@
 
   <!-- 7 Segment display clock -->
   <script type="text/javascript" src="{% static 'js/excanvas.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/segment-display.js' %}"></script>
+  <script type="text/javascript"
+          src="{% static 'js/segment-display.js' %}"></script>
   <script type="text/javascript">
     var display = new SegmentDisplay("14segClock");
     display.segmentCount    = 14;
@@ -56,28 +59,35 @@
   </script>
 </head>
 
-<!-- Do I need to change the init() function now that
-     it's in canvasRefresher.js ? -->
 <body onload="HAniS.setup(hancon, 'handiv')">
 
   <div class="stamp">
     <!-- It's a bit ugly, but it works. Pure CSS table was too annoying. -->
     <table class="tg">
       <tr>
-        <td class="tg-title" colspan="2">NightWatch - Lowell Observatory</td>
+        <td class="tg-title" colspan="1">
+          <!-- Need this assinine magicbox div to get the image and text
+          actually aligned vertically. Dumb.-->
+          <div class='magicbox'>
+            <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}"
+                 width=75px>
+            <span>&nbspNightWatch</span>
+          </div>
+        </td>
+        <td class="tg-logoblock" rowspan="3">
+            <img src="{% static 'images/MWest-DCT.png' %}" width=200px>
+          </td>
       </tr>
       <tr>
-        <td class="tg-title">
-          <canvas id='14segClock' width="260" height="40"></canvas>
-        </td>
-        <td class="tg-logoblock" rowspan="2">
-          <!-- <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}" width=200px> -->
-          <img src="{% static 'images/MWest-DCT.png' %}" width=200px>
+        <td class="tg-byline">
+          4.3m DCT
         </td>
       </tr>
       <tr>
         <!-- <td class="tg-byline">Lowell Observatory</td> -->
-        <td class="tg-byline">4.3m DCT</td>
+        <td class="tg-title">
+          <canvas id='14segClock' width="260" height="40"></canvas>
+        </td>
       </tr>
       <tr>
         <td class="tg-navblock" colspan="2">

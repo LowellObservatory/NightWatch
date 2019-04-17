@@ -1,9 +1,17 @@
+/* DSEG14 Classic */
+
 * { box-sizing: border-box; }
 
 body {
   font-family: sans-serif;
   color: rgb(160, 160, 160);
   background-color: rgb(0, 0, 0);
+}
+
+/* Ugh CSS is so effing terrible */
+.magicbox {
+  display: flex;
+  align-items:center;
 }
 
 /* ---- navigation/stamped box ---- */
@@ -28,8 +36,11 @@ body {
 
 .tg td {
   /* font-family: Arial, sans-serif; */
+  /* font-family: 'DSEG14-Classic'; */
+  font-weight: normal;
+  font-style: italic;
   font-size: 14px;
-  padding: 10px 5px;
+  padding: 5px 5px;
   overflow: hidden;
   word-break: normal;
   border-style: solid;
@@ -54,25 +65,25 @@ body {
   font-size: 36px;
   border-color: inherit;
   text-align: center;
-  vertical-align: center
+  vertical-align: middle
 }
 
 .tg .tg-byline {
   font-size: 32px;
   text-align: center;
-  vertical-align: center
+  vertical-align: middle
 }
 
 .tg .tg-logoblock {
   border-color: inherit;
   text-align: center;
-  vertical-align: center
+  vertical-align: middle
 }
 
 .tg .tg-navblock {
   /* font-size: 20px; */
   text-align: center;
-  vertical-align: center
+  vertical-align: middle
 }
 
 /* ---- button ---- */
