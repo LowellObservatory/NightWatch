@@ -1,6 +1,6 @@
 // init Isotope
 var $grid = $('.grid').isotope({
-  // disables initial layout
+  // 'false' disables the initial layout
   isInitLayout: false,
 
   itemSelector: '.element-item',

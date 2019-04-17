@@ -18,12 +18,9 @@ or they can be linked directly from the CDN, a la:
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 ```
 
-Same goes for Packery (https://packery.metafizzy.co/):
+I opted to just grab the minified version and put it into the static files
+tree so we don't have to worry about it.
 
-```
-<script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
-<!-- or -->
-<script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
 ```
 
 ### Dev. Notes
@@ -56,4 +53,3 @@ I was getting broken images that showed up as "Blocked By Client" errors
 in the Chrome console when viewing the page (on localhost); either of the
 above mentioned Chrome extensions were blocking images linked from
 another domain on the intranet.
-
