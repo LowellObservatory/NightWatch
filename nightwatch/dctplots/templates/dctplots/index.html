@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control"
+        content="max-age=0, must-revalidate, no-store">
+  <title>NightWatch - DCT</title>
+
+  <!-- Favicon crap -->
+  <!-- Used https://realfavicongenerator.net -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+  <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Overall page styling -->
+  <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
+  <link rel="stylesheet" media="screen"
+        href="https://fontlibrary.org/face/segment14" type="text/css"/>
+
+  <!-- HAniS stuff -->
+  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
+
+  <!-- Utilities -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <!-- 7 Segment display clock -->
+  <!-- I think this one is only for old IE compatibility? -->
+  <script type="text/javascript" src="{% static 'js/excanvas.js' %}"></script>
+  <script type="text/javascript"
+          src="{% static 'js/segment-display.js' %}"></script>
+  <script type="text/javascript">
+    var display = new SegmentDisplay("14segClock");
+    display.segmentCount    = 14;
+    display.cornerType      = 0;
+    display.digitHeight     = 25;
+    display.digitWidth      = 20;
+    display.digitDistance   = 2.5;
+    display.displayAngle    = 5.0;
+    display.segmentWidth    = 3.0;
+    display.segmentDistance = 0.2;
+
+    display.pattern         = "##:##:## ####";
+    display.colorOn         = "#3498db";
+    display.colorOff        = "#0a1e2b";
+    display.draw();
+
+    animate();
+
+    function animate() {
+      var time    = new Date();
+      var hours   = time.getUTCHours();
+      var minutes = time.getUTCMinutes();
+      var seconds = time.getUTCSeconds();
+      var value   = ((hours < 10) ? ' ' : '') + hours
+                  + ':' + ((minutes < 10) ? '0' : '') + minutes
+                  + ':' + ((seconds < 10) ? '0' : '') + seconds
+                  + "  UTC";
+      display.setValue(value);
+      window.setTimeout('animate()', 100);
+  }
+  </script>
+</head>
+
+<body onload="HAniS.setup(hancon, 'handiv')">
+
+  <div class="stamp">
+    <!-- It's ugly, but works. Pure CSS ver. was more annoying than this is -->
+    <table class="tg">
+      <tr>
+        <td class="tg-title" colspan="1">
+          <!-- Need this assinine magicbox div to get the image and text
+          actually aligned vertically. Dumb.-->
+          <div class='magicbox'>
+            <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}"
+                 width=75px>
+            <span>&nbspNightWatch</span>
+          </div>
+        </td>
+        <td class="tg-logoblock" rowspan="3">
+            <img src="{% static 'images/MWest-DCT.png' %}" width=200px>
+          </td>
+      </tr>
+      <tr>
+        <td class="tg-byline">
+          4.3m DCT
+        </td>
+      </tr>
+      <tr>
+        <!-- <td class="tg-byline">Lowell Observatory</td> -->
+        <td class="tg-title">
+          <canvas id='14segClock' width="260" height="40"></canvas>
+        </td>
+      </tr>
+      <tr>
+        <td class="tg-navblock" colspan="2">
+          <div class="btn-group filters-group">
+            <button class="btn btn--primary active" data-filter="home">Home</button>
+            <button class="btn btn--primary" data-filter="weather">Weather</button>
+            <button class="btn btn--primary" data-filter="telescopeStatus">DCT Status</button>
+            <button class="btn btn--primary" data-filter="webcams">DCT Webcams</button>
+            <button class="btn btn--primary" data-filter="*">Show All</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="grid">
+    <!-- HAniS weather sequence displayer -->
+    <!-- https://www.ssec.wisc.edu/hanis/ -->
+    <div class="element-item weather" data-groups='["home", "weather"]'
+         id="handiv" style="width:700px; height:900px"></div>
+
+    <div class="element-item weather" data-groups='["home", "weather"]'>
+        <canvas id="allsky" height=500px width=500px></canvas>
+    </div>
+
+    <!-- DCT Webcams -->
+    <!-- (Yes, I know I can template these in django) -->
+    <div class="element-item webcams" data-groups='["home", "webcams"]'>
+        <canvas id="obslevel" height=235px width=400px></canvas>
+    </div>
+
+    <div class="element-item webcams" data-groups='["webcams"]'>
+      <canvas id="gate" height=235px width=400px></canvas>
+    </div>
+
+    <div class="element-item webcams" data-groups='["webcams"]'>
+      <canvas id="genset" height=235px width=400px></canvas>
+    </div>
+
+    <div class="element-item webcams" data-groups='["webcams"]'>
+      <canvas id="heliumcomp" height=235px width=400px></canvas>
+    </div>
+
+    <div class="element-item webcams" data-groups='["webcams"]'>
+      <canvas id="telbldg" height=235px width=400px></canvas>
+    </div>
+
+    <div class="element-item webcams" data-groups='["webcams"]'>
+      <canvas id="utilyard" height=235px width=400px></canvas>
+    </div>
+
+  </div>
+
+  <!-- Other utilities -->
+  <script type="text/javascript" src="{% static 'js/canvasRefresher.js' %}"></script>
+
+  <!-- Layout specific -->
+  <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'js/index.js' %}"></script>
+
+
+</body>
+</html>
