@@ -21,3 +21,15 @@ $('.btn-group').each( function( i, buttonGroup ) {
     $( this ).addClass('active');
   });
 });
+
+// For the first run thru, sort by the default/home/active button
+//   ... but first we have to find which one that is.
+var $activeButt;
+
+$('.btn-group').each( function( i, buttonGroup ) {
+  var $buttonGroup = $( buttonGroup );
+  $activeButt = $buttonGroup.find('.active');
+});
+
+var filterValue = $activeButt.attr('data-filter');
+$grid.isotope({ filter: filterValue });
