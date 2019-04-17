@@ -33,6 +33,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
   <!-- 7 Segment display clock -->
+  <!-- I think this one is only for old IE compatibility? -->
   <script type="text/javascript" src="{% static 'js/excanvas.js' %}"></script>
   <script type="text/javascript"
           src="{% static 'js/segment-display.js' %}"></script>
@@ -152,12 +153,11 @@
   </div>
 
   <!-- Other utilities -->
-  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
   <script type="text/javascript" src="{% static 'js/canvasRefresher.js' %}"></script>
 
   <!-- Layout specific -->
-  <script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
-  <script  src="{% static 'js/index.js' %}"></script>
+  <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'js/index.js' %}"></script>
 
 
 </body>
