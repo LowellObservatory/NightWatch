@@ -32,30 +32,46 @@ class refreshedImgObj {
     }
 }
 
-function setImgOnload(newElem){
-  // Can only do this *after* the canvas is actually found
-  // Set the onload behavior of this particular img block
-  newElem.img.onload = function() {
-    newElem.canvas.setAttribute("width", newElem.img.width)
-    newElem.canvas.setAttribute("height", newElem.img.height)
-    newElem.ctx.drawImage(newElem.img, 0, 0);
+function drawImageScaled(img, canvas, ctx) {
+    // Props to https://stackoverflow.com/a/23105310
+    //   GameAlchemist https://stackoverflow.com/users/856501/gamealchemist
+
+    // Actually draw the image, scaling it down and centering it if necessary
+    var hRatio = canvas.width/img.width;
+    var vRatio =  canvas.height/img.height;
+    var ratio  = Math.min(hRatio, vRatio);
+
+    var centerShift_x = (canvas.width - img.width*ratio)/2;
+    var centerShift_y = (canvas.height - img.height*ratio)/2;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // This will center the image in whatever padded area is now in the canvas
+    ctx.drawImage(img, 0,0, img.width, img.height,
+                       centerShift_x, centerShift_y,
+                       img.width*ratio, img.height*ratio);
+
     if(drawDate) {
         var now = new Date();
         var text = now.toLocaleDateString() + " "
                     + now.toLocaleTimeString();
-        var maxWidth = 150;
-        var x = newElem.img.width-50-maxWidth;
-        var y = newElem.img.height-50;
-        newElem.ctx.font = "20px Courier New";
-        newElem.ctx.strokeStyle = 'black';
-        newElem.ctx.lineWidth = 2;
-        newElem.ctx.strokeText(text, x, y, maxWidth);
-        newElem.ctx.fillStyle = 'white';
-        newElem.ctx.fillText(text, x, y, maxWidth);
+
+        // 0, 0 is the upper left coord
+        var x = centerShift_x;
+        var y = centerShift_y + 3*canvas.height/4;
+
+        ctx.font = "20px Courier New";
+
+        // Text outline
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.strokeText(text, x, y);
+
+        // Actual text
+        ctx.fillStyle = 'white';
+        ctx.fillText(text, x, y);
     }
-  };
-  return newElem;
-}
+ }
 
 function init() {
     // A jQuery style foreach; really an array and a callback but whatevs
@@ -77,8 +93,11 @@ function init() {
             // Remember to reference newElem.canvas/newElem.ctx henceforth
             newElem.ctx = newElem.canvas.getContext("2d");
 
-            // Update the image/canvas stuff now and set up the onload func
-            newElem = setImgOnload(newElem);
+            // Update the image/canvas stuff now and set up the onload func.
+            //   Can only do this *after* the canvas is actually found
+             newElem.img.onload = drawImageScaled.bind(null, newElem.img,
+                                                             newElem.canvas,
+                                                             newElem.ctx);
             validElements.push(newElem);
         }
     });
