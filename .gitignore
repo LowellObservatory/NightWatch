@@ -111,3 +111,6 @@ venv.bak/
 dbconn.conf
 modules.conf
 dbqueries.conf
+
+# Ignore the django deployed staticfiles directory
+staticfiles/
