@@ -21,8 +21,6 @@ or they can be linked directly from the CDN, a la:
 I opted to just grab the minified version and put it into the static files
 tree so we don't have to worry about it.
 
-```
-
 ### Dev. Notes
 
 Following along from https://docs.djangoproject.com/en/2.2/intro/tutorial01/
