@@ -8,6 +8,7 @@ var $grid = $('.grid').isotope({
   layoutMode: 'masonry',
   masonry: {
     columnWidth: 50,
+    gutter: 5,
   },
 
   // If filter is set to a function, that function checks each
@@ -26,6 +27,12 @@ function filtFunc() {
 
   // Loop over each relevant element and see if it matches the active filter
   const groups = JSON.parse($(this).attr('data-groups'));
+
+  // Handle special case of "*" filter in the laziest way possible
+  if ($activeButt == "*") {
+    return true
+  }
+
   const isElementInCurrentGroup = groups.indexOf($activeButt) !== -1;
   // Only search elements in the current group
   if (!isElementInCurrentGroup) {
@@ -43,6 +50,8 @@ function filtFunc() {
 //   Otherwise, the filter event will be fired before changing the 'active'
 //   class on the button, which will cause the layout to be filtered based
 //   on the *previous* value and not the new one.  Tricksy.
+// TODO: Just combine the two into a single deal to avoid this
+//   potential order of operations deal.
 $('.btn-group').each( function( i, buttonGroup ) {
   var $buttonGroup = $( buttonGroup );
   $buttonGroup.on( 'click', 'button', function() {
