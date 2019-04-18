@@ -1,10 +1,10 @@
 var uradict = {
-    gate: "http://dctsleeperservice:8080/webcams/dct/gate.jpg",
-    genset: "http://dctsleeperservice:8080/webcams/dct/genset.jpg",
-    heliumcomp: "http://dctsleeperservice:8080/webcams/dct/heliumcomp.jpg",
-    obslevel: "http://dctsleeperservice:8080/webcams/dct/obs_level.jpg",
-    telbldg: "http://dctsleeperservice:8080/webcams/dct/tel_bldg.jpg",
-    utilyard: "http://dctsleeperservice:8080/webcams/dct/util_yard.jpg",
+    gate: "http://dctsleeperservice:9876/webcams/dct/gate.jpg",
+    genset: "http://dctsleeperservice:9876/webcams/dct/genset.jpg",
+    heliumcomp: "http://dctsleeperservice:9876/webcams/dct/heliumcomp.jpg",
+    obslevel: "http://dctsleeperservice:9876/webcams/dct/obs_level.jpg",
+    telbldg: "http://dctsleeperservice:9876/webcams/dct/tel_bldg.jpg",
+    utilyard: "http://dctsleeperservice:9876/webcams/dct/util_yard.jpg",
     allsky: "http://dct-allsky.lowell.edu/allsky/dct_allsky.jpg",
 }
 

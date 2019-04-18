@@ -3,7 +3,7 @@ var hancon = {
     pause : "2000",
     auto_refresh : "1",
 
-    image_base : "http://nightwatch.lowell.edu/goes16/nows/",
+    image_base : "http://dctsleeperservice:9876/goes16/nows/",
     basename : "goes_latest_???.png",
     num_frames : "24",
     base_starting_number: "23",
