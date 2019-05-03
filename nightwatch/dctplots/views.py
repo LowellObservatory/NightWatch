@@ -7,9 +7,10 @@ from bokeh.embed import components, server_document
 
 def index(request):
     """
-    This will be the page that is returned when someone navigates to
+    This will be the page that generated and then served (to nginx) 
+    when someone navigates to
 
-    http://nightwatch/dctplots/index.html (or just nightwatch/dctplots)
+    http://nightwatch.lowell.edu
 
     It's defined in the urlpatterns list in urls.py
     """
