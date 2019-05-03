@@ -124,6 +124,10 @@
         <canvas id="allsky" height=500px width=500px></canvas>
     </div>
 
+    <div class="element-item weather" data-groups='["weather"]'>
+      {{ dctweather | safe }}
+    </div>
+
     <!-- DCT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
     <div class="element-item webcams" data-groups='["home", "webcams"]'>

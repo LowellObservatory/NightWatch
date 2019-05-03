@@ -2,7 +2,7 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from . import influxdb_grabber as idbg
+from bokeh.embed import components, server_document
 
 
 def index(request):
@@ -35,4 +35,7 @@ def index(request):
     #                'script3': script3,
     #                'script4': script4})
 
-    return render(request, 'dctplots/index.html')
+    dctweather = server_document("http://dctsleeperservice:5000/dctweather")
+
+    return render(request, 'dctplots/index.html',
+                  {'dctweatherplot': dctweather})
