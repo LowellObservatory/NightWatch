@@ -7,7 +7,7 @@ from bokeh.embed import components, server_document
 
 def index(request):
     """
-    This will be the page that generated and then served (to nginx) 
+    This will be the page that generated and then served (to nginx)
     when someone navigates to
 
     http://nightwatch.lowell.edu
@@ -38,5 +38,8 @@ def index(request):
 
     dctweather = server_document("http://dctsleeperservice:5000/dctweather")
 
+    dctinstruments = server_document("http://dctsleeperservice:5000/lmitemps")
+
     return render(request, 'dctplots/index.html',
-                  {'dctweatherplot': dctweather})
+                  {'dctweatherplot': dctweather,
+                   'dctinstrumentsplot': dctinstruments})

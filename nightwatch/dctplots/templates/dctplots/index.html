@@ -110,6 +110,7 @@
             <button class="btn btn--primary" data-filter="weather">Weather</button>
             <button class="btn btn--primary" data-filter="telescopeStatus">DCT Status</button>
             <button class="btn btn--primary" data-filter="webcams">DCT Webcams</button>
+            <button class="btn btn--primary" data-filter="ryan">Ryan's Button</button>
             <button class="btn btn--primary" data-filter="*">Show All</button>
           </div>
         </td>
@@ -120,20 +121,24 @@
   <div class="grid">
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
-    <div class="element-item weather" data-groups='["home", "weather"]'
+    <div class="element-item weather" data-groups='["home", "weather", "ryan"]'
          id="handiv" style="width:700px; height:900px"></div>
 
-    <div class="element-item weather" data-groups='["home", "weather"]'>
+    <div class="element-item weather" data-groups='["home", "weather", "ryan"]'>
         <canvas id="allsky" height=500px width=500px></canvas>
     </div>
 
-    <div class="element-item weather" data-groups='["weather"]'>
+    <div class="element-item weather" data-groups='["weather", "ryan"]'>
       {{ dctweatherplot | safe }}
+    </div>
+
+    <div class="element-item weather" data-groups='["weather", "ryan"]'>
+      {{ dctinstrumentsplot | safe }}
     </div>
 
     <!-- DCT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
-    <div class="element-item webcams" data-groups='["home", "webcams"]'>
+    <div class="element-item webcams" data-groups='["home", "webcams", "ryan"]'>
         <canvas id="obslevel" height=235px width=400px></canvas>
     </div>
 
