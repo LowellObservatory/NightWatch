@@ -40,6 +40,12 @@ def index(request):
 
     dctinstruments = server_document("http://dctsleeperservice:5000/lmitemps")
 
+    facsum_tcs = server_document("http://dctsleeperservice:5000/facsum_tcs")
+
+    facsum_lpi = server_document("http://dctsleeperservice:5000/facsum_lpi")
+
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
-                   'dctinstrumentsplot': dctinstruments})
+                   'dctinstrumentsplot': dctinstruments,
+                   'facsum_tcs': facsum_tcs,
+                   'facsum_lpi': facsum_lpi})
