@@ -9,7 +9,7 @@ var uradict = {
 }
 
 var refreshInterval = 30000;
-var drawDate = true;
+var drawDate = false;
 var validElements = [];
 
 class refreshedImgObj {
