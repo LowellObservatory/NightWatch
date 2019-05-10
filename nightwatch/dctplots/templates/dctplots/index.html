@@ -110,7 +110,7 @@
             <button class="btn btn--primary" data-filter="weather">Weather</button>
             <button class="btn btn--primary" data-filter="telescopeStatus">DCT Status</button>
             <button class="btn btn--primary" data-filter="webcams">DCT Webcams</button>
-            <button class="btn btn--primary" data-filter="ryan">Ryan's Button</button>
+            <button class="btn btn--primary" data-filter="instruments">Instruments</button>
             <button class="btn btn--primary" data-filter="*">Show All</button>
           </div>
         </td>
@@ -121,32 +121,36 @@
   <div class="grid">
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
-    <div class="element-item weather" data-groups='["home", "weather", "ryan"]'
+    <div class="element-item weather" data-groups='["home", "weather"]'
          id="handiv" style="width:700px; height:900px"></div>
 
-    <div class="element-item weather" data-groups='["home", "weather", "ryan"]'>
+    <div class="element-item weather" data-groups='["home", "weather"]'>
         <canvas id="allsky" height=500px width=500px></canvas>
     </div>
 
-    <div class="element-item weather" data-groups='["weather", "ryan"]'>
+    <div class="element-item weather" data-groups='["home", "weather", "instruments"]'>
       {{ dctweatherplot | safe }}
     </div>
 
-    <div class="element-item weather" data-groups='["weather", "ryan"]'>
+    <div class="element-item weather" data-groups='["home", "weather"]'>
+      {{ dctwind | safe }}
+    </div>
+
+    <div class="element-item weather" data-groups='["instruments"]'>
       {{ dctinstrumentsplot | safe }}
     </div>
 
-    <div class="element-item weather" data-groups='["telescopeStatus", "ryan"]'>
+    <div class="element-item weather" data-groups='["telescopeStatus", "instruments"]'>
       {{ facsum_tcs | safe }}
     </div>
 
-    <div class="element-item weather" data-groups='["telescopeStatus", "ryan"]'>
+    <div class="element-item weather" data-groups='["telescopeStatus", "instruments"]'>
       {{ facsum_lpi | safe }}
     </div>
 
     <!-- DCT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
-    <div class="element-item webcams" data-groups='["home", "webcams", "ryan"]'>
+    <div class="element-item webcams" data-groups='["home", "webcams", "instruments"]'>
         <canvas id="obslevel" height=235px width=400px></canvas>
     </div>
 
