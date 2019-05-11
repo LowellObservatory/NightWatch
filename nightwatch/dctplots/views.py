@@ -18,19 +18,33 @@ def index(request):
     # Open question - is just pulling via server_document good here,
     #   or should I be doing something else?
 
-    dctweather = server_document("http://dctsleeperservice:5000/dctweather")
+    # dctweather = server_document("http://dctsleeperservice:5000/dctweather")
+    # dctwind = server_document("http://dctsleeperservice:5000/dctwind")
+    # dctinstruments = server_document("http://dctsleeperservice:5000/lmitemps")
+    # facsum_tcs = server_document("http://dctsleeperservice:5000/facsum_tcs")
+    # facsum_lpi = server_document("http://dctsleeperservice:5000/facsum_lpi")
 
-    dctwind = server_document("http://dctsleeperservice:5000/dctwind")
+    # return render(request, 'dctplots/index.html',
+    #               {'dctweatherplot': dctweather,
+    #                'dctwind': dctwind,
+    #                'dctinstrumentsplot': dctinstruments,
+    #                'facsum_tcs': facsum_tcs,
+    #                'facsum_lpi': facsum_lpi})
 
-    dctinstruments = server_document("http://dctsleeperservice:5000/lmitemps")
-
-    facsum_tcs = server_document("http://dctsleeperservice:5000/facsum_tcs")
-
-    facsum_lpi = server_document("http://dctsleeperservice:5000/facsum_lpi")
+    dctweather, divweather = components("http://dctsleeperservice:5000/dctweather")
+    dctwind, divwind = components("http://dctsleeperservice:5000/dctwind")
+    dctinstruments, divinsts = components("http://dctsleeperservice:5000/lmitemps")
+    facsum_tcs, divfstcs = components("http://dctsleeperservice:5000/facsum_tcs")
+    facsum_lpi, divfslpi = components("http://dctsleeperservice:5000/facsum_lpi")
 
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
+                   'divweather': divweather,
                    'dctwind': dctwind,
+                   'divwind': divwind,
                    'dctinstrumentsplot': dctinstruments,
+                   'divinsts': divinsts,
                    'facsum_tcs': facsum_tcs,
-                   'facsum_lpi': facsum_lpi})
+                   'divfstcs': divfstcs,
+                   'facsum_lpi': facsum_lpi,
+                   'divfslpi': divfslpi})

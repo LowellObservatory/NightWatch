@@ -23,8 +23,20 @@
   <!-- Overall page styling -->
   <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
 
-  <!-- Bokeh styles -->
-  <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.1.0.min.css" type="text/css" />
+  <!-- Bokeh stuff -->
+  <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-1.1.0.min.css"
+    rel="stylesheet" type="text/css">
+  <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.1.0.min.css"
+    rel="stylesheet" type="text/css">
+  <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-tables-1.1.0.min.css"
+    rel="stylesheet" type="text/css">
+
+  <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.1.0.min.js"></script>
+  <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.1.0.min.js"></script>
+  <script src="http://cdn.pydata.org/bokeh/release/bokeh-tables-1.1.0.min.js"></script>
 
   <!-- HAniS stuff -->
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
@@ -129,22 +141,27 @@
 
     <div class="element-item weather" data-groups='["home", "weather", "instruments"]'>
       {{ dctweatherplot | safe }}
+      {{ divweather | safe }}
     </div>
 
     <div class="element-item weather" data-groups='["home", "weather"]'>
       {{ dctwind | safe }}
+      {{ divwind | safe }}
     </div>
 
     <div class="element-item weather" data-groups='["instruments"]'>
       {{ dctinstrumentsplot | safe }}
+      {{ divinsts | safe }}
     </div>
 
     <div class="element-item weather" data-groups='["home", "telescopeStatus", "instruments"]'>
       {{ facsum_tcs | safe }}
+      {{ divfstcs | safe }}
     </div>
 
     <div class="element-item weather" data-groups='["home", "telescopeStatus", "instruments"]'>
       {{ facsum_lpi | safe }}
+      {{ divfslpi | safe }}
     </div>
 
     <!-- DCT Webcams -->
@@ -177,7 +194,6 @@
 
   <!-- Other utilities -->
   <script type="text/javascript" src="{% static 'js/canvasRefresher.js' %}"></script>
-  <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.1.0.min.js"></script>
   <script type="text/javascript">
     Bokeh.set_log_level("info");
   </script>
