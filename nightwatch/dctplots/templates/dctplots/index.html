@@ -43,6 +43,10 @@
   <script src="{% static 'js/bokeh-widgets.min.js' %}"></script>
   <script src="{% static 'js/bokeh-tables.min.js' %}"></script>
 
+  <script type="text/javascript">
+    Bokeh.set_log_level("info");
+  </script>
+
   <!-- HAniS stuff -->
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
@@ -122,12 +126,18 @@
       <tr>
         <td class="tg-navblock" colspan="2">
           <div class="btn-group filters-group">
-            <button class="btn btn--primary active" data-filter="home">Home</button>
-            <button class="btn btn--primary" data-filter="weather">Weather</button>
-            <button class="btn btn--primary" data-filter="telescopeStatus">DCT Status</button>
-            <button class="btn btn--primary" data-filter="webcams">DCT Webcams</button>
-            <button class="btn btn--primary" data-filter="instruments">Instruments</button>
-            <button class="btn btn--primary" data-filter="*">Show All</button>
+            <button class="btn btn--primary active"
+                    data-filter="home">Home</button>
+            <button class="btn btn--primary"
+                    data-filter="weather">Weather</button>
+            <button class="btn btn--primary"
+                    data-filter="telescopeStatus">DCT Status</button>
+            <button class="btn btn--primary"
+                    data-filter="webcams">DCT Webcams</button>
+            <button class="btn btn--primary"
+                    data-filter="instruments">Instruments</button>
+            <button class="btn btn--primary"
+                    data-filter="*">Show All</button>
           </div>
         </td>
       </tr>
@@ -137,71 +147,87 @@
   <div class="grid">
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
-    <div class="element-item weather" data-groups='["home", "weather"]'
-         id="handiv" style="width:700px; height:900px"></div>
+    <div class="element-item weather"
+         data-groups='["home", "weather"]'
+         id="handiv" style="width:500px; height:700px"></div>
 
-    <div class="element-item weather" data-groups='["home", "weather"]'>
+    <div class="element-item weather"
+         data-groups='["home", "weather"]'>
         <canvas id="allsky" height=500px width=500px></canvas>
     </div>
 
-    <div class="element-item weather" data-groups='["home", "weather", "instruments"]'>
-      {{ dctweatherplot | safe }}
+    <div class="element-item bokeh"
+         data-groups='["home", "weather", "instruments"]'
+         style="height:400px;width:500px">
+      <div class='bokeh-embed plot'>{{ dctweatherplot | safe }}</div>
     </div>
 
-    <div class="element-item weather" data-groups='["home", "weather"]'>
-      {{ dctwind | safe }}
+    <div class="element-item bokeh"
+         data-groups='["home", "weather"]'
+         style="height:400px;width:500px">
+      <div class='bokeh-embed plot'>{{ dctwind | safe }}</div>
     </div>
 
-    <div class="element-item weather" data-groups='["instruments"]'>
-      {{ dctinstrumentsplot | safe }}
+    <div class="element-item bokeh"
+         data-groups='["instruments"]'
+         style="height:400px;width:500px">
+    <div class='bokeh-embed plot'>{{ dctinstrumentsplot | safe }}</div>
     </div>
 
-    <div class="element-item weather" data-groups='["home", "telescopeStatus", "instruments"]'>
-      {{ facsum_tcs | safe }}
+    <div class="element-item bokeh"
+         data-groups='["home", "telescopeStatus", "instruments"]'
+         style="height:520px;width:400px">
+      <div class='bokeh-embed table'>{{ facsum_tcs | safe }}</div>
     </div>
 
-    <div class="element-item weather" data-groups='["home", "telescopeStatus", "instruments"]'>
-      {{ facsum_lpi | safe }}
+    <div class="element-item bokeh"
+         data-groups='["home", "telescopeStatus", "instruments"]'
+         style="height:300px;width:400px">
+      <div class='bokeh-embed table'>{{ facsum_lpi | safe }}</div>
     </div>
 
     <!-- DCT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
-    <div class="element-item webcams" data-groups='["home", "webcams", "instruments"]'>
+    <div class="element-item webcam"
+         data-groups='["home", "webcams", "instruments"]'>
         <canvas id="obslevel" height=235px width=400px></canvas>
     </div>
 
-    <div class="element-item webcams" data-groups='["webcams"]'>
+    <div class="element-item webcam"
+         data-groups='["webcams"]'>
       <canvas id="gate" height=235px width=400px></canvas>
     </div>
 
-    <div class="element-item webcams" data-groups='["webcams"]'>
+    <div class="element-item webcam"
+         data-groups='["webcams"]'>
       <canvas id="genset" height=235px width=400px></canvas>
     </div>
 
-    <div class="element-item webcams" data-groups='["webcams"]'>
+    <div class="element-item webcam"
+         data-groups='["webcams"]'>
       <canvas id="heliumcomp" height=235px width=400px></canvas>
     </div>
 
-    <div class="element-item webcams" data-groups='["webcams"]'>
+    <div class="element-item webcam"
+         data-groups='["webcams"]'>
       <canvas id="telbldg" height=235px width=400px></canvas>
     </div>
 
-    <div class="element-item webcams" data-groups='["webcams"]'>
+    <div class="element-item webcam"
+         data-groups='["webcams"]'>
       <canvas id="utilyard" height=235px width=400px></canvas>
     </div>
 
   </div>
 
   <!-- Other utilities -->
-  <script type="text/javascript" src="{% static 'js/canvasRefresher.js' %}"></script>
-  <script type="text/javascript">
-    Bokeh.set_log_level("info");
-  </script>
+  <script type="text/javascript"
+          src="{% static 'js/canvasRefresher.js' %}"></script>
 
   <!-- Layout specific -->
+  <!-- <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script> -->
   <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
   <script src="{% static 'js/index.js' %}"></script>
-
 
 </body>
 </html>

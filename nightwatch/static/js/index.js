@@ -52,11 +52,11 @@ function filtFunc() {
 //   on the *previous* value and not the new one.  Tricksy.
 // TODO: Just combine the two into a single deal to avoid this
 //   potential order of operations deal.
-$('.btn-group').each( function( i, buttonGroup ) {
-  var $buttonGroup = $( buttonGroup );
-  $buttonGroup.on( 'click', 'button', function() {
+$('.btn-group').each(function(i, buttonGroup ) {
+  var $buttonGroup = $(buttonGroup);
+  $buttonGroup.on('click', 'button', function() {
     $buttonGroup.find('.active').removeClass('active');
-    $( this ).addClass('active');
+    $(this).addClass('active');
   });
 });
 
@@ -64,9 +64,10 @@ $('.btn-group').each( function( i, buttonGroup ) {
 //   This binds a click on a 'button' inside that group to an actual call
 //   to Isotope to filter based on the value/group specified in the 'button'
 //   that was clicked on, via the "data-filter" attribute on the button itself
-$('.filters-group').on( 'click', 'button', function() {
+$('.filters-group').on('click', 'button', function() {
   $grid.isotope();
 });
+
 
 // Calling isotope() with no arguments triggers arrange(),
 //   which applies both filtering and sorting.
