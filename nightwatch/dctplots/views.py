@@ -2,7 +2,7 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from bokeh.embed import components, server_document
+from bokeh.embed import server_document
 
 
 def index(request):
@@ -36,6 +36,8 @@ def index(request):
                                  resources=None)
     facsum_lpi = server_document("http://%s:%d/facsum_lpi" % (hname, hport),
                                  resources=None)
+
+    print(dctweather)
 
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
