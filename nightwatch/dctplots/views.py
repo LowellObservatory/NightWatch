@@ -18,11 +18,24 @@ def index(request):
     # Open question - is just pulling via server_document good here,
     #   or should I be doing something else?
 
-    dctweather = server_document("http://dctsleeperservice:5000/dctweather")
-    dctwind = server_document("http://dctsleeperservice:5000/dctwind")
-    dctinstruments = server_document("http://dctsleeperservice:5000/lmitemps")
-    facsum_tcs = server_document("http://dctsleeperservice:5000/facsum_tcs")
-    facsum_lpi = server_document("http://dctsleeperservice:5000/facsum_lpi")
+    hname = "localhost"
+    hport = 5000
+
+    # Setting resources=None means that we must specify/serve them ourselves
+    #   as seen in the template <head> section. Easier that way so I can
+    #   still use the websocket to the bokeh server container, but keep
+    #   all the dependencies in-house.
+
+    dctweather = server_document("http://%s:%d/dctweather" % (hname, hport),
+                                 resources=None)
+    dctwind = server_document("http://%s:%d/dctwind" % (hname, hport),
+                              resources=None)
+    dctinstruments = server_document("http://%s:%d/lmitemps" % (hname, hport),
+                                     resources=None)
+    facsum_tcs = server_document("http://%s:%d/facsum_tcs" % (hname, hport),
+                                 resources=None)
+    facsum_lpi = server_document("http://%s:%d/facsum_lpi" % (hname, hport),
+                                 resources=None)
 
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
@@ -30,21 +43,3 @@ def index(request):
                    'dctinstrumentsplot': dctinstruments,
                    'facsum_tcs': facsum_tcs,
                    'facsum_lpi': facsum_lpi})
-
-    # dctweather, divweather = components("http://dctsleeperservice:5000/dctweather")
-    # dctwind, divwind = components("http://dctsleeperservice:5000/dctwind")
-    # dctinstruments, divinsts = components("http://dctsleeperservice:5000/lmitemps")
-    # facsum_tcs, divfstcs = components("http://dctsleeperservice:5000/facsum_tcs")
-    # facsum_lpi, divfslpi = components("http://dctsleeperservice:5000/facsum_lpi")
-
-    # return render(request, 'dctplots/index.html',
-    #               {'dctweatherplot': dctweather,
-    #                'divweather': divweather,
-    #                'dctwind': dctwind,
-    #                'divwind': divwind,
-    #                'dctinstrumentsplot': dctinstruments,
-    #                'divinsts': divinsts,
-    #                'facsum_tcs': facsum_tcs,
-    #                'divfstcs': divfstcs,
-    #                'facsum_lpi': facsum_lpi,
-    #                'divfslpi': divfslpi})
