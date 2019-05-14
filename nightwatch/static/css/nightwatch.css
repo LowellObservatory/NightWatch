@@ -296,6 +296,31 @@ body {
   background: rgb(0, 4, 42);
 }
 
+.bokeh-embed.table .bk-root .bk-data-table{
+  font-size: 11pt;
+}
+
+.slick-header .slick-header-columns .slick-header-column {
+  color: #d8d9da !important;
+  background-color: #004283 !important;
+  background-image: none;
+}
+
+/* .bk-root .slick-header-columns {
+  color: #d8d9da !important;
+  background-color: #2f2f32 !important;
+} */
+
+.bk-root .slick-row.even {
+  color: #d8d9da !important;
+  background-color: #262629 !important;
+}
+
+.bk-root .slick-row.odd {
+  color: #d8d9da !important;
+  background-color: #262629 !important;
+}
+
 /* This allows styling of the HAniS control buttons. */
 /* Disabled for now because it's a bit ugly */
 

@@ -27,6 +27,9 @@
   <!-- Overall page styling -->
   <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
 
+  <!-- Utilities -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
   <!-- Bokeh stuff -->
   <link
     href="{% static 'css/bokeh.min.css' %}"
@@ -50,9 +53,6 @@
   <!-- HAniS stuff -->
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
-
-  <!-- Utilities -->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -126,18 +126,21 @@
       <tr>
         <td class="tg-navblock" colspan="2">
           <div class="btn-group filters-group">
-            <button class="btn btn--primary active"
-                    data-filter="home">Home</button>
-            <button class="btn btn--primary"
-                    data-filter="weather">Weather</button>
-            <button class="btn btn--primary"
-                    data-filter="telescopeStatus">DCT Status</button>
-            <button class="btn btn--primary"
-                    data-filter="webcams">DCT Webcams</button>
-            <button class="btn btn--primary"
-                    data-filter="instruments">Instruments</button>
-            <button class="btn btn--primary"
-                    data-filter="*">Show All</button>
+            <button class="btn btn--primary active" data-filter="home">
+              Home</button>
+            <button class="btn btn--primary" data-filter="tv1">
+              TV1</button>
+            <button class="btn btn--primary" data-filter="tv2">
+              TV2</button>
+            <button class="btn btn--primary" data-filter="weather">
+              Weather</button>
+            <button class="btn btn--primary" data-filter="telescopeStatus">
+              DCT Status</button>
+            <button class="btn btn--primary" data-filter="webcam">
+              DCT Webcams</button>
+            <button class="btn btn--primary" data-filter="instruments">
+              Instruments</button>
+            <button class="btn btn--primary" data-filter="*">Show All</button>
           </div>
         </td>
       </tr>
@@ -148,22 +151,22 @@
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
     <div class="element-item weather"
-         data-groups='["home", "weather"]'
+         data-groups='["home", "tv1", "weather"]'
          id="handiv" style="width:500px; height:700px"></div>
 
     <div class="element-item weather"
-         data-groups='["home", "weather"]'>
+         data-groups='["home", "tv1", "weather"]'>
         <canvas id="allsky" height=500px width=500px></canvas>
     </div>
 
     <div class="element-item bokeh"
-         data-groups='["home", "weather", "instruments"]'
+         data-groups='["home", "tv2", "weather", "instruments"]'
          style="height:400px;width:500px">
       <div class='bokeh-embed plot'>{{ dctweatherplot | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
-         data-groups='["home", "weather"]'
+         data-groups='["home", "tv2", "weather"]'
          style="height:400px;width:500px">
       <div class='bokeh-embed plot'>{{ dctwind | safe }}</div>
     </div>
@@ -175,13 +178,13 @@
     </div>
 
     <div class="element-item bokeh"
-         data-groups='["home", "telescopeStatus", "instruments"]'
+         data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
          style="height:520px;width:400px">
       <div class='bokeh-embed table'>{{ facsum_tcs | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
-         data-groups='["home", "telescopeStatus", "instruments"]'
+         data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
          style="height:300px;width:400px">
       <div class='bokeh-embed table'>{{ facsum_lpi | safe }}</div>
     </div>
@@ -189,32 +192,32 @@
     <!-- DCT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
     <div class="element-item webcam"
-         data-groups='["home", "webcams", "instruments"]'>
+         data-groups='["home", "tv1", "webcam", "instruments"]'>
         <canvas id="obslevel" height=235px width=400px></canvas>
     </div>
 
     <div class="element-item webcam"
-         data-groups='["webcams"]'>
+         data-groups='["webcam"]'>
       <canvas id="gate" height=235px width=400px></canvas>
     </div>
 
     <div class="element-item webcam"
-         data-groups='["webcams"]'>
+         data-groups='["webcam"]'>
       <canvas id="genset" height=235px width=400px></canvas>
     </div>
 
     <div class="element-item webcam"
-         data-groups='["webcams"]'>
+         data-groups='["webcam"]'>
       <canvas id="heliumcomp" height=235px width=400px></canvas>
     </div>
 
     <div class="element-item webcam"
-         data-groups='["webcams"]'>
+         data-groups='["webcam"]'>
       <canvas id="telbldg" height=235px width=400px></canvas>
     </div>
 
     <div class="element-item webcam"
-         data-groups='["webcams"]'>
+         data-groups='["webcam"]'>
       <canvas id="utilyard" height=235px width=400px></canvas>
     </div>
 
