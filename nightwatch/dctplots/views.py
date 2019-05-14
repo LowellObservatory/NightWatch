@@ -18,7 +18,8 @@ def index(request):
     # Open question - is just pulling via server_document good here,
     #   or should I be doing something else?
 
-    hname = "localhost"
+    # hname = "localhost"
+    hname = "dctsleeperservice"
     hport = 5000
 
     # Setting resources=None means that we must specify/serve them ourselves
