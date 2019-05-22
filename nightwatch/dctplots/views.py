@@ -27,8 +27,8 @@ def index(request):
     # Open question - is just pulling via server_document good here,
     #   or should I be doing something else?
 
-    hname = "localhost"
-    # hname = "dctsleeperservice"
+    # hname = "localhost"
+    hname = "dctsleeperservice"
     hport = 5000
 
     hsat = HAniS('hansatdiv', 'hansat')
