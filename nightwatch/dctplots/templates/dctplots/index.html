@@ -53,6 +53,13 @@
   <!-- HAniS stuff -->
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
+  <!-- Now we declare our own namespaces so the two HAniS instances don't
+  clobber each other when we actually try to use the damn things.
+  Yay, javascript shenanigans! -->
+  <script>
+  var hanSatJS = HAniS;
+  var hanRadJS = HAniS;
+  </script>
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -93,8 +100,7 @@
   </script>
 </head>
 
-<body onload="HAniS.setup(hancon, 'handiv')">
-
+<body>
   <div class="stamp">
     <!-- It's ugly, but works. Pure CSS ver. was more annoying than this is -->
     <table class="tg">
@@ -150,9 +156,31 @@
   <div class="grid">
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
+    <!-- A little janky, but we have to do it this way otherwise the
+    last HAniS instance clobbers all the others. So we instead shove them
+    into a dead simple iframe and hold our noses appropriately. -->
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'
-         id="handiv" style="width:600px; height:600px"></div>
+         style="padding:0px; width:600px; height:600px">
+      <iframe id="encoder_iframe" src="{% url 'hanissat' %}"
+              style="border:none; position:relative; height:100%; width:100%;">
+      </iframe>
+    </div>
+    <div class="element-item weather"
+         data-groups='["home", "tv1", "weather"]'
+         style="padding:0px; width:600px; height:600px">
+      <iframe id="encoder_iframe" src="{% url 'hanisrad' %}"
+              style="border:none; position:relative; height:100%; width:100%;">
+      </iframe>
+    </div>
+
+    <!-- <div class="element-item weather"
+         data-groups='["home", "tv1", "weather"]'
+         id="hansatdiv" style="width:600px; height:600px"></div>
+
+    <div class="element-item weather"
+         data-groups='["home", "tv1", "weather"]'
+         id="hanraddiv" style="width:600px; height:600px"></div> -->
 
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'>

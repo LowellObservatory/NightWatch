@@ -5,6 +5,15 @@ from django.http import HttpResponse
 from bokeh.embed import server_document
 
 
+def HAniS(divname, jsconfigvar):
+    """
+    Return a barebones template for embedding a working HAniS animating thing.
+    """
+    setupString = "HAniS.setup(%s, '%s')" % (jsconfigvar, divname)
+
+    return {'setupStr': setupString, 'divName': divname}
+
+
 def index(request):
     """
     This will be the page that generated and then served (to nginx)
@@ -18,9 +27,12 @@ def index(request):
     # Open question - is just pulling via server_document good here,
     #   or should I be doing something else?
 
-    # hname = "localhost"
-    hname = "dctsleeperservice"
+    hname = "localhost"
+    # hname = "dctsleeperservice"
     hport = 5000
+
+    hsat = HAniS('hansatdiv', 'hansat')
+    hrad = HAniS('hanraddiv', 'hanrad')
 
     # Setting resources=None means that we must specify/serve them ourselves
     #   as seen in the template <head> section. Easier that way so I can
@@ -38,11 +50,10 @@ def index(request):
     facsum_lpi = server_document("http://%s:%d/facsum_lpi" % (hname, hport),
                                  resources=None)
 
-    print(dctweather)
-
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
                    'dctwind': dctwind,
                    'dctinstrumentsplot': dctinstruments,
                    'facsum_tcs': facsum_tcs,
-                   'facsum_lpi': facsum_lpi})
+                   'facsum_lpi': facsum_lpi,
+                   })
