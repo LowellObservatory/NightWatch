@@ -53,13 +53,6 @@
   <!-- HAniS stuff -->
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
-  <!-- Now we declare our own namespaces so the two HAniS instances don't
-  clobber each other when we actually try to use the damn things.
-  Yay, javascript shenanigans! -->
-  <script>
-  var hanSatJS = HAniS;
-  var hanRadJS = HAniS;
-  </script>
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -69,6 +62,7 @@
           src="{% static 'js/segment-display.js' %}"></script>
   <script type="text/javascript">
     var display = new SegmentDisplay("14segClock");
+    // Original values
     display.segmentCount    = 14;
     display.cornerType      = 0;
     display.digitHeight     = 25;
@@ -104,31 +98,33 @@
   <div class="stamp">
     <!-- It's ugly, but works. Pure CSS ver. was more annoying than this is -->
     <table class="tg">
+      <!-- First row - title -->
       <tr>
         <td class="tg-title" colspan="1">
-          <!-- Need this assinine magicbox div to get the image and text
-          actually aligned vertically. Dumb.-->
-          <div class='magicbox'>
-            <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}"
-                 width=75px>
-            <span>&nbspNightWatch</span>
-          </div>
+          <span>
+            NightWatch&nbsp
+            <!-- Need this assinine magicbox div to get the image and text
+            actually aligned vertically. Dumb.-->
+            <div class='magicbox' style='width:75px;
+                                         display:inline-block;
+                                         vertical-align:middle;'>
+              <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}"
+                  width=75px>
+            </div>
+            &nbsp4.3m DCT
+          </span>
         </td>
-        <td class="tg-logoblock" rowspan="3">
+        <td class="tg-logoblock" rowspan="2">
             <img src="{% static 'images/MWest-DCT_sm.png' %}" width=200px>
           </td>
       </tr>
+      <!-- Second row - UTC clock -->
       <tr>
-        <td class="tg-byline">
-          4.3m DCT
-        </td>
-      </tr>
-      <tr>
-        <!-- <td class="tg-byline">Lowell Observatory</td> -->
         <td class="tg-title">
-          <canvas id='14segClock' width="260" height="40"></canvas>
+          <canvas id='14segClock' width="350" height="50"></canvas>
         </td>
       </tr>
+      <!-- Third row - navigation/filter buttons -->
       <tr>
         <td class="tg-navblock" colspan="2">
           <div class="btn-group filters-group">
