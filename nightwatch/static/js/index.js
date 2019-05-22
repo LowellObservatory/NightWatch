@@ -7,7 +7,7 @@ var $grid = $('.grid').isotope({
 
   layoutMode: 'masonry',
   masonry: {
-    columnWidth: 50,
+    columnWidth: 10,
     gutter: 5,
   },
 
