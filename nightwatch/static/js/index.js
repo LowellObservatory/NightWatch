@@ -7,8 +7,8 @@ var $grid = $('.grid').isotope({
 
   layoutMode: 'masonry',
   masonry: {
-    columnWidth: 10,
-    gutter: 5,
+    columnWidth: 5,
+    gutter: 2,
   },
 
   // If filter is set to a function, that function checks each
