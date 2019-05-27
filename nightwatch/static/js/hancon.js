@@ -44,7 +44,7 @@ var hanrad = {
     auto_refresh: "5",
 
     image_base: "http://dctsleeperservice:9876/nexrad/nows/",
-    basename: "nexrad_latest_???.png",
+    basename: "nexrad_???.png",
     num_frames: "25",
     base_starting_number: "23",
 
