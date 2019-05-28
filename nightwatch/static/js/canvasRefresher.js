@@ -5,7 +5,7 @@ var uradict = {
     obslevel: "http://dctsleeperservice:9876/webcams/dct/obs_level.jpg",
     telbldg: "http://dctsleeperservice:9876/webcams/dct/tel_bldg.jpg",
     utilyard: "http://dctsleeperservice:9876/webcams/dct/util_yard.jpg",
-    allsky: "http://dct-allsky.lowell.edu/allsky/dct_allsky.jpg",
+    allsky: "http://dctsleeperservice:9876/webcams/dct/allsky.jpg",
 }
 
 var refreshInterval = 30000;
