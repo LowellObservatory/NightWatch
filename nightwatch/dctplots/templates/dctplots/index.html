@@ -62,17 +62,17 @@
           src="{% static 'js/segment-display.js' %}"></script>
   <script type="text/javascript">
     var display = new SegmentDisplay("14segClock");
-    // Original values
     display.segmentCount    = 14;
     display.cornerType      = 0;
-    display.digitHeight     = 25;
+    display.digitHeight     = 30;
     display.digitWidth      = 20;
     display.digitDistance   = 2.5;
     display.displayAngle    = 5.0;
     display.segmentWidth    = 3.0;
     display.segmentDistance = 0.2;
 
-    display.pattern         = "##:##:## ####";
+    // display.pattern         = "##:##:## ####";
+    display.pattern         = "#############:##:## ####";
     display.colorOn         = "#3498db";
     display.colorOff        = "#0a1e2b";
     display.draw();
@@ -81,13 +81,26 @@
 
     function animate() {
       var time    = new Date();
-      var hours   = time.getUTCHours();
+      var year    = time.getUTCFullYear();
+      var day     = time.getUTCDate();
+      // Because month is zero-indexed, for some insane reason
+      var month   = time.getUTCMonth() + 1;
+      var hours   = time.getUTCHours() - 12;
       var minutes = time.getUTCMinutes();
       var seconds = time.getUTCSeconds();
-      var value   = ((hours < 10) ? ' ' : '') + hours
+      // For the full date + time
+      var value   = year + "-"
+                  + ((month < 10) ? '0' : '') + month + "-"
+                  + ((day < 10) ? '0' : '') + day + " "
+                  + ((hours < 10) ? '0' : '') + hours
                   + ':' + ((minutes < 10) ? '0' : '') + minutes
                   + ':' + ((seconds < 10) ? '0' : '') + seconds
                   + "  UTC";
+      // For just the time
+      // var value   = ((hours < 10) ? ' ' : '') + hours
+      //             + ':' + ((minutes < 10) ? '0' : '') + minutes
+      //             + ':' + ((seconds < 10) ? '0' : '') + seconds
+      //             + "  UTC";
       display.setValue(value);
       window.setTimeout('animate()', 100);
   }
@@ -121,7 +134,7 @@
       <!-- Second row - UTC clock -->
       <tr>
         <td class="tg-title">
-          <canvas id='14segClock' width="350" height="50"></canvas>
+          <canvas id='14segClock' width="500" height="50"></canvas>
         </td>
       </tr>
       <!-- Third row - navigation/filter buttons -->
