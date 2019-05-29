@@ -7,7 +7,7 @@ var hansat = {
     auto_refresh: "5",
 
     image_base: "http://dctsleeperservice:9876/goes16/nows/",
-    basename: "goes_latest_???.png",
+    basename: "goes16_???.png",
     num_frames: "25",
     base_starting_number: "23",
 
