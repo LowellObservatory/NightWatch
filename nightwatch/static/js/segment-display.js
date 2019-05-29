@@ -222,7 +222,7 @@ SegmentDisplay.prototype.drawDigit = function(context, xPos, mask, c) {
       // draw segment c
       x = xPos + this.digitWidth - this.segmentWidth;
       y = h + this.segmentWidth;
-      context.fillStyle = this.getSegmentColor(c, '013456789abdhnouy', '01346789abdghjmnoqsuw@', '%');
+      context.fillStyle = this.getSegmentColor(c, '013456789abdhnouy', '013456789abdghjmnoquw@', '%');
       context.beginPath();
       context.moveTo(x, y + this.segmentWidth + d);
       context.lineTo(x + s, y + s + d);
@@ -404,7 +404,7 @@ SegmentDisplay.prototype.drawDigit = function(context, xPos, mask, c) {
         // draw segment g2
         x = xPos;
         y = (this.digitHeight - this.segmentWidth) / 2.0;
-        context.fillStyle = this.getSegmentColor(c, null, '234689abefghprsy-+*=@', '%');
+        context.fillStyle = this.getSegmentColor(c, null, '2345689abefghpry-+*=@', '%');
         context.beginPath();
         context.moveTo(x + t + d, y + s);
         context.lineTo(x + t + d + s, y);
@@ -479,7 +479,7 @@ SegmentDisplay.prototype.drawDigit = function(context, xPos, mask, c) {
         // draw segment l
         x = xPos + w + 2.0 * this.segmentWidth;
         y = h + 2.0 * this.segmentWidth;
-        context.fillStyle = this.getSegmentColor(c, null, '5knqrwx\\*');
+        context.fillStyle = this.getSegmentColor(c, null, 'knqrswx\\*');
         context.beginPath();
         context.moveTo(x + this.segmentDistance, y + this.segmentDistance);
         context.lineTo(x + this.segmentDistance + r, y + this.segmentDistance);
