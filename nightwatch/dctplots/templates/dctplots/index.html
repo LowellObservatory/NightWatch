@@ -190,31 +190,33 @@
 
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "weather", "instruments"]'
-         style="height:400px;width:500px">
+         style="height:525px;width:515px">
       <div class='bokeh-embed plot'>{{ dctweatherplot | safe }}</div>
+      <div class='bokeh-embed table'>{{ dctweathertable | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "weather"]'
-         style="height:400px;width:500px">
+         style="height:525px;width:515px">
       <div class='bokeh-embed plot'>{{ dctwind | safe }}</div>
+      <div class='bokeh-embed table'>{{ dctwindtable | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
          data-groups='["instruments"]'
-         style="height:400px;width:500px">
+         style="height:400px;width:515px">
     <div class='bokeh-embed plot'>{{ dctinstrumentsplot | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
-         style="height:520px;width:400px">
+         style="height:420px;width:400px">
       <div class='bokeh-embed table'>{{ facsum_tcs | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
-         style="height:300px;width:400px">
+         style="height:280px;width:400px">
       <div class='bokeh-embed table'>{{ facsum_lpi | safe }}</div>
     </div>
 

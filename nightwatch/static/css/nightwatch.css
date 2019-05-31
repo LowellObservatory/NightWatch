@@ -239,6 +239,7 @@ body {
   margin: 5px;
   padding: 5px;
   background: rgb(51, 51, 51);
+  text-align: center;
   color: #262524;
 }
 
@@ -259,6 +260,12 @@ body {
 
 .element-item.bokeh {
   background: rgb(0, 4, 42);
+}
+
+/* ABSOLUTE MAGIC! Thanks to this */
+/* https://www.freecodecamp.org/news/how-to-center-things-with-style-in-css-dc87b7542689/ */
+.bk.bk-root {
+  display: inline-block;
 }
 
 .bokeh-embed.table .bk-root .bk-data-table{

@@ -41,8 +41,12 @@ def index(request):
 
     dctweather = server_document("http://%s:%d/dctweather" % (hname, hport),
                                  resources=None)
+    dctweathertable = server_document("http://%s:%d/dctweathertable" % (hname, hport),
+                                 resources=None)
     dctwind = server_document("http://%s:%d/dctwind" % (hname, hport),
                               resources=None)
+    dctwindtable = server_document("http://%s:%d/dctwindtable" % (hname, hport),
+                                   resources=None)
     dctinstruments = server_document("http://%s:%d/lmitemps" % (hname, hport),
                                      resources=None)
     facsum_tcs = server_document("http://%s:%d/facsum_tcs" % (hname, hport),
@@ -52,7 +56,9 @@ def index(request):
 
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
+                   'dctweathertable': dctweathertable,
                    'dctwind': dctwind,
+                   'dctwindtable': dctwindtable,
                    'dctinstrumentsplot': dctinstruments,
                    'facsum_tcs': facsum_tcs,
                    'facsum_lpi': facsum_lpi,
