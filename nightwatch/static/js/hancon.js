@@ -8,8 +8,8 @@ var hansat = {
 
     image_base: "http://dctsleeperservice:9876/goes16/nows/",
     basename: "goes16_???.png",
-    num_frames: "25",
-    base_starting_number: "23",
+    num_frames: "18",
+    base_starting_number: "30",
 
     window_size: "div",
     enable_smoothing: "true",
@@ -45,8 +45,8 @@ var hanrad = {
 
     image_base: "http://dctsleeperservice:9876/nexrad/nows/",
     basename: "nexrad_???.png",
-    num_frames: "25",
-    base_starting_number: "23",
+    num_frames: "18",
+    base_starting_number: "30",
 
     window_size: "div",
     enable_smoothing: "true",
