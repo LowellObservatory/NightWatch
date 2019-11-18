@@ -27,8 +27,8 @@ def index(request):
     # Open question - is just pulling via server_document good here,
     #   or should I be doing something else?
 
-    # hname = "localhost"
-    hname = "dctsleeperservice"
+    hname = "localhost"
+    # hname = "dctsleeperservice"
     hport = 5000
 
     hsat = HAniS('hansatdiv', 'hansat')
@@ -47,8 +47,8 @@ def index(request):
                               resources=None)
     dctwindtable = server_document("http://%s:%d/dctwindtable" % (hname, hport),
                                    resources=None)
-    dctinstruments = server_document("http://%s:%d/lmitemps" % (hname, hport),
-                                     resources=None)
+    #dctinstruments = server_document("http://%s:%d/lmitemps" % (hname, hport),
+    #                                 resources=None)
     facsum_tcs = server_document("http://%s:%d/facsum_tcs" % (hname, hport),
                                  resources=None)
     facsum_lpi = server_document("http://%s:%d/facsum_lpi" % (hname, hport),
@@ -59,7 +59,7 @@ def index(request):
                    'dctweathertable': dctweathertable,
                    'dctwind': dctwind,
                    'dctwindtable': dctwindtable,
-                   'dctinstrumentsplot': dctinstruments,
+                   #'dctinstrumentsplot': dctinstruments,
                    'facsum_tcs': facsum_tcs,
                    'facsum_lpi': facsum_lpi,
                    })
