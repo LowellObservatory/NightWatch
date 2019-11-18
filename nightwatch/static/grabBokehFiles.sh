@@ -1,4 +1,4 @@
-ver=1.3.4
+ver=1.4.0
 
 # CSS Files
 wget -O "css/bokeh.min.css" "http://cdn.pydata.org/bokeh/release/bokeh-"$ver".min.css"
