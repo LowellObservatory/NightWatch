@@ -38,21 +38,23 @@ def index(request):
     #   as seen in the template <head> section. Easier that way so I can
     #   still use the websocket to the bokeh server container, but keep
     #   all the dependencies in-house.
-
-    dctweather = server_document("http://%s:%d/dctweather" % (hname, hport),
-                                 resources=None)
-    dctweathertable = server_document("http://%s:%d/dctweathertable" % (hname, hport),
-                                 resources=None)
-    dctwind = server_document("http://%s:%d/dctwind" % (hname, hport),
-                              resources=None)
-    dctwindtable = server_document("http://%s:%d/dctwindtable" % (hname, hport),
-                                   resources=None)
-    #dctinstruments = server_document("http://%s:%d/lmitemps" % (hname, hport),
-    #                                 resources=None)
-    facsum_tcs = server_document("http://%s:%d/facsum_tcs" % (hname, hport),
-                                 resources=None)
-    facsum_lpi = server_document("http://%s:%d/facsum_lpi" % (hname, hport),
-                                 resources=None)
+    #
+    # Reminder: server_document is a *bokeh* function!
+    #
+    dctweather = server_document("http://%s:%d/dctweather" %
+                                 (hname, hport), resources=None)
+    dctweathertable = server_document("http://%s:%d/dctweathertable" %
+                                      (hname, hport), resources=None)
+    dctwind = server_document("http://%s:%d/dctwind" %
+                              (hname, hport), resources=None)
+    dctwindtable = server_document("http://%s:%d/dctwindtable" %
+                                   (hname, hport), resources=None)
+    #dctinstruments = server_document("http://%s:%d/lmitemps" %
+    #                                 (hname, hport), resources=None)
+    facsum_tcs = server_document("http://%s:%d/facsum_tcs" %
+                                 (hname, hport), resources=None)
+    facsum_lpi = server_document("http://%s:%d/facsum_lpi" %
+                                 (hname, hport), resources=None)
 
     return render(request, 'dctplots/index.html',
                   {'dctweatherplot': dctweather,
