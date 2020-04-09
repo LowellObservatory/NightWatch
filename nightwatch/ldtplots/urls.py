@@ -7,9 +7,9 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('hanisrad/',
-         TemplateView.as_view(template_name="dctplots/hanisrad.html"),
+         TemplateView.as_view(template_name="ldtplots/hanisrad.html"),
          name='hanisrad'),
     path('hanissat/',
-         TemplateView.as_view(template_name="dctplots/hanissat.html"),
+         TemplateView.as_view(template_name="ldtplots/hanissat.html"),
          name='hanissat'),
 ]

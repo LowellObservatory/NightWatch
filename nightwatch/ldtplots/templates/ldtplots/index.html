@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Cache-Control"
         content="max-age=0, must-revalidate, no-store">
-  <title>NightWatch - DCT</title>
+  <title>NightWatch - LDT</title>
 
   <!-- Favicon crap -->
   <!-- Used https://realfavicongenerator.net -->
@@ -124,7 +124,7 @@
               <img src="{% static 'images/lowell_logo_large_transparentbg.png' %}"
                   width=75px>
             </div>
-            &nbsp4.3m DCT
+            &nbsp4.3m LDT
           </span>
         </td>
         <td class="tg-logoblock" rowspan="2">
@@ -150,9 +150,9 @@
             <button class="btn btn--primary" data-filter="weather">
               Weather</button>
             <button class="btn btn--primary" data-filter="telescopeStatus">
-              DCT Status</button>
+              LDT Status</button>
             <button class="btn btn--primary" data-filter="webcam">
-              DCT Webcams</button>
+              LDT Webcams</button>
             <button class="btn btn--primary" data-filter="instruments">
               Instruments</button>
             <button class="btn btn--primary" data-filter="*">Show All</button>
@@ -191,24 +191,16 @@
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "weather", "instruments"]'
          style="height:525px;width:515px">
-      <div class='bokeh-embed plot'>{{ dctweatherplot | safe }}</div>
-      <div class='bokeh-embed table'>{{ dctweathertable | safe }}</div>
+      <div class='bokeh-embed plot'>{{ ldtweatherplot | safe }}</div>
+      <div class='bokeh-embed table'>{{ ldtweathertable | safe }}</div>
     </div>
 
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "weather"]'
          style="height:525px;width:515px">
-      <div class='bokeh-embed plot'>{{ dctwind | safe }}</div>
-      <div class='bokeh-embed table'>{{ dctwindtable | safe }}</div>
+      <div class='bokeh-embed plot'>{{ ldtwind | safe }}</div>
+      <div class='bokeh-embed table'>{{ ldtwindtable | safe }}</div>
     </div>
-
-    <!--
-    <div class="element-item bokeh"
-         data-groups='["instruments"]'
-         style="height:400px;width:515px">
-    <div class='bokeh-embed plot'>{{ dctinstrumentsplot | safe }}</div>
-    </div>
-    -->
 
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
@@ -222,7 +214,7 @@
       <div class='bokeh-embed table'>{{ facsum_lpi | safe }}</div>
     </div>
 
-    <!-- DCT Webcams -->
+    <!-- LDT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
     <div class="element-item webcam"
          data-groups='["home", "tv2", "webcam", "instruments"]'>

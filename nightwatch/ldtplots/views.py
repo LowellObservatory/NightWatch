@@ -41,27 +41,24 @@ def index(request):
     #
     # Reminder: server_document is a *bokeh* function!
     #
-    dctweather = server_document("http://%s:%d/dctweather" %
+    ldtweather = server_document("http://%s:%d/ldtweather" %
                                  (hname, hport), resources=None)
-    dctweathertable = server_document("http://%s:%d/dctweathertable" %
+    ldtweathertable = server_document("http://%s:%d/ldtweathertable" %
                                       (hname, hport), resources=None)
-    dctwind = server_document("http://%s:%d/dctwind" %
+    ldtwind = server_document("http://%s:%d/ldtwind" %
                               (hname, hport), resources=None)
-    dctwindtable = server_document("http://%s:%d/dctwindtable" %
+    ldtwindtable = server_document("http://%s:%d/ldtwindtable" %
                                    (hname, hport), resources=None)
-    #dctinstruments = server_document("http://%s:%d/lmitemps" %
-    #                                 (hname, hport), resources=None)
     facsum_tcs = server_document("http://%s:%d/facsum_tcs" %
                                  (hname, hport), resources=None)
     facsum_lpi = server_document("http://%s:%d/facsum_lpi" %
                                  (hname, hport), resources=None)
 
-    return render(request, 'dctplots/index.html',
-                  {'dctweatherplot': dctweather,
-                   'dctweathertable': dctweathertable,
-                   'dctwind': dctwind,
-                   'dctwindtable': dctwindtable,
-                   #'dctinstrumentsplot': dctinstruments,
+    return render(request, 'ldtplots/index.html',
+                  {'ldtweatherplot': ldtweather,
+                   'ldtweathertable': ldtweathertable,
+                   'ldtwind': ldtwind,
+                   'ldtwindtable': ldtwindtable,
                    'facsum_tcs': facsum_tcs,
                    'facsum_lpi': facsum_lpi,
                    })
