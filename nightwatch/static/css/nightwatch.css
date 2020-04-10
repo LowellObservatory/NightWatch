@@ -250,16 +250,16 @@ body {
 
 .element-item.weather {
   /* background: rgb(42, 42, 42); */
-  background: rgb(42, 0, 0);
+  background: #104a7114;
   /* padding-bottom: 5px; */
 }
 
 .element-item.webcam {
-  background: rgb(0, 70, 0);
+  background: #008e0014;
 }
 
 .element-item.bokeh {
-  background: rgb(0, 4, 42);
+  background: #3e025624;
 }
 
 /* ABSOLUTE MAGIC! Thanks to this */
