@@ -32,7 +32,8 @@ var hansat = {
     buttons_style: "flex:auto; margin:2px;",
 
     toggle_size: "15, 10, 5",
-    toggle_colors: "#000d42, #6b000e, #3498db",
+    //             loaded    disabled current
+    toggle_colors: "#011563, #990000, #3498db",
 };
 
 var hanrad = {
@@ -69,5 +70,6 @@ var hanrad = {
     buttons_style: "flex:auto; margin:2px;",
 
     toggle_size: "15, 10, 5",
-    toggle_colors: "#000d42, #6b000e, #3498db",
+    //             loaded    disabled current
+    toggle_colors: "#011563, #990000, #3498db",
 };
