@@ -19,7 +19,7 @@ body {
   display: inline-block;
   /* width: 650px; */
   box-sizing: border-box;
-  background: rgb(0, 10, 50);
+  background: #000a32c7;
   border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
 
