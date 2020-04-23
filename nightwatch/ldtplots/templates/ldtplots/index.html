@@ -112,17 +112,6 @@
 </head>
 
 <body>
-  <script>
-    function init() {
-      var sat = (new HAniSF()).setup("{% static 'js/hanis_goes.js' %}",
-                 'hansat');
-      var rad = (new HAniSF()).setup("{% static 'js/hanis_radar.js' %}",
-                 'hanrad');
-
-    };
-    window.onload = init();
-  </script>
-
   <div class="stamp">
     <!-- It's ugly, but works. Pure CSS ver. was more annoying than this is -->
     <table class="tg">
@@ -193,6 +182,16 @@
          style="padding:0px; width:620px; height:620px; border:none; position:relative;"
          id="hanrad">
     </div>
+    <script>
+      function init() {
+        var sat = (new HAniSF()).setup("{% static 'js/hanis_goes.js' %}",
+                   'hansat');
+        var rad = (new HAniSF()).setup("{% static 'js/hanis_radar.js' %}",
+                   'hanrad');
+
+      };
+      window.onload = init();
+    </script>
 
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'>
