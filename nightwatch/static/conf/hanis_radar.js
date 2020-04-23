@@ -1,4 +1,5 @@
 var hanrad = {
+    file_of_filenames: '',
     // in ms
     dwell: "150",
     pause: "1000",
