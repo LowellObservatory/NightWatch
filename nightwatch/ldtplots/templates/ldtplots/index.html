@@ -54,9 +54,12 @@
   </script>
 
   <!-- HAniS stuff -->
-  <script type="text/javascript" src="{% static 'js/hanisf_min.js' %}"></script>
-  <!-- <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script> -->
+  <script type="text/javascript"
+          src="{% static 'js/hanisf_min.js' %}"></script>
+  <!--
+  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
+  -->
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -184,12 +187,11 @@
     </div>
     <script>
       function init() {
-        var sat = (new HAniSF()).setup("{% static 'js/hanis_goes.js' %}",
-                   'hansat');
-        var rad = (new HAniSF()).setup("{% static 'js/hanis_radar.js' %}",
-                   'hanrad');
-
-      };
+        var a = (new HAniSF()).setup("{% static 'js/hanis_goes.js' %}",
+                                     'hansat');
+        var b = (new HAniSF()).setup("{% static 'js/hanis_radar.js' %}",
+                                     'hanrad');
+      }
       window.onload = init();
     </script>
 
