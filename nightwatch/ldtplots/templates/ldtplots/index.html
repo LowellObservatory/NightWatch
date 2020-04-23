@@ -13,15 +13,15 @@
 
   <!-- Favicon crap -->
   <!-- Used https://realfavicongenerator.net -->
-  <link rel="apple-touch-icon" sizes="180x180"
+  <!-- <link rel="apple-touch-icon" sizes="180x180"
         href="{% static 'images/apple-touch-icon.png' %}">
   <link rel="icon" type="image/png" sizes="32x32"
         href="{% static 'images/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16"
-        href="{% static 'images/favicon-16x16.png' %}">
+        href="{% static 'images/favicon-16x16.png' %}"> -->
   <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
-  <link rel="mask-icon"
-        href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5">
+  <!-- <link rel="mask-icon"
+        href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5"> -->
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="theme-color" content="#ffffff">
 
@@ -54,8 +54,9 @@
   </script>
 
   <!-- HAniS stuff -->
-  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hanisf_min.js' %}"></script>
+  <!-- <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script> -->
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -111,6 +112,17 @@
 </head>
 
 <body>
+  <script>
+    function init() {
+      var sat = (new HAniSF()).setup("{% static 'js/hanis_goes.js' %}",
+                 'hansat');
+      var rad = (new HAniSF()).setup("{% static 'js/hanis_radar.js' %}",
+                 'hanrad');
+
+    };
+    window.onload = init();
+  </script>
+
   <div class="stamp">
     <!-- It's ugly, but works. Pure CSS ver. was more annoying than this is -->
     <table class="tg">
@@ -173,17 +185,13 @@
     into a dead simple iframe and hold our noses appropriately. -->
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'
-         style="padding:0px; width:620px; height:620px">
-      <iframe id="encoder_iframe" src="{% url 'hanissat' %}"
-              style="border:none; position:relative; height:100%; width:100%;">
-      </iframe>
+         style="padding:0px; width:620px; height:620px; border:none; position:relative;"
+         id="hansat">
     </div>
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'
-         style="padding:0px; width:620px; height:620px">
-      <iframe id="encoder_iframe" src="{% url 'hanisrad' %}"
-              style="border:none; position:relative; height:100%; width:100%;">
-      </iframe>
+         style="padding:0px; width:620px; height:620px; border:none; position:relative;"
+         id="hanrad">
     </div>
 
     <div class="element-item weather"
