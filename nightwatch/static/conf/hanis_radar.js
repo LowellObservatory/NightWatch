@@ -1,5 +1,6 @@
 var hanrad = {
-    file_of_filenames: '',
+    debug: true,
+
     // in ms
     dwell: "150",
     pause: "1000",
@@ -8,9 +9,10 @@ var hanrad = {
     auto_refresh: "5",
 
     image_base: "http://dctsleeperservice:9876/nexrad/nows/",
-    basename: "nexrad_???.png",
-    num_frames: "18",
-    base_starting_number: "30",
+    file_of_filenames: 'radar_filenames.txt',
+    // basename: "nexrad_???.png",
+    // num_frames: "18",
+    // base_starting_number: "30",
 
     window_size: "div",
     enable_smoothing: "true",
