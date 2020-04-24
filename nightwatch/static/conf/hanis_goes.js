@@ -1,4 +1,6 @@
 var hansat = {
+    debug: true,
+
     // in ms
     dwell: "150",
     pause: "1000",
