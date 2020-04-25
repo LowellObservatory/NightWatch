@@ -56,10 +56,10 @@
   <!-- HAniS stuff -->
   <script type="text/javascript"
           src="{% static 'js/hanisf_min.js' %}"></script>
-  <!--
-  <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/hancon.js' %}"></script>
-  -->
+  <script type="text/javascript"
+          src="{% static 'conf/hanis_radar.js' %}"></script>
+  <script type="text/javascript"
+          src="{% static 'conf/hanis_goes.js' %}"></script>
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -182,11 +182,7 @@
          style="padding:0px; width:620px; height:620px; border:none; position:relative;"
          id="hanraddiv">
     </div>
-    <!-- Load the config files into variables -->
-    <script type="text/javascript"
-            src="{% static 'conf/hanis_radar.js' %}"></script>
-    <script type="text/javascript"
-            src="{% static 'conf/hanis_goes.js' %}"></script>
+
     <script>
       function init() {
         var a = (new HAniSF()).setup(hansat, 'hansatdiv');
