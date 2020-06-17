@@ -31,8 +31,9 @@ def index(request):
     hname = "dctsleeperservice"
     hport = 5000
 
-    hsat = HAniS('hansatdiv', 'hansat')
-    hrad = HAniS('hanraddiv', 'hanrad')
+    # For the future
+    # hsat = HAniS('hansatdiv', 'hansat')
+    # hrad = HAniS('hanraddiv', 'hanrad')
 
     # Setting resources=None means that we must specify/serve them ourselves
     #   as seen in the template <head> section. Easier that way so I can

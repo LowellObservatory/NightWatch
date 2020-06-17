@@ -24,7 +24,10 @@ SECRET_KEY = 'ifh3)9g@m6de*h0f8-o8*q6$1cfhczt$d5!1-@8h))4q77*kx#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'dctsleeperservice']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                 'dctsleeperservice',
+                 'nightwatch',
+                 'nightwatch.lowell.edu']
 
 # Application definition
 INSTALLED_APPS = [
