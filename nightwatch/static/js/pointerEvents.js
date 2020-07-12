@@ -5,6 +5,7 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
   var element, offsetLeft, offsetTop, didMove, sentStop, timer;
   var callUp, callDown, callDrag, callMove, callClick, callStopped;
   var callWheel;
+  var debugWindow;
   var x = 0;
   var y = 0;
   var oldX, oldY;
@@ -126,8 +127,9 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
         dx = touches[0].pageX - touches[1].pageX;
         dy = touches[0].pageY - touches[1].pageY;
         dist = dx*dx + dy*dy;
+        getPosition(e);
         if (callWheel && (oldDist > 0) && (Math.abs(dist-oldDist) > 30)) {
-          callWheel( (dist - oldDist)>0?1:-1);
+          callWheel( ((dist - oldDist)>0?1:-1));
         }
         oldDist = dist;
       }
@@ -184,13 +186,14 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
     if (isMulti) {
       avgX = (ptrID[0].pageX + ptrID[1].pageX)/2;
       avgY = (ptrID[0].pageY + ptrID[1].pageY)/2;
+      getPosition(e);
       if (callWheel) {
         isPinch = true;
         dx = ptrID[0].pageX - ptrID[1].pageX;
         dy = ptrID[0].pageY - ptrID[1].pageY;
         dist = dx*dx + dy*dy;
         if (callWheel && (oldDist > 0) && (Math.abs(dist-oldDist) > 30)) {
-          callWheel( (dist - oldDist)>0?1:-1);
+          callWheel( ((dist - oldDist)>0?1:-1));
         }
         oldDist = dist;
       }
@@ -309,5 +312,17 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
     }
     isDown = false;
   });
+
+  /****  debug window when needed...
+  debugWindow = window.open("","pointerEvents Debug Info","scrollbars=yes,width=400,height=200");
+  info("pointerEvents ver 6/2020.....");
+  function info(s) {
+    try {
+       debugWindow.document.write(s+"<br>");
+    } catch (err) {
+    }
+  }
+  *****/
+
 
 }

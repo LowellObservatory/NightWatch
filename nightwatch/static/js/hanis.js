@@ -7,8 +7,8 @@ var HAniS = new function() {
   ptr, useDiv=false, divall, divcon, divcont, divconb, divcan, divcanStyle,
   divanim, divtop, prefHgt, prefWid, imgCan,
   ctx, ctx1, drwCan, ctxd, topCan, ctxtop,
-  usingZip, zipFilename, zipOnly, zipFile, zipStatic,
-  backFilesUrl, numFrames, backFiles, useWheelFrame, divoldrop,
+  usingZip, zipFilename, zipOnly, zipFile, zipStatic, backFilesUrl,
+  numFrames, backFiles, useWheelFrame, divoldrop, oldrop, menuIndex, menuButt,
   numOverlays, overlayTop, overlayLabels,overlayOrder, overlayFiles, overlayFilesUrl,
   overlayLinks, fofBase, imageBase, configImageBase, backImages, overlayImages,
   overlayCheck, overlayAlpha, overlayStatic, showTip, tipText, tipX, tipY,
@@ -92,7 +92,7 @@ var HAniS = new function() {
   };
 
   var beginsWith = function(strng, ltr) {
-    if (strng == null) return;
+    if (strng == null) return false;
     return (strng.trim().toLowerCase().indexOf(ltr) == 0);
   }
 
@@ -192,8 +192,7 @@ var HAniS = new function() {
       info("image filename = "+backFiles[i]);
     }
 
-    cv = configValues["reverse_order"];
-    if (cv != null && beginsWith(cv,"t")) backFiles.reverse();
+    if (beginsWith(configValues["reverse_order"],"t")) backFiles.reverse();
 
     doFOF = false;
     if (numFrames > numOverlays) numOverlays = 0;
@@ -223,7 +222,7 @@ var HAniS = new function() {
 
     if (divnam == undefined) divnam = "MORdivcan";
     initCall = initCallback;
-    if (initCall != undefined && initCall.trim().length < 1 ) initCall = null;
+    if (initCall != undefined && typeof(initiCall) != "function" ) initCall = null;
     if (extras != undefined) {
       extraParams = extras.split("\n");
     } else {
@@ -330,6 +329,10 @@ var HAniS = new function() {
     numHotspots = 0;
     chkImageSize = true;
     overlayOrder = null;
+    divoldrop = [];
+    oldrop = false;
+    menuIndex = 0;
+    menuButt = [];
     fetchImages = true;
     dwell = 500;
     minDwell = 100;
@@ -486,17 +489,14 @@ var HAniS = new function() {
       if (cv == "true") {
         debugWindow = window.open("","HAniSDebugInfo","scrollbars=yes,width=400,height=200");
         debug = true;
-        info("HAniS Version 4.28");
+        info("HAniS Version 4.30");
       } else {
         debug = false;
       }
     }
 
     useCN = true;
-    cv = configValues["set_className"];
-    if (cv != null) {
-      if (beginsWith(cv,"f")) useCN = false;
-    }
+    if (beginsWith(configValues["set_className"],"f")) useCN = false;
 
     info("Is type of param an array = "+(txt instanceof Array));
 
@@ -506,10 +506,7 @@ var HAniS = new function() {
       divall.align = divalign;
     }
 
-    cv = configValues["prevent_shortcuts"];
-    if (cv != null) {
-      if (beginsWith(cv, "t")) noShortCuts = true;
-    }
+    if (beginsWith(configValues["prevent_shortcuts"], "t")) noShortCuts = true;
 
     cv = configValues["initial_message"];
     if (cv != null) {
@@ -722,16 +719,10 @@ var HAniS = new function() {
     }
 
     enableSmoothing = false;
-    cv = configValues["enable_smoothing"];
-    if (cv != null) {
-      if (beginsWith(cv, "t")) enableSmoothing = true;
-    }
+    if (beginsWith(configValues["enable_smoothing"], "t")) enableSmoothing = true;
 
     chkImageSize = true;
-    cv = configValues["check_image_size"];
-    if (cv != null) {
-      if (beginsWith(cv, "f")) chkImageSize = false;
-    }
+    if (beginsWith(configValues["check_image_size"], "f")) chkImageSize = false;
 
     gotSprites = false;
     cv = configValues["sprites"];
@@ -957,8 +948,7 @@ var HAniS = new function() {
     }
 
     sliceSmoothing = true;
-    cv = configValues["slice_smoothing"];
-    if (beginsWith(cv,"f")) sliceSmoothing = false;
+    if (beginsWith(configValues["slice_smoothing"],"f")) sliceSmoothing = false;
 
     overlayClear = null; // 'n', 'z', 's', 'r'
     cv = configValues["overlay_clear"];
@@ -1123,13 +1113,10 @@ var HAniS = new function() {
 
     toFromLock = false;
     toFrom = false;
-    cv = configValues["to_from_lock"];
-    if (cv != null) {
-      if (beginsWith(cv,"t")) {
-        toFrom = true;
-      } else {
-        toFrom = false;
-      }
+    if (beginsWith(configValues["to_from_lock"],"t")) {
+      toFrom = true;
+    } else {
+      toFrom = false;
     }
 
     var dsboxBG = "black";
@@ -1209,10 +1196,7 @@ var HAniS = new function() {
     }
 
     zipOnly = true;
-    cv = configValues["zip_only"];
-    if (cv != null) {
-      if (beginsWith(cv, "f")) zipOnly = false;
-    }
+    if (beginsWith(configValues["zip_only"], "f")) zipOnly = false;
 
     usingZip = false;
     cv = configValues["zip_filename"];
@@ -1253,18 +1237,14 @@ var HAniS = new function() {
 
     zipStatic = true;
     var zst = configValues["zip_static"];
-    if (zst != null) {
-      if (beginsWith(zst,"f") || beginsWith(zst,"n")) {
-        zipStatic = false;
-      }
+    if (beginsWith(zst,"f") || beginsWith(zst,"n")) {
+      zipStatic = false;
     }
 
     backStatic = true;
     var bst = configValues["background_static"];
-    if (bst != null) {
-      if (beginsWith(bst,"f") || beginsWith(bst,"n")) {
-        backStatic = false;
-      }
+    if (beginsWith(bst,"f") || beginsWith(bst,"n")) {
+      backStatic = false;
     }
 
     cv = configValues["overlay_filenames"];
@@ -1290,12 +1270,7 @@ var HAniS = new function() {
 
 
     keepZoom = true;
-    cv = configValues["keep_zoom"];
-    if (cv != null) {
-      if (beginsWith(cv,"f")) {
-        keepZoom = false;
-      }
-    }
+    if (beginsWith(configValues["keep_zoom"],"f")) keepZoom = false;
 
     hideBottomDef = 0;
     hideBottom = 0;
@@ -1338,10 +1313,7 @@ var HAniS = new function() {
     }
 
     hideBackground = false;
-    cv = configValues["hide_background"];
-    if (cv != null) {
-      if (beginsWith(cv, "t")) hideBackground = true;
-    }
+    if (beginsWith(configValues["hide_background"], "t")) hideBackground = true;
 
     popupDiv = "<div>";
     popupWinHeight = 300;
@@ -1367,22 +1339,14 @@ var HAniS = new function() {
 
     enableZooming = false;
     wasZooming = false;
-    cv = configValues["active_zoom"];
-    if (cv != null) {
-      if (beginsWith(cv, "t")) {
-        if (zoom == null) enableZooming = true;
-        pointer.useWheel(HAniS.wheel);
-      }
+    if (beginsWith(configValues["active_zoom"], "t")) {
+      if (zoom == null) enableZooming = true;
+      pointer.useWheel(HAniS.wheel);
     }
 
 
     cycleZoom = false;
-    cv = configValues["cycle_zoom"];
-    if (cv != null) {
-      if (beginsWith(cv, "t")) {
-        cycleZoom = true;
-      }
-    }
+    if (beginsWith(configValues["cycle_zoom"], "t")) cycleZoom = true;
 
     cv = configValues["initial_zoom"];
     if (cv != null) {
@@ -1430,12 +1394,7 @@ var HAniS = new function() {
     }
 
     showProgress = true;
-    cv = configValues["use_progress_bar"];
-    if (cv != null) {
-      if (beginsWith(cv,"f")) {
-        showProgress = false;
-      }
-    }
+    if (beginsWith(configValues["use_progress_bar"],"f")) showProgress = false;
 
     cv = configValues["dwell"];
     if (cv != null) {
@@ -1512,10 +1471,8 @@ var HAniS = new function() {
     extrapPrompts = ["Click on target's initial position","Click on target's final position","Move pointer around or click here to select target"];
 
     extrapYpos = 10;
-    cv = configValues["extrap_prompts_position"];
-    if (cv != null) {
-      if (beginsWith(cv,"bot")) extrapYpos = 9999;
-    }
+    if (beginsWith(configValues["extrap_prompts_position"],"bot")) extrapYpos = 9999;
+
     cv = configValues["extrap_prompts"];
     if (cv != null) {
       extrapPrompts = cv.split(",");
@@ -1528,10 +1485,7 @@ var HAniS = new function() {
     }
 
     markClose = true;
-    cv = configValues["mark_close"];
-    if (cv != null) {
-      if (beginsWith(cv,"f")) markClose = false;
-    }
+    if (beginsWith(configValues["mark_close"],"f")) markClose = false;
 
     markFont = "12pt Arial";
     markColor = "white";
@@ -1933,7 +1887,7 @@ var HAniS = new function() {
   }
 
   function setHotzoneVis(nz, vis) {
-    if (nz != 0) {
+    if (nz != 0 && !oldrop) {
       for (var i=0; i<nz; i++) {
         if (overlayCheck[hotzones[i].overlay].isGhost == false ) {
           overlayCheck[hotzones[i].overlay].parentNode.style.visibility=vis;
@@ -2628,140 +2582,148 @@ var HAniS = new function() {
               k = loadOrder[klf];
               overlayImages[k] = new Array(numOverlays)
               for (j=0; j<numOverlays; j++) {
-                overlayImages[k][j] = new Image();
-                overlayImages[k][j].gotit = false;
-                overlayImages[k][j].frameNum = k;
-                overlayImages[k][j].overlayNum = j;
-                overlayImages[k][j].onerror = function() {
-                  imgGotCount++;
-                }
-                overlayImages[k][j].onload = function() {
-                  this.gotit = true;
-                  var f = this.frameNum;
-                  imgGotCount++;
-                  drawImageProgress();
-                  if (chkImageSize && (this.height != imgHeight || this.width != imgWidth)) {
-                    this.gotit = false;
-                    info("Bad image size:"+this.src);
-                  } else {
-                    if (this.overlayNum == missTog-1) toggleFrames[this.frameNum] = 0;
+                if (useForAll[j+1] != undefined && useForAll[j+1] >= numFrames) useForAll[j+1] = numFrames - 1;
+                if (useForAll[j+1] == undefined || useForAll[j+1] == k) {
+                  overlayImages[k][j] = new Image();
+                  overlayImages[k][j].gotit = false;
+                  overlayImages[k][j].frameNum = k;
+                  overlayImages[k][j].overlayNum = j;
+                  overlayImages[k][j].onerror = function() {
+                    imgGotCount++;
                   }
+                  overlayImages[k][j].onload = function() {
+                    this.gotit = true;
+                    var f = this.frameNum;
+                    imgGotCount++;
+                    drawImageProgress();
+                    if (chkImageSize && (this.height != imgHeight || this.width != imgWidth)) {
+                      this.gotit = false;
+                      info("Bad image size:"+this.src);
+                    } else {
+                      if (this.overlayNum == missTog-1) toggleFrames[this.frameNum] = 0;
+                    }
 
-                  if (isOverlayEnh && this.gotit && this.overlayNum == overlayEnhNum) {
-                    origCan[f].height = this.height;
-                    origCan[f].width = this.width;
-                    ctxo = origCan[f].getContext("2d");
-                    ctxo.drawImage(this, 0, 0);
-                    origIDd[f] = ctxo.getImageData(0,0,this.width,this.height).data;
+                    if (isOverlayEnh && this.gotit && this.overlayNum == overlayEnhNum) {
+                      origCan[f].height = this.height;
+                      origCan[f].width = this.width;
+                      ctxo = origCan[f].getContext("2d");
+                      ctxo.drawImage(this, 0, 0);
+                      origIDd[f] = ctxo.getImageData(0,0,this.width,this.height).data;
 
-                    enhCan[f].height = this.height;
-                    enhCan[f].width = this.width;
-                    ctxe[f] = enhCan[f].getContext("2d");
-                    ctxe[f].drawImage(this, 0, 0)
-                    enhID[f] = ctxe[f].getImageData(0,0,this.width,this.height);
+                      enhCan[f].height = this.height;
+                      enhCan[f].width = this.width;
+                      ctxe[f] = enhCan[f].getContext("2d");
+                      ctxe[f].drawImage(this, 0, 0)
+                      enhID[f] = ctxe[f].getImageData(0,0,this.width,this.height);
 
-                    overlayImages[f][this.overlayNum] = null;
-                    overlayImages[f][this.overlayNum] = enhCan[f];
-                    overlayImages[f][this.overlayNum].gotit = true;
+                      overlayImages[f][this.overlayNum] = null;
+                      overlayImages[f][this.overlayNum] = enhCan[f];
+                      overlayImages[f][this.overlayNum].gotit = true;
 
-                  } else if (this.gotit && overlayCheck[this.overlayNum].hotspotIndex) {
+                    } else if (this.gotit && overlayCheck[this.overlayNum].hotspotIndex) {
 
-                      var cnt = 0;
-                      var tpx, tpy, tph, tpon, tpv;
-                      var tpcan = make("canvas");
-                      tpcan.height = this.height;
-                      tpcan.width = this.width;
-                      var ctxtp = tpcan.getContext("2d");
-                      ctxtp.drawImage(this,0,0);
-                      var tpdd = ctxtp.getImageData(0,0,this.width, this.height).data;
-                      var npt = tpdd.length;
-                      tpon = this.overlayNum;
-                      var k;
-                      for (k=0; k<npt; k=k+4) {
-                        if (tpdd[k] != 0) {
-                          if (numHotspots == 0) hotspots = new Array();
-                          cnt = cnt + 1;
-                          tpv = tpdd[k];
-                          tpy = Math.floor((k/4)/tpcan.width);
-                          tpx = Math.floor((k/4) % tpcan.width);
-                          hotspots[numHotspots] = new Hotspot(tpx, tpy, "spritefn",tpv, "pan", null, null, tpon, f, null);
-                         numHotspots++;
+                        var cnt = 0;
+                        var tpx, tpy, tph, tpon, tpv;
+                        var tpcan = make("canvas");
+                        tpcan.height = this.height;
+                        tpcan.width = this.width;
+                        var ctxtp = tpcan.getContext("2d");
+                        ctxtp.drawImage(this,0,0);
+                        var tpdd = ctxtp.getImageData(0,0,this.width, this.height).data;
+                        var npt = tpdd.length;
+                        tpon = this.overlayNum;
+                        var k;
+                        for (k=0; k<npt; k=k+4) {
+                          if (tpdd[k] != 0) {
+                            if (numHotspots == 0) hotspots = new Array();
+                            cnt = cnt + 1;
+                            tpv = tpdd[k];
+                            tpy = Math.floor((k/4)/tpcan.width);
+                            tpx = Math.floor((k/4) % tpcan.width);
+                            hotspots[numHotspots] = new Hotspot(tpx, tpy, "spritefn",tpv, "pan", null, null, tpon, f, null);
+                           numHotspots++;
+                          }
                         }
-                      }
 
-                  } else if (this.gotit && doTransparency) {
+                    } else if (this.gotit && doTransparency) {
 
-                    if (!useTransparencyList || (useTransparencyList &&
-                         transparencyList[this.overlayNum])) {
-                      var tpcan = make("canvas");
-                      tpcan.height = this.height;
-                      tpcan.width = this.width;
-                      var ctxtp = tpcan.getContext("2d");
-                      ctxtp.drawImage(this,0,0);
-                      var tpdata = ctxtp.getImageData(0,0,this.width, this.height);
-                      var tpdd = tpdata.data;
-                      var npt = tpdd.length;
-                      var k;
-                      for (k=0; k<npt; k=k+4) {
-                        if (tpdd[k] === transRed && tpdd[k+1] === transGreen &&
-                               tpdd[k+2] === transBlue) {
+                      if (!useTransparencyList || (useTransparencyList &&
+                           transparencyList[this.overlayNum])) {
 
-                          tpdd[k+3] = 0;
+                        var tpcan = make("canvas");
+                        tpcan.height = this.height;
+                        tpcan.width = this.width;
+                        var ctxtp = tpcan.getContext("2d");
+                        ctxtp.drawImage(this,0,0);
+                        var tpdata = ctxtp.getImageData(0,0,this.width, this.height);
+                        var tpdd = tpdata.data;
+                        var npt = tpdd.length;
+                        var k;
+                        for (k=0; k<npt; k=k+4) {
+                          if (tpdd[k] === transRed && tpdd[k+1] === transGreen &&
+                                 tpdd[k+2] === transBlue) {
+
+                            tpdd[k+3] = 0;
+                          }
                         }
+                        ctxtp.putImageData(tpdata,0,0);
+                        overlayImages[f][this.overlayNum] = null;
+                        overlayImages[f][this.overlayNum] = tpcan;
+                        overlayImages[f][this.overlayNum].gotit = true;
                       }
-                      ctxtp.putImageData(tpdata,0,0);
+                    }
+
+                    if (this.gotit && overlayTop[this.overlayNum]) {
+                      ctxtop.clearRect(0,0,canW, canH);
+                      ctxtop.drawImage(overlayImages[f][this.overlayNum],0,0,canW,canH);
+
+                    } else if (this.gotit && overlaySlice[this.overlayNum] && (sliceCoords != null)) {
+                      var tpcan = make("canvas");
+                      tpcan.height = imgHeight;
+                      tpcan.width = imgWidth;
+                      if (sliceCoords.length < 8) {
+                        sliceCoords[4] = 0;
+                        sliceCoords[5] = 0;
+                        sliceCoords[6] = imgWidth;
+                        sliceCoords[7] = imgHeight;
+                      }
+                      var ctxtp = tpcan.getContext("2d");
+                      ctxtp.imageSmoothingEnabled=sliceSmoothing;
+                      ctxtp.drawImage(this,sliceCoords[0], sliceCoords[1], sliceCoords[2],sliceCoords[3],sliceCoords[4],sliceCoords[5],sliceCoords[6], sliceCoords[7]);
                       overlayImages[f][this.overlayNum] = null;
                       overlayImages[f][this.overlayNum] = tpcan;
                       overlayImages[f][this.overlayNum].gotit = true;
+                      if (preserveIndex !=null && preserveIndex[this.overlayNum]) {
+                        overlayImages[f][this.overlayNum].origImage = this;
+                      }
+                    }
+                    if (usingZip && overlayFilesUrl[f][this.overlayNum] != null) {
+                      URL.revokeObjectURL(overlayFilesUrl[f][this.overlayNum]);
+                    }
+
+                    if (useForAll[this.overlayNum+1] != undefined && useForAll[this.overlayNum+1] == f) {
+                      for (var ff = 0; ff<numFrames; ff++) {
+                        if (ff != f) {
+                          overlayImages[ff][this.overlayNum] = overlayImages[f][this.overlayNum];
+                          imgGotCount++;
+                        }
+                      }
                     }
                   }
 
-                  if (this.gotit && overlayTop[this.overlayNum]) {
-                    ctxtop.clearRect(0,0,canW, canH);
-                    ctxtop.drawImage(overlayImages[f][this.overlayNum],0,0,canW,canH);
+                  var ofn = overlayFiles[k][j];
 
-                  } else if (this.gotit && overlaySlice[this.overlayNum] && (sliceCoords != null)) {
-                    var tpcan = make("canvas");
-                    tpcan.height = imgHeight;
-                    tpcan.width = imgWidth;
-                    if (sliceCoords.length < 8) {
-                      sliceCoords[4] = 0;
-                      sliceCoords[5] = 0;
-                      sliceCoords[6] = imgWidth;
-                      sliceCoords[7] = imgHeight;
-                    }
-                    var ctxtp = tpcan.getContext("2d");
-                    ctxtp.imageSmoothingEnabled=sliceSmoothing;
-                    ctxtp.drawImage(this,sliceCoords[0], sliceCoords[1], sliceCoords[2],sliceCoords[3],sliceCoords[4],sliceCoords[5],sliceCoords[6], sliceCoords[7]);
-                    overlayImages[f][this.overlayNum] = null;
-                    overlayImages[f][this.overlayNum] = tpcan;
-                    overlayImages[f][this.overlayNum].gotit = true;
-                    if (preserveIndex !=null && preserveIndex[this.overlayNum]) {
-                      overlayImages[f][this.overlayNum].origImage = this;
-                    }
+                  if (overlayStatic != undefined && !overlayStatic[j]) {
+                    ofn = ofn+olayNotStatic;
                   }
-                  if (usingZip && overlayFilesUrl[f][this.overlayNum] != null) {
-                    URL.revokeObjectURL(overlayFilesUrl[f][this.overlayNum]);
+
+                  if (usingZip && (zipOnly || overlayFilesUrl[k][j]) ) {
+                    overlayImages[k][j].src = overlayFilesUrl[k][j];
+                  } else {
+                    overlayImages[k][j].src = ofn;
                   }
+                  imgCount++;
                 }
-
-                var ofn = overlayFiles[k][j];
-                if (useForAll[j+1] != undefined) {
-                  var ufai = useForAll[j+1];
-                  if (ufai >= numFrames) ufai = numFrames-1;
-                  ofn = overlayFiles[ufai][j];
-                }
-
-                if (overlayStatic != undefined && !overlayStatic[j]) {
-                  ofn = ofn+olayNotStatic;
-                }
-                overlayImages[k][j].src = ofn;
-                if (usingZip && (zipOnly || overlayFilesUrl[k][j]) ) {
-                  overlayImages[k][j].src = overlayFilesUrl[k][j];
-                } else {
-                  overlayImages[k][j].src = ofn;
-                }
-                imgCount++;
               }
             }
           }
@@ -3036,6 +2998,7 @@ var HAniS = new function() {
         direction = 1;
         looprock.addEventListener("click",HAniS.toggleLoopRock,false);
         divcon.appendChild(looprock);
+        if (beginsWith(configValues["start_rocking"], "t")) HAniS.toggleLoopRock();
       }
 
       if (cstr == "loophalt") {
@@ -3767,9 +3730,9 @@ var HAniS = new function() {
       }
 
 
-      if (cstr == "overlay" || cstr == "menu") {
+      if (cstr == "overlay" || beginsWith(cstr,"menu")) {
 
-        overlayCheck = new Array();
+        if (menuIndex == 0) overlayCheck = new Array();
         var olt = configValues["overlay_tooltip"];
         var oltips = null;
         if (olt != null) oltips = olt.split(",");
@@ -3779,19 +3742,24 @@ var HAniS = new function() {
           olrad = olr.split(",");
         }
 
+        var olml = configValues["overlay_menu_links"];
+        var olmenulist = null;
+        if (olml != null) olmenulist = olml.split(",");
+
         var olc = configValues["overlay_labels_color"];
         var olcolor = null;
         if (olc !=null) {
           olcolor = olc.split(",");
         }
 
-        var oldrop = false;
-        if (cstr == "menu") {
+        oldrop = false;
+        var oldropon = false;
+        if (beginsWith(cstr,"menu")) {
           oldrop = true;
+          if (cstr.indexOf("/on") > 0) oldropon = true;
         }
 
-
-        overlayStatic = new Array();
+        if (menuIndex == 0) overlayStatic = new Array();
         var ols = configValues["overlay_caching"];
         var olstat = null;
         if (ols == null) ols = configValues["overlay_static"];
@@ -3800,14 +3768,16 @@ var HAniS = new function() {
         var oldv = true;
         if (configValues["overlay_nonewdiv"] != null) oldv = false;
 
+        menuIndex++;
+
         for (k=0; k<overlayLabels.length; k++) {
           var olab = overlayLabels[k].trim();
 
           if (k == 0 || olab.indexOf("/") == 0) {
             if (olab.indexOf("/") == 0) olab = olab.substr(1);
             if (oldrop) {
-              divoldrop = make("div");
-              divoldrop.setAttribute("style","text-align:left;display:block;visibility:hidden;position:absolute;border-style:solid;border-width:2px;background:#ffffff;z-index:999;"+configValues["overlay_labels_style"]);
+              divoldrop[menuIndex] = make("div");
+              divoldrop[menuIndex].setAttribute("style","text-align:left;display:block;position:absolute;border-style:solid;border-width:2px;background:#ffffff;z-index:999;visibility:"+(oldropon ? "visible" : "hidden")+";"+configValues["overlay_labels_style"]);
               numdivolay++;
 
             } else if (oldv) {
@@ -3829,128 +3799,139 @@ var HAniS = new function() {
             }
           }
 
-          var olon = false;
-          var oll = olab.length;
-          if (olab.indexOf("/on") > 0 && olab.indexOf("/on") == oll-3) {
-            olon =true;
-            olab = olab.substr(0,oll-3);
-          }
+          if (olmenulist == null || (olmenulist != null && olmenulist[k] == menuIndex)) {
 
-          var isAlways = false;
-          if (olab.indexOf("/always")> 0 && olab.indexOf("/always")  == oll-7) {
-            olon = true;
-            isAlways = true;
-          }
+            var olon = false;
+            var oll = olab.length;
+            if (olab.indexOf("/on") > 0 && olab.indexOf("/on") == oll-3) {
+              olon =true;
+              olab = olab.substr(0,oll-3);
+            }
 
-          var isHidden = false;
-          if (olab.indexOf("/hidden") > 0) {
-            isHidden = true;
-          }
+            var isAlways = false;
+            if (olab.indexOf("/always")> 0 && olab.indexOf("/always")  == oll-7) {
+              olon = true;
+              isAlways = true;
+            }
 
-          var isIndex = false;
-          if (olab.indexOf("/hotspots")> 0) {
-            isIndex = true;
-            olab = olab.substr(0, olab.indexOf("/"));
-          }
+            var isHidden = false;
+            if (olab.indexOf("/hidden") > 0) {
+              isHidden = true;
+            }
 
-          if (olstat != null) {
-            if (beginsWith(olstat[k],"y") || beginsWith(olstat[k],"t")) {
-              overlayStatic[k] = true;
+            var isIndex = false;
+            if (olab.indexOf("/hotspots")> 0) {
+              isIndex = true;
+              olab = olab.substr(0, olab.indexOf("/"));
+            }
+
+            if (olstat != null) {
+              if (beginsWith(olstat[k],"y") || beginsWith(olstat[k],"t")) {
+                overlayStatic[k] = true;
+              } else {
+                overlayStatic[k] = false;
+              }
             } else {
-              overlayStatic[k] = false;
-            }
-          } else {
-            overlayStatic[k] = true;
-          }
-
-
-          overlayCheck[k] = make("input");
-          overlayCheck[k].type = "checkbox";
-          overlayCheck[k].value = olab;
-          overlayCheck[k].id = olab;
-          overlayCheck[k].showMe = !(isAlways & isHidden) & !isIndex;
-
-          var cbsty = "vertical-align:middle;";
-          cv = configValues["checkbox_style"];
-          if (cv != null) {
-            cbsty = cbsty + cv;
-          }
-          overlayCheck[k].setAttribute("style", cbsty);
-          overlayCheck[k].checked = olon;
-          overlayCheck[k].restorableState = olon;
-          overlayCheck[k].name = 0;
-          overlayCheck[k].hotspotIndex = isIndex;
-          if (enhance != null) {
-            if ((k == overlayEnhNum) && overlayCheck[k].checked) {
-              enhance.disabled = false;
-            }
-          }
-
-          if (allowHoverzones != null && (!allowHoverzones[k] && olon)) okToShowHoverzones = false;
-          overlayCheck[k].addEventListener("click",HAniS.overClick,false);
-          if (olr != null) {
-            var grp = olrad[k].indexOf("/");
-            if (grp != -1) {
-              overlayCheck[k].name = olrad[k].substr(grp+1).trim();
+              overlayStatic[k] = true;
             }
 
-            if (beginsWith(olrad[k],"t")) {
-              overlayCheck[k].type="radio";
-              if (grp == -1) {
-                overlayCheck[k].name="all";
+            overlayCheck[k] = make("input");
+            overlayCheck[k].type = "checkbox";
+            overlayCheck[k].value = olab;
+            overlayCheck[k].id = olab;
+            overlayCheck[k].showMe = !(isAlways & isHidden) & !isIndex;
+
+            var cbsty = "vertical-align:middle;";
+            cv = configValues["checkbox_style"];
+            if (cv != null) {
+              cbsty = cbsty + cv;
+            }
+            overlayCheck[k].setAttribute("style", cbsty);
+            overlayCheck[k].checked = olon;
+            overlayCheck[k].restorableState = olon;
+            overlayCheck[k].name = 0;
+            overlayCheck[k].hotspotIndex = isIndex;
+            if (enhance != null) {
+              if ((k == overlayEnhNum) && overlayCheck[k].checked) {
+                enhance.disabled = false;
               }
             }
-          }
 
-          overlayCheck[k].isGhost = true;
-          if (!isAlways && !isHidden) {
-            if (oltips != null) overlayCheck[k].title = oltips[k];
-            var lab = make('label');
-            lab.htmlFor = olab;
-            if (oltips != null) lab.title = oltips[k];
-            lab.innerHTML = olab;
-            lab.name = overlayCheck[k].name;
-            var lsty = "vertical-align:middle;";
-            if (olcolor != null) {
-              lsty = lsty + "color:"+olcolor[k]+";";
+            if (allowHoverzones != null && (!allowHoverzones[k] && olon)) okToShowHoverzones = false;
+            overlayCheck[k].addEventListener("click",HAniS.overClick,false);
+            if (olr != null) {
+              var grp = olrad[k].indexOf("/");
+              if (grp != -1) {
+                overlayCheck[k].name = olrad[k].substr(grp+1).trim();
+              }
+
+              if (beginsWith(olrad[k],"t")) {
+                overlayCheck[k].type="radio";
+                if (grp == -1) {
+                  overlayCheck[k].name="all";
+                }
+              }
             }
 
-            lab.setAttribute("style",lsty);
-            //if (!oldrop) lab.setAttribute("style",lsty);
-            var spn = make("span");
-            var space = "10"
-            if (overlaySpacer != null) {
-              space = 10 + overlaySpacer[k];
+            overlayCheck[k].isGhost = true;
+            if (!isAlways && !isHidden) {
+              if (oltips != null) overlayCheck[k].title = oltips[k];
+              var lab = make('label');
+              lab.htmlFor = olab;
+              if (oltips != null) lab.title = oltips[k];
+              lab.innerHTML = olab;
+              lab.name = overlayCheck[k].name;
+              var lsty = "vertical-align:middle;";
+              if (olcolor != null) {
+                lsty = lsty + "color:"+olcolor[k]+";";
+              }
+
+              lab.setAttribute("style",lsty);
+
+              var spn = make("span");
+
+              spn.appendChild(overlayCheck[k]);
+              spn.appendChild(lab);
+
+              if (oldrop) {
+                spn.setAttribute("style","display:block;margin-right:5px;");
+                divoldrop[menuIndex].appendChild(spn);
+
+              } else {
+                var space = "10"
+                if (overlaySpacer != null) space = 10 + overlaySpacer[k];
+                spn.setAttribute("style","margin-left:"+space+"px;");
+                divolay.appendChild(spn);
+              }
+              overlayCheck[k].isGhost = false;
             }
-            spn.appendChild(overlayCheck[k]);
-            spn.appendChild(lab);
-            if (oldrop) {
-              spn.setAttribute("style","display:block;margin-right:5px;");
-              divoldrop.appendChild(spn);
-            } else {
-              spn.setAttribute("style","margin-left:"+space+"px;");
-              divolay.appendChild(spn);
-            }
-            overlayCheck[k].isGhost = false;
           }
         }
 
         if (oldrop) {
-          var olbutt = make("button");
-          configButton(olbutt,"menu","Show Overlay Menu","Hide Menu",mytip,"menu off");
-          olbutt.addEventListener("click", function (e) {
-            var vis = divoldrop.style.visibility;
+          menuButt[menuIndex] = make("button");
+          configButton(menuButt[menuIndex],"menu"+menuIndex,"Show Overlay Menu","Hide Menu",mytip,"menu off");
+          menuButt[menuIndex].menuInx = menuIndex;
+          menuButt[menuIndex].addEventListener("click", function (e) {
+            var vis = divoldrop[this.menuInx].style.visibility;
             if (vis === "hidden") {
-              divoldrop.style.visibility = "visible";
-              toggleButton(olbutt, false, "menu on");
+              for (var dp = 1; dp<divoldrop.length; dp++) {
+                if (divoldrop[dp].style.visibility == "visible") {
+                  divoldrop[menuButt[dp].menuInx].style.visibility = "hidden";
+                  toggleButton(menuButt[dp], true, "menu off");
+                }
+              }
+              divoldrop[this.menuInx].style.visibility = "visible";
+              toggleButton(this, false, "menu on");
             } else {
-              divoldrop.style.visibility = "hidden";
-              toggleButton(olbutt, true, "menu off");
+              divoldrop[this.menuInx].style.visibility = "hidden";
+              toggleButton(this, true, "menu off");
             }
 
           }, false);
-          divcon.appendChild(olbutt);
-          divall.insertBefore(divoldrop, divcan);
+
+          divcon.appendChild(menuButt[menuIndex]);
+          divall.insertBefore(divoldrop[menuIndex], divcan);
         }
 
         // now fix up links, if there
@@ -4476,7 +4457,6 @@ var HAniS = new function() {
     }
     drawLines();
   }
-
 
   this.down = function() {
     if (showTip) {
@@ -5775,8 +5755,9 @@ var HAniS = new function() {
           }
         }
 
-        if (showProbe) drawLines();
       }
+
+      if (showProbe) drawLines();
 
       if (useProgress) drawImageProgress();
 
@@ -6167,5 +6148,4 @@ var HAniS = new function() {
   }
 
 }
-
 
