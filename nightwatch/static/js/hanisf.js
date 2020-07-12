@@ -465,7 +465,7 @@ var HAniSF = function() {
   }
 
   function parseConfig (txt) {
-    var i,j, st, steq, sto, cv;
+    var i,j, st, steq, sto, cv, ov;
     doFOF = true;
     if (txt instanceof Array) {
       configValues = {};
