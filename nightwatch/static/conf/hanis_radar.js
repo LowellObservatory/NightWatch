@@ -1,12 +1,13 @@
 var hanrad = {
     debug: true,
+    objname: "hradObj",
 
     // in ms
     dwell: "150",
     pause: "1000",
 
     // in minutes
-    auto_refresh: "5",
+    auto_refresh: "2",
 
     image_base: "http://dctsleeperservice:9876/nexrad/nows/",
     basename: "nexrad_???.png",
