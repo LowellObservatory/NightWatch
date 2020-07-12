@@ -713,9 +713,12 @@ var HAniSF = function() {
     }
 
     cv = configValues["auto_refresh"];
+    ov = configValues["objname"];
     if (cv != null) {
       autoRefresh= parseInt(cv,10)*60000;
-      refreshTimer = setInterval("HAniS.reloadFOF();",autoRefresh);
+      reloadFunc = ov + ".reloadFOF();";
+      refreshTimer = setInterval(reloadFunc, autoRefresh);
+      // refreshTimer = setInterval("HAniS.reloadFOF();",autoRefresh);
       isAutoRefresh = true;
     }
 
