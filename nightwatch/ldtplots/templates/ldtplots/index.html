@@ -199,8 +199,12 @@
         // NOTE: the name of the variable here MUST match what's in the
         //   config file/JS blob because it's used to refresh the right
         //   file.  This is a hack to work around a bug in 4.28 thru 4.30
-        var hsatObj = (new HAniSF()).setup(hansat, 'hansatdiv');
-        var hradObj = (new HAniSF()).setup(hanrad, 'hanraddiv');
+
+        // NOTE: This is really the HAniSF file, but there's a bug with
+        //   auto_refresh so I just renamed it back to HAniS so it'd work
+        //   until the author fixes it for real (broken in 4.28 thru 4.30)
+        var hsatObj = (new HAniS()).setup(hansat, 'hansatdiv');
+        var hradObj = (new HAniS()).setup(hanrad, 'hanraddiv');
       };
       window.onload = init();
     </script>
