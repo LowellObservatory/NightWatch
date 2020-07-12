@@ -183,16 +183,6 @@
   <div class="grid">
     <!-- HAniS weather sequence displayer -->
     <!-- https://www.ssec.wisc.edu/hanis/ -->
-    <script>
-      function init() {
-        // NOTE: the name of the variable here MUST match what's in the
-        //   config file/JS blob because it's used to refresh the right
-        //   file.  This is a hack to work around a bug in 4.28 thru 4.30
-        hsatObj = (new HAniSF()).setup(hansat, 'hansatdiv');
-        HAniS = (new HAniSF()).setup(hanrad, 'hanraddiv');
-      };
-      window.onload = init();
-    </script>
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'
          style="padding:0px; width:620px; height:620px; border:none; position:relative;"
@@ -203,6 +193,16 @@
          style="padding:0px; width:620px; height:620px; border:none; position:relative;"
          id="hanraddiv">
     </div>
+    <script>
+      function init() {
+        // NOTE: the name of the variable here MUST match what's in the
+        //   config file/JS blob because it's used to refresh the right
+        //   file.  This is a hack to work around a bug in 4.28 thru 4.30
+        hsatObj = (new HAniSF()).setup(hansat, 'hansatdiv');
+        HAniS = (new HAniSF()).setup(hanrad, 'hanraddiv');
+      };
+      window.onload = init();
+    </script>
 
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'>
