@@ -14,6 +14,8 @@ var hanrad = {
     num_frames: "18",
     base_starting_number: "30",
 
+    start_looping: "false, 18",
+
     window_size: "div",
     enable_smoothing: "true",
 
