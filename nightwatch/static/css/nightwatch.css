@@ -5,6 +5,12 @@
   src: url("../fonts/Orbitron/Orbitron-Regular.ttf");
 }
 
+@font-face {
+  font-family: "Alata";
+  src: url("../fonts/Alata/Alata-Regular.ttf");
+}
+
+
 body {
   font-family: sans-serif;
   color: rgb(160, 160, 160);
@@ -191,7 +197,8 @@ body {
 .btn--primary {
   color: #3498db;
   border-color: #3498db;
-  font-family: 'Orbitron';
+  font-family: 'Alata';
+  font-size: 14px;
   background-color: rgba(52, 152, 219, 0);
 }
 
