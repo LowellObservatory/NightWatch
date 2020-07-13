@@ -1,5 +1,10 @@
 * { box-sizing: border-box; }
 
+@font-face {
+  font-family: "Orbitron";
+  src: url("../fonts/Orbitron/Orbitron-Regular.ttf");
+}
+
 body {
   font-family: sans-serif;
   color: rgb(160, 160, 160);
@@ -24,6 +29,8 @@ body {
 }
 
 /* table crap */
+
+
 
 .tg {
   color: #3498db;
