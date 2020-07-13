@@ -194,6 +194,9 @@
          id="hanraddiv">
     </div>
     <script>
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
       function init() {
         // NOTE: the name of the variable here MUST match what's in the
         //   config file/JS blob because it's used to refresh the right
@@ -206,7 +209,8 @@
       };
       window.onload = init();
       console.log("HAniS init complete")
-
+      await sleep(1500);
+      console.log("Slept for 1500 msec to init")
       hsatObj.toggleIsLooping();
       hradObj.toggleIsLooping();
       console.log("hsat/hrad toggled")
