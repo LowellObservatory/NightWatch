@@ -55,7 +55,6 @@ body {
 }
 
 .tg th {
-  font-family: 'Orbitron', sans-serif;
   font-size: 24px;
   font-weight: normal;
   overflow: hidden;
@@ -67,7 +66,8 @@ body {
 }
 
 .tg .tg-title {
-  font-size: 36px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 30px;
   border-color: inherit;
   text-align: center;
   vertical-align: middle
