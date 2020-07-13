@@ -197,7 +197,7 @@
       function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
-      function init() {
+      async function init() {
         // NOTE: the name of the variable here MUST match what's in the
         //   config file/JS blob because it's used to refresh the right
         //   file.  This is a hack to work around a bug in 4.28 thru 4.30
@@ -206,11 +206,12 @@
 
         hradObj = new HAniSF();
         hradObj.setup(hanrad, 'hanraddiv');
+        await sleep(1500);
+        console.log("Slept for 1500 msec to init")
       };
       window.onload = init();
       console.log("HAniS init complete")
-      await sleep(1500);
-      console.log("Slept for 1500 msec to init")
+
       hsatObj.toggleIsLooping();
       hradObj.toggleIsLooping();
       console.log("hsat/hrad toggled")
