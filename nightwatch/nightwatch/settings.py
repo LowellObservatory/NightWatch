@@ -26,6 +26,7 @@ SECRET_KEY = 'ifh3)9g@m6de*h0f8-o8*q6$1cfhczt$d5!1-@8h))4q77*kx#'
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
                  'dctsleeperservice',
+                 'dctsleeperservice.lowell.edu',
                  'nightwatch',
                  'nightwatch.lowell.edu']
 
