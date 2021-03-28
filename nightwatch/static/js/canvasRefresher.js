@@ -7,7 +7,7 @@ var uradict = {
     telbldg: "http://dctsleeperservice:9876/webcams/dct/thumb_tel_bldg.jpg",
     domeroof: "http://dctsleeperservice:9876/webcams/dct/thumb_dome_roof.jpg",
     utilyard: "http://dctsleeperservice:9876/webcams/dct/thumb_util_yard.jpg",
-    allsky: "http://dctsleeperservice:9876/webcams/dct/thumb_allsky.jpg",
+    allsky: "http://dctsleeperservice:9876/webcams/dct/allsky.jpg",
 }
 
 var refreshInterval = 30000;
