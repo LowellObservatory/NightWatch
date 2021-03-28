@@ -1,12 +1,13 @@
 var uradict = {
-    gate: "http://dctsleeperservice:9876/webcams/dct/gate.jpg",
-    genset: "http://dctsleeperservice:9876/webcams/dct/genset.jpg",
-    heliumcomp: "http://dctsleeperservice:9876/webcams/dct/heliumcomp.jpg",
-    obslevel: "http://dctsleeperservice:9876/webcams/dct/obs_level.jpg",
-    telbldg: "http://dctsleeperservice:9876/webcams/dct/tel_bldg.jpg",
-    domeroof: "http://dctsleeperservice:9876/webcams/dct/dome_roof.jpg",
-    // utilyard: "http://dctsleeperservice:9876/webcams/dct/util_yard.jpg",
-    allsky: "http://dctsleeperservice:9876/webcams/dct/allsky.jpg",
+    gate: "http://dctsleeperservice:9876/webcams/dct/thumb_gate.jpg",
+    genset: "http://dctsleeperservice:9876/webcams/dct/thumb_genset.jpg",
+    heliumcomp: "http://dctsleeperservice:9876/webcams/dct/thumb_heliumcomp.jpg",
+    mezzanine: "http://dctsleeperservice:9876/webcams/dct/thumb_mezzanine.jpg",
+    obslevel: "http://dctsleeperservice:9876/webcams/dct/thumb_obs_level.jpg",
+    telbldg: "http://dctsleeperservice:9876/webcams/dct/thumb_tel_bldg.jpg",
+    domeroof: "http://dctsleeperservice:9876/webcams/dct/thumb_dome_roof.jpg",
+    utilyard: "http://dctsleeperservice:9876/webcams/dct/thumb_util_yard.jpg",
+    allsky: "http://dctsleeperservice:9876/webcams/dct/thumb_allsky.jpg",
 }
 
 var refreshInterval = 30000;
