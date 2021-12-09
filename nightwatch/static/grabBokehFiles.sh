@@ -1,4 +1,4 @@
-ver=2.4.1
+ver=2.4.2
 
 # CSS Files
 # NOTE: CSS files were depreciated from Bokeh in 2.0.  No longer needed!
