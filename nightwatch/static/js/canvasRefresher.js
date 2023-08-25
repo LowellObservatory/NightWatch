@@ -4,6 +4,7 @@ var uradict = {
     heliumcomp: "http://dctsleeperservice:9876/webcams/dct/thumb_heliumcomp.jpg",
     mezzanine: "http://dctsleeperservice:9876/webcams/dct/thumb_mezzanine.jpg",
     obslevel: "http://dctsleeperservice:9876/webcams/dct/thumb_obs_level.jpg",
+    obsrot: "http://dctsleeperservice:9876/webcams/dct/thumb_obs_level_rot.jpg",
     telbldg: "http://dctsleeperservice:9876/webcams/dct/thumb_tel_bldg.jpg",
     domeroof: "http://dctsleeperservice:9876/webcams/dct/thumb_dome_roof.jpg",
     utilyard: "http://dctsleeperservice:9876/webcams/dct/thumb_util_yard.jpg",
