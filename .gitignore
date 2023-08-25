@@ -114,3 +114,6 @@ dbqueries.conf
 
 # Ignore the django deployed staticfiles directory
 staticfiles/
+
+# Other garbage
+.DS_Store
