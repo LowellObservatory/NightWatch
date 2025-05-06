@@ -11,6 +11,7 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
   var oldX, oldY;
   var ptrID, isMulti = false, isPinch = false;;
   var dist=0, oldDist=0, dx=0,dy=0, avgX, avgY;
+  var hys = 3;
 
   var myele = ele;
 
@@ -34,6 +35,10 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
   }
   this.getY = function() { 
     return y; 
+  }
+
+  this.setHysteresis = function(v) {
+    hys = v;
   }
 
   var buck = function(e) {
@@ -68,7 +73,7 @@ function PEvs (ele, down, up, move, drag, click, stopped) {
 
   var doMove = function(e) {
     getPosition(e);
-    if (Math.abs(x - oldX) < 3 && Math.abs(y - oldY) < 3) {
+    if (Math.abs(x - oldX) < hys && Math.abs(y - oldY) < hys) {
       return;
     }
 

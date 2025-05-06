@@ -2,7 +2,7 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from bokeh.embed import server_document
+#from bokeh.embed import server_document
 
 
 def HAniS(divname, jsconfigvar):
@@ -28,8 +28,8 @@ def index(request):
     #   or should I be doing something else?
 
     # hname = "localhost"
-    hname = "dctsleeperservice"
-    hport = 5000
+    #hname = "dctsleeperservice"
+    #hport = 5000
 
     # For the future
     # hsat = HAniS('hansatdiv', 'hansat')
@@ -42,24 +42,25 @@ def index(request):
     #
     # Reminder: server_document is a *bokeh* function!
     #
-    ldtweather = server_document("http://%s:%d/ldtweather" %
-                                 (hname, hport), resources=None)
-    ldtweathertable = server_document("http://%s:%d/ldtweathertable" %
-                                      (hname, hport), resources=None)
-    ldtwind = server_document("http://%s:%d/ldtwind" %
-                              (hname, hport), resources=None)
-    ldtwindtable = server_document("http://%s:%d/ldtwindtable" %
-                                   (hname, hport), resources=None)
-    facsum_tcs = server_document("http://%s:%d/facsum_tcs" %
-                                 (hname, hport), resources=None)
-    facsum_lpi = server_document("http://%s:%d/facsum_lpi" %
-                                 (hname, hport), resources=None)
-
-    return render(request, 'ldtplots/index.html',
-                  {'ldtweatherplot': ldtweather,
-                   'ldtweathertable': ldtweathertable,
-                   'ldtwind': ldtwind,
-                   'ldtwindtable': ldtwindtable,
-                   'facsum_tcs': facsum_tcs,
-                   'facsum_lpi': facsum_lpi,
-                   })
+#    ldtweather = server_document("http://%s:%d/ldtweather" %
+#                                 (hname, hport), resources=None)
+#    ldtweathertable = server_document("http://%s:%d/ldtweathertable" %
+#                                      (hname, hport), resources=None)
+#    ldtwind = server_document("http://%s:%d/ldtwind" %
+#                              (hname, hport), resources=None)
+#    ldtwindtable = server_document("http://%s:%d/ldtwindtable" %
+#                                   (hname, hport), resources=None)
+#    facsum_tcs = server_document("http://%s:%d/facsum_tcs" %
+#                                 (hname, hport), resources=None)
+#    facsum_lpi = server_document("http://%s:%d/facsum_lpi" %
+#                                 (hname, hport), resources=None)
+#
+#    return render(request, 'ldtplots/index.html',
+#                  {'ldtweatherplot': ldtweather,
+#                   'ldtweathertable': ldtweathertable,
+#                   'ldtwind': ldtwind,
+#                   'ldtwindtable': ldtwindtable,
+#                   'facsum_tcs': facsum_tcs,
+#                   'facsum_lpi': facsum_lpi,
+#                   })
+    return render(request, 'ldtplots/index.html', {})

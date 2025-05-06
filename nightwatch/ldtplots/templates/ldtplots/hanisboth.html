@@ -1,0 +1,97 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control"
+        content="max-age=0, must-revalidate, no-store">
+
+  <title>Combo weather animator</title>
+
+  <!-- Favicon crap -->
+  <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Overall page styling -->
+  <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
+
+  <!-- Utilities -->
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+
+  <!-- HAniS stuff -->
+  <!--
+  <script type="text/javascript"
+          src="{% static 'js/hanisf_min.js' %}"></script>
+  -->
+
+  <!-- If using the non minified hanis, need to include pointerEvents too -->
+  <script type="text/javascript"
+          src="{% static 'js/hanisf.js' %}"></script>
+  <script type="text/javascript"
+          src="{% static 'js/pointerEvents.js' %}"></script>
+</head>
+
+<body>
+  <div class="grid">
+    <!-- HAniS weather sequence displayer -->
+    <!-- https://www.ssec.wisc.edu/hanis/ -->
+    <div class="element-item weather"
+         data-groups='["home", "tv1", "weather"]'
+         style="padding:0px; width:620px; height:620px; border:none; position:relative;"
+         id="hansatdiv">
+    </div>
+    <div class="element-item weather"
+         data-groups='["home", "tv1", "weather"]'
+         style="padding:0px; width:620px; height:620px; border:none; position:relative;"
+         id="hanraddiv">
+    </div>
+  <script type="text/javascript">
+    var hradObj = new HAniSF();
+    var hsatObj = new HAniSF();
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+    function refreshHanii() {
+        var refreshInterval = 300000;
+        hradObj.reloadFOF();
+	hsatObj.reloadFOF();
+        setTimeout("refreshHanii()", refreshInterval);
+        console.log("Updated all Hanii! Timer reset.");
+	console.log(refreshInterval);
+      }
+    async function init() {
+      hsatObj.setup('../static/conf/hanis_goes.txt', 'hansatdiv', aready);
+      console.log("HAniS GOES loaded with callback aready");
+
+      hradObj.setup('../static/conf/hanis_radar.txt', 'hanraddiv');
+      console.log("HAniS radar loaded");
+
+      await sleep(15000);
+      console.log("Slept for 15000 msec to init")
+
+      hsatObj.toggleIsLooping();
+      console.log("GOES image looping toggled");
+      
+      refreshHanii();
+    }
+    function aready() {
+      hsatObj.frameChanged(changb);
+      hsatObj.zoomChanged(zchangb);
+    }
+    function changb(frm) {
+      hradObj.showFrame(frm);
+    }
+    function zchangb(z) {
+      hradObj.showZoom(z);
+    }
+    window.onload = init();
+    console.log("HAniS init complete");
+  </script>
+</body>
+</html>
+
