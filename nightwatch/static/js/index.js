@@ -2,7 +2,7 @@
 var $grid = $('.grid').isotope({
   // 'false' disables the initial layout
   isInitLayout: false,
-
+  stagger: 30,
   itemSelector: '.element-item',
 
   layoutMode: 'masonry',

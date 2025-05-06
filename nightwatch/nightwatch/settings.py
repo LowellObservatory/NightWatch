@@ -27,8 +27,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
                  'dctsleeperservice',
                  'dctsleeperservice.lowell.edu',
+                 'dctsleeperservice.lowell.local',
                  'nightwatch',
-                 'nightwatch.lowell.edu']
+                 'nightwatch.lowell.edu',
+                 'nightwatch.lowell.local']
 
 # Application definition
 INSTALLED_APPS = [
@@ -123,3 +125,7 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Get embeds to work!
+X_FRAME_OPTIONS = 'ALLOWALL'
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']

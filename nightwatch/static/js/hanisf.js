@@ -2,32 +2,37 @@
 /** @constructor */
 var HAniSF = function() {
   var HAniS = this;
-  var userWindow, canH, canW, imgHeight, imgWidth, canXScale, canYScale,
+  var userWindow, canH, canW, imgHeight, imgWidth, imgHChk, imgWChk,
+  canXScale, canYScale, xInit,  yInit,
   controls, bottomControls, firstlast, first, last, loadMsg, loadMsgAuto,
   pointer, debug, popupWindow, debugWindow, debugText, buttcss, undoText,
-  ptr, useDiv=false, divall, divcon, divcont, divconb, divcan, divcanStyle,
-  divanim, divtop, prefHgt, prefWid, imgCan,
-  ctx, ctx1, drwCan, ctxd, topCan, ctxtop,
+  ptr, useDiv, divall, divcon, divcont, divconb, divcan, divcanStyle,
+  divname, divanim, divtop, prefHgt, prefWid, imgCan,
+  ctx, ctx1, drwCan, ctxd, topCan, ctxtop, idx, idy, idsx, idsy, iddx, iddy,
   usingZip, zipFilename, zipOnly, zipFile, zipStatic, backFilesUrl,
   numFrames, backFiles, useWheelFrame, divoldrop, oldrop, menuIndex, menuButt,
   numOverlays, overlayTop, overlayLabels,overlayOrder, overlayFiles, overlayFilesUrl,
   overlayLinks, fofBase, imageBase, configImageBase, backImages, overlayImages,
+  slide, doSlide, isSliding, xSlide, wSlide, hSlide, colSlide, widSlide, shSlide,
+  fade, sfChanged,doFade, isFading, fillSlide, vSlide, pSlide,
+  fofsub, fofsubmatch, fofsubfn, noCachePrefix,
   overlayCheck, overlayAlpha, overlayStatic, showTip, tipText, tipX, tipY,
   overlayClear, useForAll, overlaySlice, sliceCoords, sliceSmoothing,
   redirect, redirectList, xScreen, yScreen,
   xLoc, yLoc, xImage, yImage, wImage, hImage, xMove,yMove, drawPrompts, useCN,
-  begFrame, isRunning, isLooping, wasLooping, refLooping,
-  curFrame, cfChanged, direction, isRocking,
-  fetchImages, needSizes=true, chkImageSize, isCtrlKey, noShortCuts,
-  configValues, dwell, minDwell, maxDwell, dwChanged, cdLoading,
-  stepDwell, lastDwell, delay, enableSmoothing,
-  enhance, enhTab, isBaseEnh, isOverlayEnh, overlayEnhNum,
+  begFrame, begFrameSet, isRunning, isLooping, wasLooping, refLooping,
+  curFrame, cfChanged, direction, isRocking, czChanged,
+  fetchImages, needSizes=true, chkImageSize, isCtrlKey, isShiftKey, isAltKey, keyStop,
+  noShortCuts, configValues, dwell, minDwell, maxDwell, dwChanged, cdLoading,
+  stepDwell, lastDwell, initDwell, initDwellValue, delay,
+  enableSmoothing, smoothingQuality, overlaySmoothing,
+  enhance, enhTab, isBaseEnh, isOverlayEnh, overlayEnhNum, enhInitIndex,
   enhCan, origCan, ctxe, ctxo, origIDd, enhID, autoEnhanceBg,
   aeCan, ctxae, ctxaed, eod, eodk, etr, etg, etb, eta, esd, ek, autoEnhanceList,
-  toggleFrames, wTog, hTog, spTog, cwTog, divtog, togstart, togPointer,
+  toggleFrames, wTog, hTog, spTog, cwTog, divtog, togstart, togPointer, togHit,
   togColorOff, togColorOn, togColorSel, missTog, missTogColor,
-  hotspots, numHotspots, isIconHotspot, backStatic,
-  spriteImagesCnt, spriteImages, spriteImagesOffset, useSpriteFn,
+  hotspots, numHotspots, isIconHotspot, backStatic, showHotspots, centerHotspots,
+  hotspotsColor, spriteImagesCnt, spriteImages, spriteImagesOffset, useSpriteFn,
   prevNumHotzones, numHotzones, hotzones, rgb, rgbpack,
   hoverzones, numHoverzones, doHoverzones, gotHoverzones, hoverCan, ctxh,
   hoverPick, showedHover, allowHoverzones, okToShowHoverzones,
@@ -35,37 +40,40 @@ var HAniSF = function() {
   hiResOlay, hiResOlayName, doingHiResZoom, frameLabels, frameLabelField,
   hiResOlayIndex, useToggle, toggleDefs, cantog, ctxtog, gotImages, doFOF,
   startstop, forward, backward, setSpeed, faster, slower, overlaySpacer,
-  mark, isMark, markMode, markPrompts, markFont, markClose,
+  anigif, doanigif, gif, mp4, mp4quant,
+  mark, isMark, markMode, markPrompts, markFont, markClose, custom,
   markColor, markPoints, markSaveTB, markTB, markXbeg, markXend, markHbeg,
   extrap, isExtrap, extrapMode, extrapX, extrapY, extrapT, extrapXbeg,
   extrapPrompts, extrapYbeg, extrapYend, extrapYpos,
-  extrapTB, extrapTimes, exsign, dxdt, dydt, dt,
+  extrapTB, extrapTimes, exsign, dxdt, dydt, dt, DTR,
   extrapTimesTemplate, minutes, doTime, xInc, yInc, tmin, nmin, exMsg,
   startingMinute, utcOffset, tzLabel, timeColor, timeBack, timeFont,
   timeFontSize, extrapAMPM, toFromLock, toFrom, showOpt,
   show, showPrompt, capture, capturePrompt, captureFilename,
   annotate, annotatePrompt, ants, annPointer,
   frameTimesRe, frameTimesDef, frameTimes, frameTimesFormat,
-  saveall, saveallPrompt, saveallFilename, saveallList,
+  saveall, saveallPrompt, saveallFilename, saveallList, savealltoggle,
   divannot, isAnnot, anpe, anxdiff, anydiff, anxloc, anyloc, anyDown, anzoom,
   antype, ancol, anwid, antxt, anlastw, anlastf,
-  zoom, keepZoom, isDown,
+  zoom, keepZoom, keepEnh, isDown,
   zoomScale, zoomXFactor, zoomYFactor, zoomXBase, zoomYBase,
   isInitialZoom, initialZoom, initialX, initialY,
   wasZooming, enableZooming, zoomFactorMax, doZoomFactors, isDragging, cycleZoom,
   doTransparency=false, transRed, transGreen, transBlue,
-  useTransparencyList, transparencyList, haltMe, wasHalted,
-  looprock, loophalt, setframe, setframeLabel, setframeLabelSpan, isSetframe, distance,
-  doDistance, doDirection, x0Dist, y0Dist, distDigits, distShift,
-  xText, yText, wText, hText, winFirst=true, initCall, extraParams,
-  x1Dist, y1Dist, distBox, distLineColor, markCursor, prevCursor, distCursor, locCursor,
-  showDistance, distXScale, distYScale, distUnit, tipBox,
+  useTransparencyList, transparencyList, haltMe, wasHalted, sfbinx, sfold,
+  looprock, loophalt, setframe, setframeLabel, setframeLabelSpan, isSetframe,
+  distance, doDistance, doDirection, x0Dist, y0Dist, distDigits, distShift,
+  hasCoords, xText, yText, wText, hText, winFirst=true, initCall, extraParams,
+  x1Dist, y1Dist, distBox, distLineColor, markCursor, prevCursor,
+  distCursor, locCursor, distHold, locll0, locll1,
+  showDistance, distXScale, distYScale, distUnit, showBearing,
+  begLat, endLat, begLon, endLon, dist, distMult, tipBox, frameIndexValues,
   location, doLocation, showLocation, locDigits, locLatPrefix, locLonPrefix,
-  locBox, locTran, locll, llstr, loc0, loc1, loc2, loc3,
+  locBox, locTran, locll, loc0ll, llstr, loc0, loc1, loc2, loc3,
   preserveBackPoints, divolay, numdivolay, olayZoomIndex,
   preserveIndex, preservePoints, preserveAlways,
   restore, refresh, autotoggle, popupDiv, popupWinWidth, popupWinHeight,
-  overlayProbe, showProbe, probe, tabGray, probeCursor,
+  overlayProbe, showProbe, probe, tabGray, probeCursor, hideProbe,
   gotTable, tabUnit, tabPrefix, tabDecimal, minx, minDiff, probeBox,
   probeUndef, probeTest, probeExact, doBaseProbe,
   dirspdBox, dirspdPrefix, dirspdSuffix, dirspdLabel, dirspdX, dirspdY,
@@ -219,18 +227,35 @@ var HAniSF = function() {
    });
   }
 
-  this.setup = function(confn, divnam, initCallback, extras) {
+  this.setup = function(confn, divthing, initCallback, extras) {
 
-    if (divnam == undefined) divnam = "MORdivcan";
+    if (divthing == undefined) divthing = "MORdivcan";
+    if (typeof(divthing) == "string") {
+      divname = divthing;
+      divall = document.getElementById(divthing);
+    } else {
+      divall = divthing;  // <div> element
+
+      if (divall.nodeName != "DIV") {
+        console.log("Invalid value for HAniS div element...");
+        return;
+      }
+
+      if (divall.id == "") {
+        divname = ("MORdivcan"+Math.round(Math.random()*10000000)).trim();
+      } else {
+        divname = divall.id;
+      }
+    }
+
     initCall = initCallback;
-    if (initCall != undefined && typeof(initiCall) != "function" ) initCall = null;
+    if (initCall != undefined && typeof(initCall) != "function" ) initCall = null;
     if (extras != undefined) {
       extraParams = extras.split("\n");
     } else {
       extraParams = null;
     }
 
-    divall = document.getElementById(divnam);
     divalign = "center";
     divall.align=divalign;
 
@@ -243,7 +268,7 @@ var HAniSF = function() {
     ctx = imgCan.getContext("2d");
 
     drwCan = make("canvas");
-    drwCan.setAttribute("style",canpos+"6;");
+    drwCan.setAttribute("style",canpos+"12;");
     ctxd = drwCan.getContext("2d");
     ctxd.imageSmoothingEnabled = false;
 
@@ -275,24 +300,42 @@ var HAniSF = function() {
     divall.addEventListener("keyup", function(e) {
       if (isAnnot || noShortCuts) return;
       isCtrlKey = false;
-      e.preventDefault();
-      e.stopPropagation();
+      isShiftKey = false;
+      isAltKey = false;
+      if (keyStop) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }, false);
 
     divall.addEventListener("keypress", function(e) {
       if (isAnnot || noShortCuts) return;
-      e.preventDefault();
-      e.stopPropagation();
+      if (keyStop) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }, false);
 
     divall.addEventListener("keydown", function(e) {
       if (isAnnot || noShortCuts) return;
-      e.preventDefault();
-      e.stopPropagation();
+      if (keyStop) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       if (e.ctrlKey) {
         isCtrlKey = true;
       } else {
         isCtrlKey = false;
+      }
+      if (e.shiftKey) {
+        isShiftKey = true;
+      } else {
+        isShiftKey = false;
+      }
+      if (e.altKey) {
+        isAltKey = true;
+      } else {
+        isAltKey = false;
       }
       if (e.keyCode == 37) {  // arrowleft
           setIsLooping(false);
@@ -305,29 +348,46 @@ var HAniSF = function() {
       } else if (e.keyCode == 32 ) {  // spacebar
           HAniS.toggleIsLooping();
       } else if (e.keyCode == 82 && e.altKey) {  //alt+r
-          HAniS.resetZoom();
+          HAniS.resetZoom(0);
+      } else if (e.keyCode == 67 && e.altKey) {  //alt+c
+          HAniS.doCapture();
       }
     }, false);
 
-    divtop.addEventListener("mouseenter", function(e) {
-       divall.focus();
+    divall.addEventListener("mouseenter", function(e) {
+       divall.focus({preventScroll:true});
     }, false);
 
     divall.style.outlineWidth = "0px";
     divall.style.outline = "none";
-    divall.focus();
 
+    DTR = .01745329252;
     curFrame = 0;
     begFrame = 0;
+    begFrameSet = false;
     isRocking = false;
+    isSliding = false;
+    doSlide = false;
+    isFading = false;
+    doFade = false;
+    wSlide = 30;
+    hSlide = 30;
+    vSlide = 0;
+    fillSlide = false;
+    colSlide = "white";
+    widSlide = 1;
+    shSlide = 2;
     direction = +1;
     haltMe = false;
     wasHalted = false;
     isLooping = true;
     wasLooping = true;
+    doanigif = false;
     numFrames = 0;
     numOverlays = 0;
     numHotspots = 0;
+    showHotspots = false;
+    centerHotspots = false;
     chkImageSize = true;
     overlayOrder = null;
     divoldrop = [];
@@ -340,6 +400,8 @@ var HAniSF = function() {
     maxDwell = 2000;
     stepDwell = 30;
     lastDwell = 0;
+    initDwell = 0;
+    initDwellValue = 0;
     autoRefresh = 60000;
     refreshTimer = null;
     isAutoRefresh = false;
@@ -349,6 +411,7 @@ var HAniSF = function() {
     imageBase = null;
     overlayBase = null;
     fofBase = null;
+    fofsub = false;
     configImageBase = null;
     zoomFactors = null;
     doingHiResZoom = false;
@@ -376,6 +439,7 @@ var HAniSF = function() {
     isDown = false;
     loadMsgAuto = false;
     useToggle = false;
+    togHit = -1;
     missTog = -1;
     toggleFrames = new Array();
     numHotzones = 0;
@@ -392,12 +456,14 @@ var HAniSF = function() {
     tabEnh = false;
     tn = 0;
     gotImages = false;
+    noCachePrefix = "?";
     backStatic = false;
     zipStatic = false;
     showTip = false;
     x0Dist = y0Dist = x1Dist = y1Dist = 0;
     doDistance = false;
     showDistance = false;
+    distHold = false;
     prevCursor = [];
     prevCursor.push("default");
     prevCursor.push("default");
@@ -407,6 +473,7 @@ var HAniSF = function() {
     locCursor = "default";
     locTran = null;
     locll = [0,0];
+    loc0ll = [0,0];
     distShift = false;
     isSetframe = false;
     doHoverzones = false;
@@ -421,6 +488,7 @@ var HAniSF = function() {
     markPoints = [];
     doBaseProbe = false;
     showProbe = false;
+    hideProbe = true;
     probeCursor = "default";
     gotTable = false;
     m1 = [1,0,0];
@@ -439,9 +507,13 @@ var HAniSF = function() {
     divconb = null;
     divolay = null;
     numdivolay = 0;
+    keyStop = true;
     isCtrlKey = false;
+    isAltKey = false;
+    isShiftKey = false;
     noShortCuts = false;
     isAnnot = false;
+    mp4quant= 27;
 
     var can1 = make("canvas");
     can1.height=1;
@@ -465,14 +537,14 @@ var HAniSF = function() {
   }
 
   function parseConfig (txt) {
-    var i,j, st, steq, sto, cv, ov, reloadFunc;
+    var i,j, st, steq, sto, cv;
     doFOF = true;
     if (txt instanceof Array) {
       configValues = {};
       if (extraParams != null) txt = txt.concat(extraParams);
       for (i=0; i<txt.length; i++) {
-        if (txt[i].length < 2) continue;
         st = txt[i].trim();
+        if (st.length < 2) continue;
         if (st.indexOf("#") == 0) continue;
 
         steq = st.indexOf("=");
@@ -490,10 +562,15 @@ var HAniSF = function() {
       if (cv == "true") {
         debugWindow = window.open("","HAniSDebugInfo","scrollbars=yes,width=400,height=200");
         debug = true;
-        info("HAniS Version 4.30");
+        info("HAniS Version 4.56");
       } else {
         debug = false;
       }
+    }
+
+    cv = configValues["no_initial_focus"];
+    if (cv == null || cv == "false") {
+      divall.focus();
     }
 
     useCN = true;
@@ -519,8 +596,9 @@ var HAniSF = function() {
       loadMsg = make("div");
       loadMsg.setAttribute("style",lms);
       loadMsg.innerHTML = cv;
-      loadMsg.addEventListener("click", function() {
+      loadMsg.addEventListener("click", function(evt) {
         loadMsg.style.visibility = "hidden";
+        evt.stopPropagation();
       },false);
       loadMsg.style.visibility = "visible";
       divcan.appendChild(loadMsg);
@@ -540,11 +618,23 @@ var HAniSF = function() {
       }
     }
 
+    enhInitIndex = null;
+    cv = configValues["initial_enhancement"];
+    if (cv != null) {
+      enhInitIndex = parseInt(cv,10)-1;
+    }
 
+    hasCoords = false;
+    locLatPrefix = "X = ";
+    locLonPrefix = " Y = ";
     cv = configValues["coordinates"];
     if (cv != null) {
       parseCoordinates(cv);
+      hasCoords = true;
+      locLatPrefix = "Lat = ";
+      locLonPrefix = " Lon = ";
     }
+
     var locBGColor = "green";
     var locFGColor = "white";
     var locFont = "12px Arial";
@@ -553,8 +643,11 @@ var HAniSF = function() {
     var locSxoff = 10;
     var locSyoff = 10;
     locDigits = 2;
-    locLatPrefix = "Lat = ";
-    locLonPrefix = " Lon = ";
+
+    cv = configValues["keyboard_propagate"];
+    if (cv != null) {
+      if (beginsWith(cv, "t")) keyStop = false;
+    }
 
     cv = configValues["coordinates_display_style"];
     if (cv != null) {
@@ -591,10 +684,20 @@ var HAniSF = function() {
       }
     }
 
-    distUnit = " ";
+    distUnit = (hasCoords ? "km":" ");
+    distMult = 1.0;
     cv = configValues["distance_unit"];
     if (cv != null) {
       distUnit = cv.trim();
+      if (beginsWith(distUnit,"mi")) distMult = 0.621371192;
+      if (beginsWith(distUnit,"nm")) distMult = 0.539956803;
+      if (beginsWith(distUnit,"na")) distMult = 0.539956803;
+    }
+
+    showBearing = null;
+    cv = configValues["show_bearing"];
+    if (cv != null) {
+      showBearing = cv.trim();
     }
 
     divcanStyle = " ";
@@ -627,11 +730,45 @@ var HAniSF = function() {
       markCursor = cv.trim();
     }
 
+    if (beginsWith(configValues["active_slide"],"t")) {
+      doSlide = false;
+      HAniS.toggleSliding();
+    }
+
+    if (beginsWith(configValues["active_fade"],"t")) {
+      doFade = false;
+      HAniS.toggleFading();
+    }
+
+    cv = configValues["slidebar_style"];
+    if (cv == null) cv = configValues["fadebar_style"];
+    if (cv != null) {
+      // color, line width, box width, box height [,type [,vert pos]]
+      //   vert pos = 0 (center), -N (N lines from bottom), +N (N from top)
+      var a = cv.split(",");
+      colSlide = a[0].trim();
+      widSlide = parseInt(a[1], 10);
+      wSlide = parseInt(a[2], 10);
+      hSlide = parseInt(a[3], 10);
+      shSlide = 2;  // use triangles (or rectangle, diamond, ellipse, none)
+      fillSlide = false;
+      if (a.length >= 5) {
+        if (beginsWith(a[4],"r")) shSlide = 0;
+        if (beginsWith(a[4],"d")) shSlide = 1;
+        if (beginsWith(a[4],"t")) shSlide = 2;
+        if (beginsWith(a[4],"e")) shSlide = 3;
+        if (beginsWith(a[4],"n")) shSlide = 4;
+        if (a[4].indexOf("fill") != -1) fillSlide = true;
+      }
+      vSlide = 0;
+      if (a.length == 6) vSlide = parseInt(a[5],10);
+    }
+
     cv = configValues["imagecan_style"];
     if (cv != null) {
       var a = cv.trim()+";position:absolute;top:0;left:0;";
       imgCan.setAttribute("style",a+"z-index:1;");
-      drwCan.setAttribute("style",a+"z-index:6;");
+      drwCan.setAttribute("style",a+"z-index:12;");
     }
 
     var distBGColor = "blue";
@@ -689,6 +826,12 @@ var HAniSF = function() {
     probeUndef = "Undefined";
     probeExact = false;
     probeTest = 0;
+    hideProbe = true;
+
+    cv = configValues["probe_hide"];
+    if (cv != null) {
+      if (beginsWith(cv, "f")) hideProbe = false;
+    }
 
     cv = configValues["probe_undefined"];
     if (cv != null) {
@@ -709,21 +852,42 @@ var HAniSF = function() {
 
     cv = configValues["pause"];
     if (cv != null) {
-      lastDwell = parseInt(cv,10);
+      a = cv.split(",");
+      lastDwell = parseInt(a[0],10);
+      if (a.length > 1) {
+        initDwellValue = parseInt(a[1],10);
+        initDwell = initDwellValue;
+      } else {
+        initDwellValue = 0;
+        initDwell = 0;
+      }
     }
 
     cv = configValues["auto_refresh"];
-    ov = configValues["objname"];
     if (cv != null) {
       autoRefresh= parseInt(cv,10)*60000;
-      reloadFunc = ov + ".reloadFOF();";
-      refreshTimer = setInterval(reloadFunc, autoRefresh);
-      // refreshTimer = setInterval("HAniS.reloadFOF();",autoRefresh);
+      refreshTimer = setInterval("HAniS.reloadFOF();",autoRefresh);
       isAutoRefresh = true;
     }
 
+    showHotspots = false;
+    hotspotsColor = "#FFFFFF80";
+    cv = configValues["show_hotspots"];
+    if (cv != null) {
+      var a = cv.split(",");
+      if (beginsWith(a[0], "t")) showHotspots = true
+      if (a.length > 1) hotspotsColor = a[1];
+    }
+
+    centerHotspots = false;
+    if (beginsWith(configValues["center_hotspots"], "t")) centerHotspots = true;
+
     enableSmoothing = false;
     if (beginsWith(configValues["enable_smoothing"], "t")) enableSmoothing = true;
+
+    smoothingQuality = "low";
+    cv = configValues["smoothing_quality"];
+    if (cv != null) smoothingQuality = cv;
 
     chkImageSize = true;
     if (beginsWith(configValues["check_image_size"], "f")) chkImageSize = false;
@@ -808,6 +972,13 @@ var HAniSF = function() {
       overlayLabels = cv.split(",");
     }
 
+    cv = configValues["nonstatic_prefix"];
+    if (cv != null) {
+      noCachePrefix = cv.trim();
+    } else {
+      noCachePrefix = "?";
+    }
+
     autoEnhanceBg = null;
     cv = configValues["auto_enhance_background"];
     if (cv != null) {
@@ -862,10 +1033,19 @@ var HAniSF = function() {
       if (a[0] == "div") {
         useDiv = true;
       } else {
-        canW = parseInt(a[0], 10);
-        canH = parseInt(a[1], 10);
+        canW = Math.floor(parseInt(a[0], 10)/2)*2;
+        canH = Math.floor(parseInt(a[1], 10)/2)*2;
+        pSlide = vSlide == 0 ? canH/2 : (vSlide < 0 ? (canH+vSlide) : vSlide);
+        xSlide = canW/2;
+        if (sfChanged != undefined) sfChanged(.5);
       }
       userWindow = true;
+    }
+
+    frameIndexValues = [];
+    cv = configValues["framenumber_index_values"];
+    if (cv != null) {
+      frameIndexValues = cv.split(",");
     }
 
     useForAll = [];
@@ -1066,6 +1246,9 @@ var HAniSF = function() {
               preservePoints[i][kp][4] = preservePoints[i][kp][0];
               preservePoints[i][kp][5] = preservePoints[i][kp][1];
             }
+            // need a rectangle for no-probe
+            preservePoints[i][kp][6] = preservePoints[i][kp][4] + preservePoints[i][kp][2] - 1;
+            preservePoints[i][kp][7] = preservePoints[i][kp][5] + preservePoints[i][kp][3] - 1;
 
             if (p < a.length && a[p].trim() == "&") {
               p = p + 1;
@@ -1222,7 +1405,7 @@ var HAniSF = function() {
       // allow for base_starting_number and increment
       // also, wildcards!!  (* means all digits, ??? means 3 digits)
       var b = configValues["base_starting_number"];
-      var bsv = 0
+      var bsv = 0;
       var binc = 1;
       if (b != null) {
         var a = b.split(",");
@@ -1272,6 +1455,9 @@ var HAniSF = function() {
         }
     }
 
+
+    keepEnh = false;
+    if (beginsWith(configValues["keep_enhancement"],"t")) keepEnh = true;
 
     keepZoom = true;
     if (beginsWith(configValues["keep_zoom"],"f")) keepZoom = false;
@@ -1434,6 +1620,13 @@ var HAniSF = function() {
       frameTimesFormat = configValues["frame_times_format"];
     }
 
+    mp4quant = 27;
+    cv = configValues["mp4_quantization"];
+    if (cv != null) {
+      mp4quant = parseInt(cv, 10);
+      if (mp4quant < 10 || mp4quant > 51) mp4quant = 27;
+    }
+
     extrapTimes = null;
     cv = configValues["times"];
     if (cv != null) {
@@ -1505,6 +1698,7 @@ var HAniSF = function() {
     info("bottom_controls = "+configValues["bottom_controls"]);
 
     startstop = null;
+    custom = null;
     firstlast = null;
     forward = null;
     backward = null;
@@ -1653,7 +1847,11 @@ var HAniSF = function() {
               tabUnit[tabNum][k] = tabPrevUnit;
               tabDecimal[tabNum][k] = tabPrevDecimal;
               if (gotValues) {
-                tabVal[tabNum][k] = vlo + (vhi - vlo) * (k - inlo) / indif;
+                if (indif === 0) {
+                  tabVal[tabNum][k] = vlo;
+                } else {
+                  tabVal[tabNum][k] = vlo + (vhi - vlo) * (k - inlo) / indif;
+                }
               }
             }
           }
@@ -1842,7 +2040,14 @@ var HAniSF = function() {
       loc1 = parseFloat(a[1]);
       loc2 = parseFloat(a[2]);
       loc3 = parseFloat(a[3]);
+      if (loc1 > 0.0 && loc3 < 0.0) loc3 = loc3 + 360.;
     }
+    if (configValues["coordinates_display_style"] == null) {
+      locLatPrefix = "Lat = ";
+      locLonPrefix = " Lon = ";
+    }
+
+    hasCoords = true;
   }
 
   function getConfig(fn) {
@@ -1942,7 +2147,9 @@ var HAniSF = function() {
       if (refLooping == null) {
         wasLooping = true;  // old behavior
       } else {
-        wasLooping = isLooping;
+         wasLooping = isLooping;
+         isLooping = false;
+         initDwell = initDwellValue;
       }
       fetchImages = true;
       loadImages();
@@ -1956,7 +2163,7 @@ var HAniSF = function() {
   }
 
   this.newFOF = function(fn, setFrm) {
-    HAniS.resetZoom();
+    HAniS.resetZoom(0);
     processFOF(fn, setFrm);
   }
 
@@ -1976,6 +2183,7 @@ var HAniSF = function() {
     backFiles = new Array();
     hoverzones = null;
     sliceCoords = null;
+    fofsub = false;
     redirectList = [];
     redirect = null;
     while (divanim.hasChildNodes()) {
@@ -2021,8 +2229,8 @@ var HAniSF = function() {
     req.onload = function() {
       var txt = this.responseText.split("\n");
       for (i=0; i<txt.length; i++) {
-        if (txt[i].length < 2) continue;
         st = txt[i].trim();
+        if (st.length < 2) continue;
 
         info("FOF: "+st);
         if (st.indexOf("#") == 0) continue;
@@ -2041,6 +2249,12 @@ var HAniSF = function() {
             var m = parseInt(hro2[j],10) - 1;
             redirectList[m] = true;
           }
+          continue;
+        }
+
+        if (st.indexOf("framenumber_index_values") == 0) {
+          hro = st.split("=");
+          frameIndexValues = hro[1].split(",");
           continue;
         }
 
@@ -2169,6 +2383,15 @@ var HAniSF = function() {
           continue;
         }
 
+        if (st.indexOf("fof_substitute") == 0) {
+          var s = st.indexOf("=");
+          hro2 = st.substring(s+1).split(",");
+          fofsub = true;
+          fofsubfn = hro2[0].trim();
+          fofsubmatch = hro2[1].trim();
+          continue;
+        }
+
         if (st.indexOf("map_scale") == 0) {
           hro = st.split("=");
           hro2 = hro[1].split(",");
@@ -2238,7 +2461,7 @@ var HAniSF = function() {
           sto = stt.substring(m+1);
           stt = sto.trim();
           sto = stt.split(",");
-          numOverlays = sto.length;
+          numOverlays = Math.max(numOverlays, sto.length);
           info("numOverlays set to "+numOverlays);
 
           for (n=0; n<sto.length; n++) {
@@ -2282,26 +2505,80 @@ var HAniSF = function() {
             }
           }
 
-          readyToLoad();
+          fofSubstCheck();
         }
 
         reqx.onerror = function() {
-          readyToLoad();
+          fofSubstCheck();
         }
 
         reqx.open("get", fofext+"?"+Math.round(Math.random()*100000), true);
         reqx.send();
 
       } else {
-        readyToLoad();
+        fofSubstCheck();
       }
     }
-
 
     lastFOF = fn;
     req.open("get", fn+"?"+Math.round(Math.random()*100000), true);
     req.send();
+  }
 
+  function fofSubstCheck() {
+    var st,stt,sto, i, n, m, reqr, nFrame;
+    // check if fof_substitute needs to be done
+    if (fofsub) {
+      reqr = new XMLHttpRequest();
+      nFrame = 0;
+      overlayFiles  = [];
+      reqr.onload = function() {
+        var st = this.responseText.split("\n");
+        info("Processing FoF-substitute: "+fofsubfn);
+        for (i=0; i<st.length; i++) {
+          if (st[i].length < 2) continue;
+          if (st[i].indexOf(fofsubmatch) < 0) continue;
+
+          overlayFiles[nFrame] = new Array();
+          m = st[i].indexOf("overlay");
+          if (m >= 0) {
+            stt = st[i].substring(m);
+            m = stt.indexOf("=");
+            if (m < 0) {
+              info("!! Cannot find a = sign in "+stt);
+            }
+            sto = stt.substring(m+1);
+            stt = sto.trim();
+            sto = stt.split(",");
+            numOverlays = Math.max(numOverlays, sto.length);
+            info("numOverlays reset in fof_substitute to "+numOverlays);
+
+            for (n=0; n<sto.length; n++) {
+              overlayFiles[nFrame][n] = sto[n].trim();
+              if ((redirect != null) && redirectList[n]) {
+                overlayFiles[nFrame][n] =
+                     (redirect+overlayFiles[nFrame][n]).trim();
+              } else if (overlayBase != null) {
+                overlayFiles[nFrame][n] =
+                     (overlayBase+overlayFiles[nFrame][n]).trim();
+              } else if (imageBase != null) {
+                overlayFiles[nFrame][n] =
+                     (imageBase+overlayFiles[nFrame][n]).trim();
+              }
+
+            }
+            nFrame = nFrame + 1;
+          }
+        }
+        info("Number of frames "+numFrames+"... number of fof_sub frames = "+nFrame);
+        readyToLoad();
+      }
+      reqr.open("get", fofsubfn+"?"+Math.round(Math.random()*100000), true);
+      reqr.send();
+
+    } else {
+      readyToLoad();
+    }
   }
 
   function readyToLoad() {
@@ -2328,7 +2605,6 @@ var HAniSF = function() {
     var hgt = h - dcn - dcnb - dtog - numdivolay*doly;
     prefHgt = hgt;
     prefWid = w;
-    if (hgt > imgHeight) hgt = imgHeight;
     var wid = hgt * imgWidth / imgHeight;
     if (wid > w) {
       wid = w;
@@ -2338,7 +2614,11 @@ var HAniSF = function() {
     wid = Math.floor(wid);
 
     if (needSizes) return;
-    resizeWindow(wid, hgt);
+    if (useDiv) {
+      resizeWindow(prefWid, prefHgt);
+    } else {
+      resizeWindow(wid, hgt);
+    }
     drawLines();
   }
 
@@ -2355,17 +2635,39 @@ var HAniSF = function() {
 
     ctxae = aeCan.getContext("2d");
 
-    canW = w;
-    canH = h;
+    canW = Math.floor(w/2)*2;
+    canH = Math.floor(h/2)*2;
+    pSlide = vSlide == 0 ? canH/2 : (vSlide < 0 ? (canH+vSlide) : vSlide);
+    xSlide = canW/2;
+    if (sfChanged != undefined) sfChanged(.5);
+
+    // effective re-size of image for window_size=div option
+    if (useDiv) {
+      var nh = imgWChk * canH / canW;
+      var nw = imgWChk;
+      if (nh < imgHChk) {
+        nw = imgHChk * canW / canH;
+        nh = imgHChk;
+      }
+
+      imgWidth = nw;
+      imgHeight = nh;
+    }
+
     progX = canW/2 - 100;
     progY = canH/2 - 10;
-    canXScale = 1.0 * imgWidth / canW;
-    canYScale = 1.0 * imgHeight / canH;
+    canXScale = imgWidth / canW;
+    canYScale = imgHeight / canH;
+    wImage = Math.floor(imgWidth / zoomXFactor);
+    hImage = Math.floor(imgHeight / zoomYFactor);
 
-    if (winFirst) {
-      winFirst = false;
-      if (initCall != null) initCall();
+    xInit = 0;
+    yInit = 0;
+    if (useDiv) {
+      xInit = Math.round((imgWidth - imgWChk)/2);
+      yInit = Math.round((imgHeight - imgHChk)/2);
     }
+
     divcan.style.height = canH+"px";
     divcan.style.width = canW+"px";
     divanim.style.height = canH+"px";
@@ -2373,6 +2675,11 @@ var HAniSF = function() {
     divtop.style.height = canH+"px";
     divtop.style.width = canW+"px";
     makeToggles(numFrames, false);
+
+    if (winFirst) {
+      winFirst = false;
+      if (initCall != null) initCall();
+    }
   }
 
   function getzipback() {
@@ -2467,9 +2774,11 @@ var HAniSF = function() {
   function getImages() {
     var i,j,k;
     if (cdLoading != undefined) cdLoading(false);
-    var olayNotStatic = "?"+Math.round(Math.random()*10000);
+    var olayNotStatic = noCachePrefix+Math.round(Math.random()*10000);
     var loadOrder = [];
     loadOrder[0] = begFrame;
+    if (anigif != null) anigif.disabled = true;
+    if (mp4 != null) mp4.disabled = true;
     for (i=1; i<numFrames; i++) {
       loadOrder[i] = (i <= begFrame) ? i-1 : i;
     }
@@ -2484,7 +2793,13 @@ var HAniSF = function() {
       origIDd = new Array();
       enhID = new Array();
     }
-    if (enhance != null) enhance.selectedIndex = 0;
+    if (enhance != null) {
+      if (keepEnh) {
+        if (enhInitIndex == null) enhInitIndex = enhance.value;
+      } else {
+        enhance.selectedIndex = 0;
+      }
+    }
 
     for (var ilf=0; ilf<numFrames; ilf++){
       i = loadOrder[ilf];
@@ -2497,6 +2812,7 @@ var HAniSF = function() {
       backImages[i].frameNum = i;
       backImages[i].onerror = function() {
         imgGotCount++;
+        drawImageProgress();
       }
 
       backImages[i].onload = function() {
@@ -2504,8 +2820,9 @@ var HAniSF = function() {
         if (needSizes) {
           imgHeight = this.height;
           imgWidth = this.width;
-          hImage = imgHeight;
-          wImage = imgWidth;
+          // get original sizes for verification and perhaps re-scaling
+          imgHChk = imgHeight;
+          imgWChk = imgWidth;
           needSizes = false;
           if (userWindow) {
             if (useDiv) {
@@ -2516,6 +2833,9 @@ var HAniSF = function() {
           } else {
             resizeWindow(imgWidth, imgHeight);
           }
+
+          hImage = imgHeight;
+          wImage = imgWidth;
           if (isInitialZoom) {
             if (initialZoom == "auto") {
               initialZoom = (canXScale + canYScale) / 2.0;
@@ -2534,6 +2854,11 @@ var HAniSF = function() {
               enableZooming = false;
               HAniS.toggleZooming();
             }
+            hideBottom = hideBottomDef;
+            hideTop = hideTopDef;
+            hideRight = hideRightDef;
+            hideLeft = hideLeftDef;
+            doHide();
           }
         }
 
@@ -2568,6 +2893,7 @@ var HAniSF = function() {
           fetchImages = false;
           ctx = imgCan.getContext("2d");
           ctx.imageSmoothingEnabled = enableSmoothing;
+          ctx.imageSmoothingQuality = smoothingQuality;
           ctx.fillStyle="blue";
           ctx.font="bold 20px Arial";
           ctxd = drwCan.getContext("2d");
@@ -2576,6 +2902,7 @@ var HAniSF = function() {
           makeToggles(numFrames, true);
           if (refLooping && !wasLooping) {
             setCurrentFrame(findFrame(begFrame));
+            initDwell = initDwellValue;
           } else {
             setCurrentFrame(findFrame(curFrame));
           }
@@ -2594,13 +2921,14 @@ var HAniSF = function() {
                   overlayImages[k][j].overlayNum = j;
                   overlayImages[k][j].onerror = function() {
                     imgGotCount++;
+                    drawImageProgress();
                   }
                   overlayImages[k][j].onload = function() {
                     this.gotit = true;
                     var f = this.frameNum;
                     imgGotCount++;
                     drawImageProgress();
-                    if (chkImageSize && (this.height != imgHeight || this.width != imgWidth)) {
+                    if (chkImageSize && (sliceCoords == null || !overlaySlice[this.overlayNum]) && (this.height != imgHChk || this.width != imgWChk)) {
                       this.gotit = false;
                       info("Bad image size:"+this.src);
                     } else {
@@ -2644,7 +2972,7 @@ var HAniSF = function() {
                             tpv = tpdd[k];
                             tpy = Math.floor((k/4)/tpcan.width);
                             tpx = Math.floor((k/4) % tpcan.width);
-                            hotspots[numHotspots] = new Hotspot(tpx, tpy, "spritefn",tpv, "pan", null, null, tpon, f, null);
+                            hotspots[numHotspots] = new Hotspot(tpx, tpy, "spritefn",tpv, "pan", null, null, tpon, f, null, null);
                            numHotspots++;
                           }
                         }
@@ -2653,6 +2981,7 @@ var HAniSF = function() {
 
                       if (!useTransparencyList || (useTransparencyList &&
                            transparencyList[this.overlayNum])) {
+
 
                         var tpcan = make("canvas");
                         tpcan.height = this.height;
@@ -2701,6 +3030,7 @@ var HAniSF = function() {
                         overlayImages[f][this.overlayNum].origImage = this;
                       }
                     }
+
                     if (usingZip && overlayFilesUrl[f][this.overlayNum] != null) {
                       URL.revokeObjectURL(overlayFilesUrl[f][this.overlayNum]);
                     }
@@ -2710,6 +3040,7 @@ var HAniSF = function() {
                         if (ff != f) {
                           overlayImages[ff][this.overlayNum] = overlayImages[f][this.overlayNum];
                           imgGotCount++;
+                          drawImageProgress();
                         }
                       }
                     }
@@ -2739,6 +3070,7 @@ var HAniSF = function() {
               hiResBase[j].gotit = false;
               hiResBase[j].onerror = function(e) {
                 imgGotCount++;
+                drawImageProgress();
               }
               hiResBase[j].onload = function(e) {
                 e.currentTarget.gotit = true;
@@ -2807,7 +3139,7 @@ var HAniSF = function() {
 
         }
 
-        if ((!chkImageSize && this.height != 0 && this.width != 0) || this.height == imgHeight && this.width == imgWidth) {
+        if ((!chkImageSize && this.height != 0 && this.width != 0) || this.height == imgHChk && this.width == imgWChk) {
           this.gotit = true;
           if (missTog == 0) toggleFrames[this.frameNum] = 0;
 
@@ -2838,7 +3170,7 @@ var HAniSF = function() {
         imgGotCount++;
         drawImageProgress();
 
-        if (!keepZoom) HAniS.resetZoom();
+        if (!keepZoom) HAniS.resetZoom(0);
         gotImages = true;
 
         if (!isRunning) {
@@ -2848,6 +3180,10 @@ var HAniSF = function() {
         }
 
         setIsLooping(wasLooping);
+        if (this.frameNum == begFrame && this.gotit == true && begFrameSet == true) {
+          setCurrentFrame(begFrame);
+          drawIt();
+        }
       }
 
       var bfn = backFiles[i];
@@ -2959,6 +3295,7 @@ var HAniSF = function() {
         if (isTop) {
           divall.insertBefore(divcon, divcan);
           divcont = divcon;
+          divcont.id = divname+"-top-controls";
 
         } else {
           cv = configValues["bottom_controls_style"];
@@ -2967,6 +3304,7 @@ var HAniSF = function() {
           }
           divall.appendChild(divcon);
           divconb = divcon;
+          divconb.id = divname+"-bottom-controls";
         }
       }
 
@@ -2976,7 +3314,7 @@ var HAniSF = function() {
         if (sty != null) enhance.setAttribute("style", sty);
         if (mytip != null) enhance.title = mytip;
         var opt = make("option");
-        opt.innerHTML = "Pick Enhancement";
+        opt.innerHTML = configValues["enhance_prompt"] == undefined ? "Pick Enhancement" : configValues["enhance_prompt"];
         opt.value = -1;
         enhance.add(opt);
         enhance.addEventListener("change",HAniS.doEnhance,false);
@@ -2987,6 +3325,26 @@ var HAniSF = function() {
           enhance.disabled = true;
         }
         divcon.appendChild(enhance);
+      }
+
+      if (cstr == "custom") {
+        custom = make("button");
+        configButton(custom, "custom", "On", "Off", mytip, "custom");
+        divcon.appendChild(custom);
+      }
+
+      if (cstr == "mp4") {
+        mp4 = make("button");
+        configButton(mp4, "mp4", "Make MP4", "Stop", mytip, "mp4");
+        mp4.addEventListener("click", HAniS.makeMP4 ,false);
+        divcon.appendChild(mp4);
+      }
+
+      if (cstr == "anigif") {
+        anigif = make("button");
+        configButton(anigif, "anigif", "Make GIF", "Stop", mytip, "anigif");
+        anigif.addEventListener("click",HAniS.makeAniGIF,false);
+        divcon.appendChild(anigif);
       }
 
       if (cstr == "startstop") {
@@ -3051,12 +3409,14 @@ var HAniSF = function() {
         divcon.appendChild(location);
       }
 
-      if (cstr == "distance") {
+      if (cstr == "distance" || cstr == "distance/hold") {
         distance = make("button");
         configButton(distance, "distance", "Show dist", "Hide dist", mytip,"distance");
 
         distShift = false;
         doDistance = false;
+        distHold = false;
+        if (cstr == "distance/hold") distHold = true;
 
         distance.addEventListener("click", function() {
           doDistance = !doDistance;
@@ -3064,9 +3424,20 @@ var HAniSF = function() {
             toggleButton(distance, false, "distance off");
             prevCursor.push(divall.style.cursor);
             divall.style.cursor = distCursor;
+            if (distHold) {
+              wasZooming = enableZooming;
+              enableZooming = false;
+              if (zoom != null) zoom.disabled = true;
+            }
           } else {
             toggleButton(distance, true, "distance on");
             divall.style.cursor = prevCursor.pop();
+            if (distHold) {
+              showDistance = false;
+              drawLines();  // erase dist
+              enableZooming = wasZooming;
+              if (zoom != null) zoom.disabled = false;
+            }
           }
         }, false);
         divcon.appendChild(distance);
@@ -3112,11 +3483,13 @@ var HAniSF = function() {
             markMode = 0;
             toggleButton(mark, false, "mark off");
             if (zoom != null) zoom.disabled = true;
+            if (distance != null) distance.disabled = true;
             prevCursor.push(divall.style.cursor);
             divall.style.cursor = markCursor;
           } else {
             toggleButton(mark, true, "mark on");
-            if (zoom != null) zoom.disabled = false;
+            if (zoom != null && (!showDistance && !distHold)) zoom.disabled = false;
+            if (distance != null) distance.disabled = false;
             markMode = -1;
             divall.style.cursor = prevCursor.pop();
           }
@@ -3139,8 +3512,10 @@ var HAniSF = function() {
         restore = make("button");
         configButton(restore, "restore", "Restore", null, mytip, "restore");
         restore.addEventListener("click",function(e) {
+          okToShowHoverzones = true;
           for (var i=0; i<overlayCheck.length; i++) {
             overlayCheck[i].checked = overlayCheck[i].restorableState;
+            if (allowHoverzones != null && (!allowHoverzones[i] && overlayCheck[i].checked)) okToShowHoverzones = false;
           }
           for (var i=0; i<overlayCheck.length; i++) {
             resetLinks(i);
@@ -3148,6 +3523,7 @@ var HAniSF = function() {
         },false);
         divcon.appendChild(restore);
       }
+
 
       if (cstr == "setframe" ) {
         setframe= make("input");
@@ -3174,9 +3550,19 @@ var HAniSF = function() {
         setframeLabelSpan.setAttribute("style","display:block;vertical-align:middle;"+configValues["setframe_label_style"]);
         dsf.appendChild(setframeLabelSpan);
         dsf.appendChild(setframe);
-
         divcon.appendChild(dsf);
+
+        // when slider is CSS styled, events get re-defined somehow...this stops 'em
+        divcon.addEventListener("touchmove", function(e) {
+          e.stopPropagation();
+        }, false);
+        divcon.addEventListener("mousemove", function(e) {
+          e.stopPropagation();
+        }, false);
+
         setframe.addEventListener("input", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
           setIsLooping(false);
           var sf = parseInt(setframe.value,10)-1;
           if (toggleFrames[sf] >= 0) {
@@ -3185,6 +3571,56 @@ var HAniSF = function() {
           }
           drawIt();
         }, false);
+
+        sfbinx = 0;
+        sfold = -1;
+
+        function sfbounds() {
+          var sf = parseInt(setframe.value,10)-1;
+          if (isCtrlKey || isAltKey) {
+            for (var i=0; i<numFrames; i++) {
+              setToggleState(i,0);
+            }
+            sfbinx = 0;
+            return;
+          }
+
+          if (sf == sfold) return;
+          if (!isShiftKey) return;
+          if (sfbinx == 0) {
+            // lower bound
+            for (var i=0; i<numFrames; i++) {
+              if (i > sf) {
+                setToggleState(i,0);
+              } else {
+                setToggleState(i,-1);
+              }
+            }
+            sfbinx = 1;
+          } else {
+            // upper bound
+            for (var i=sf+1; i<numFrames; i++) {
+              setToggleState(i,-1);
+            }
+            sfbinx = 0;
+            setIsLooping(true);
+          }
+          sfold = sf;
+        }
+
+        setframe.addEventListener("pointerup", function(e) {
+          e.stopPropagation();
+          sfbounds();
+        }, false);
+        setframe.addEventListener("mouseup", function(e) {
+          e.stopPropagation();
+          sfbounds();
+        }, false);
+        setframe.addEventListener("change", function(e) {
+          e.stopPropagation();
+          sfbounds();
+        }, false);
+
         isSetframe = true;
       }
 
@@ -3388,6 +3824,24 @@ var HAniSF = function() {
         divcon.appendChild(faster);
       }
 
+      if (cstr == "slide") {
+        slide = make("button");
+        configButton(slide, "slide", "Slide", "Un-slide", mytip, "slide off");
+        slide.addEventListener("click",HAniS.toggleSliding,false);
+        divcon.appendChild(slide);
+        doSlide = false;
+        isSliding = false;
+      }
+
+      if (cstr == "fade") {
+        fade = make("button");
+        configButton(fade, "fade", "Fade", "Un-Fade", mytip, "fade off");
+        fade.addEventListener("click",HAniS.toggleFading,false);
+        divcon.appendChild(fade);
+        doFade = false;
+        isFading = false;
+      }
+
       if (cstr == "zoom") {
         zoom = make("button");
         configButton(zoom, "zoom", "Zoom", "Un-zoom", mytip, "zoom off");
@@ -3489,11 +3943,13 @@ var HAniSF = function() {
             anzoom = enableZooming;
             enableZooming = false;
             if (zoom != null) zoom.disabled = true;
+            if (distance != null) distance.disabled = true;
           } else {
             divannot.style.visibility = "hidden";
             toggleButton(annotate, true, "annotate on");
             enableZooming = anzoom;
-            if (zoom != null) zoom.disabled = false;
+            if (zoom != null && (!showDistance && !distHold)) zoom.disabled = false;
+            if (distance != null) distance.disabled = false;
           }
           drawLines();
         }, true );
@@ -3510,7 +3966,7 @@ var HAniSF = function() {
         });
         anwid.title = "Select width or font size";
 
-        antype = makeSelect( ["Type","Arrow","Circle","Box","Polygon","Draw","Text"],[-1,0,1,2,3,4,5], function(e) {
+        antype = makeSelect( ["Type", "Arrow","Circle","Box","Polygon","Draw","Text", "Line"],[-1,0,1,2,3,4,5,6], function(e) {
           if (antype.selectedIndex == 6) {
             antxt.focus();
             antxt.select();
@@ -3577,6 +4033,9 @@ var HAniSF = function() {
         configButton(saveall, "saveall", "SaveAll", "SaveAll", mytip, "saveall");
         saveallPrompt = configValues["saveall_prompt"];
         saveallFilename = configValues["saveall_filename"];
+        savealltoggle = false;
+        if (beginsWith(configValues["saveall_toggle"], "t")) savealltoggle=true;
+
         var savl = configValues["saveall_list"];
         if (savl == null) {
           saveallList = ["0"];
@@ -3587,34 +4046,39 @@ var HAniSF = function() {
         saveall.addEventListener("click", function() {
           for (var L=0; L<saveallList.length; L++) {
             var ln = parseInt(saveallList[L],10);
-            for (var k=0; k<backFiles.length; k++) {
-              if (k === 0) {
-                if (saveallPrompt != null) {
-                  saveallFilename = window.prompt(saveallPrompt, saveallFilename);
-                  if (saveallFilename != null && saveallFilename.length < 1) {
-                    saveallFilename=null;
+            var kdel = 0;
+            for (var kk=0; kk<backFiles.length; kk++) {
+              if (savealltoggle && toggleFrames[kk] < 0) continue;
+
+              setTimeout( function(k,kd) {
+                if (kd === 0) {
+                  if (saveallPrompt != null) {
+                    saveallFilename = window.prompt(saveallPrompt, saveallFilename);
+                    if (saveallFilename != null && saveallFilename.length < 1) {
+                      saveallFilename=null;
+                    }
                   }
                 }
-              }
-              var fn;
-              if (saveallFilename == null) {
-                fn = "";
-              } else {
-                if (saveallFilename.indexOf("#") != -1) {
-                  fn = saveallFilename.replace("#",k.toString());
+                var fn;
+                if (saveallFilename == null) {
+                  fn = "";
                 } else {
-                  fn = saveallFilename+k;
+                  if (saveallFilename.indexOf("#") != -1) {
+                    fn = saveallFilename.replace("#",k.toString());
+                  } else {
+                    fn = saveallFilename+k;
+                  }
                 }
-              }
-              var alink = document.createElement("a");
-              if (ln == 0) {
-                alink.href = backFiles[k];
-              } else {
-                alink.href = overlayFiles[k][ln-1];
-              }
-              alink.download = fn;
-              var evt = new MouseEvent("click");
-              alink.dispatchEvent(evt);
+                var alink = document.createElement("a");
+                if (ln == 0) {
+                  alink.href = backFiles[k];
+                } else {
+                  alink.href = overlayFiles[k][ln-1];
+                }
+                alink.download = fn;
+                alink.click();
+              }, kdel*1000,kk,kdel);
+              kdel = kdel + 1;
             }
           }
         }, false);
@@ -3622,40 +4086,14 @@ var HAniSF = function() {
         divcon.appendChild(saveall);
       }
 
+      capturePrompt = configValues["capture_prompt"];
+      captureFilename = configValues["capture_filename"];
+      if (captureFilename == null) captureFilename = "haimage.png";
       if (cstr == "capture") {
         capture = make("button");
         configButton(capture, "capture", "Capture", "Capture", mytip, "capture");
-        var capturePrompt = configValues["capture_prompt"];
-        captureFilename = configValues["capture_filename"];
-        if (captureFilename == null) captureFilename = "haimage.png";
         capture.addEventListener("click", function() {
-          var fn = captureFilename;
-          if (capturePrompt != null) {
-             fn = window.prompt(capturePrompt, fn);
-             if (fn == null) return;
-          }
-          var savCan = make("canvas");
-          savCan.height = imgCan.height;
-          savCan.width = imgCan.width;
-          var stx = savCan.getContext("2d");
-          drawPrompts = false;
-          drawLines();
-          stx.drawImage(imgCan,0,0);
-          stx.drawImage(drwCan,0,0);
-          drawPrompts = true;
-          savCan.toBlob( function(blob) {
-            var image = URL.createObjectURL(blob);
-            var alink = document.createElement("a");
-            alink.href = image;
-            alink.download = fn;
-            var evt = new MouseEvent("click");
-            alink.dispatchEvent(evt);
-            setTimeout( function() {
-              URL.revokeObjectURL(blob);
-            }, 30000);
-
-          });
-
+          HAniS.doCapture();
         }, false);
 
         divcon.appendChild(capture);
@@ -3713,7 +4151,8 @@ var HAniSF = function() {
         divtog.setAttribute("style",nosel);
         divtog.style.backgroundColor = divcon.style.backgroundColor;
         divtog.align=divalign;
-        togPointer = new PEvs(divtog, null, null, null, null, HAniS.togclick, null);
+        togPointer = new PEvs(divtog, HAniS.togdown, HAniS.togup, null, HAniS.togdown, null, null);
+        togPointer.setHysteresis(0);
         cantog = make("canvas");
         cantog.height = 2*hTog;
         ctxtog = cantog.getContext("2d");
@@ -3756,11 +4195,18 @@ var HAniSF = function() {
           olcolor = olc.split(",");
         }
 
+        var olsm = configValues["overlay_smoothing"];
+        var olsmooth = null;
+        if (olsm != null) olsmooth = olsm.split(",");
+        overlaySmoothing = [];
+
         oldrop = false;
         var oldropon = false;
+        var oldropalways = false;
         if (beginsWith(cstr,"menu")) {
           oldrop = true;
           if (cstr.indexOf("/on") > 0) oldropon = true;
+          if (cstr.indexOf("/always") > 0) oldropalways = true;
         }
 
         if (menuIndex == 0) overlayStatic = new Array();
@@ -3777,11 +4223,25 @@ var HAniSF = function() {
         for (k=0; k<overlayLabels.length; k++) {
           var olab = overlayLabels[k].trim();
 
+          overlaySmoothing[k] = enableSmoothing;
+          if (olsmooth != null) {
+            if (beginsWith(olsmooth[k],"t") || beginsWith(olsmooth[k],"y")) {
+              overlaySmoothing[k] = true
+            } else {
+              overlaySmoothing[k] = false
+            }
+          }
+
           if (k == 0 || olab.indexOf("/") == 0) {
             if (olab.indexOf("/") == 0) olab = olab.substr(1);
             if (oldrop) {
               divoldrop[menuIndex] = make("div");
-              divoldrop[menuIndex].setAttribute("style","text-align:left;display:block;position:absolute;border-style:solid;border-width:2px;background:#ffffff;z-index:999;visibility:"+(oldropon ? "visible" : "hidden")+";"+configValues["overlay_labels_style"]);
+              divoldrop[menuIndex].dropalways = oldropalways;
+              var lsts = "menu"+menuIndex+"_labels_style";
+              var lsaddon = (configValues[lsts] == undefined) ? configValues["overlay_labels_style"] : configValues[lsts];
+
+              divoldrop[menuIndex].setAttribute("style","text-align:left;display:block;position:absolute;border-style:solid;border-width:2px;background:#ffffff;z-index:99;visibility:"+((oldropon || oldropalways) ? "visible" : "hidden")+";"+lsaddon);
+
               numdivolay++;
 
             } else if (oldv) {
@@ -3805,28 +4265,34 @@ var HAniSF = function() {
 
           if (olmenulist == null || (olmenulist != null && olmenulist[k] == menuIndex)) {
 
+            var isURL = false;
+            if (olab.indexOf("<a href=") != -1) isURL = true;
+
             var olon = false;
-            var oll = olab.length;
-            if (olab.indexOf("/on") > 0 && olab.indexOf("/on") == oll-3) {
-              olon =true;
-              olab = olab.substr(0,oll-3);
-            }
-
             var isAlways = false;
-            if (olab.indexOf("/always")> 0 && olab.indexOf("/always")  == oll-7) {
-              olon = true;
-              isAlways = true;
-            }
-
             var isHidden = false;
-            if (olab.indexOf("/hidden") > 0) {
-              isHidden = true;
-            }
-
             var isIndex = false;
-            if (olab.indexOf("/hotspots")> 0) {
-              isIndex = true;
-              olab = olab.substr(0, olab.indexOf("/"));
+            var oll = olab.length;
+
+            if (!isURL) {
+              if (olab.indexOf("/on") > 0 && olab.indexOf("/on") == oll-3) {
+                olon =true;
+              }
+
+              if (olab.indexOf("/always")> 0 && olab.indexOf("/always")  == oll-7) {
+                olon = true;
+                isAlways = true;
+              }
+
+              if (olab.indexOf("/hidden") > 0) {
+                isHidden = true;
+              }
+
+              if (olab.indexOf("/hotspots")> 0) {
+                isIndex = true;
+              }
+
+              if (olab.indexOf("/") != -1) olab = olab.substr(0, olab.indexOf("/"));
             }
 
             if (olstat != null) {
@@ -3842,7 +4308,7 @@ var HAniSF = function() {
             overlayCheck[k] = make("input");
             overlayCheck[k].type = "checkbox";
             overlayCheck[k].value = olab;
-            overlayCheck[k].id = olab;
+            overlayCheck[k].id = divname+olab;
             overlayCheck[k].showMe = !(isAlways & isHidden) & !isIndex;
 
             var cbsty = "vertical-align:middle;";
@@ -3881,7 +4347,7 @@ var HAniSF = function() {
             if (!isAlways && !isHidden) {
               if (oltips != null) overlayCheck[k].title = oltips[k];
               var lab = make('label');
-              lab.htmlFor = olab;
+              lab.htmlFor = divname+olab;
               if (oltips != null) lab.title = oltips[k];
               lab.innerHTML = olab;
               lab.name = overlayCheck[k].name;
@@ -3894,7 +4360,7 @@ var HAniSF = function() {
 
               var spn = make("span");
 
-              spn.appendChild(overlayCheck[k]);
+              if (!isURL) spn.appendChild(overlayCheck[k]);
               spn.appendChild(lab);
 
               if (oldrop) {
@@ -3920,7 +4386,7 @@ var HAniSF = function() {
             var vis = divoldrop[this.menuInx].style.visibility;
             if (vis === "hidden") {
               for (var dp = 1; dp<divoldrop.length; dp++) {
-                if (divoldrop[dp].style.visibility == "visible") {
+                if (!divoldrop[dp].dropalways && divoldrop[dp].style.visibility == "visible") {
                   divoldrop[menuButt[dp].menuInx].style.visibility = "hidden";
                   toggleButton(menuButt[dp], true, "menu off");
                 }
@@ -3934,7 +4400,7 @@ var HAniSF = function() {
 
           }, false);
 
-          divcon.appendChild(menuButt[menuIndex]);
+          if (!divoldrop[menuIndex].dropalways) divcon.appendChild(menuButt[menuIndex]);
           divall.insertBefore(divoldrop[menuIndex], divcan);
         }
 
@@ -3947,7 +4413,8 @@ var HAniSF = function() {
 
         } else {
           for (k=0; k<overlayLabels.length; k++) {
-            resetLinks(k);
+            // if more than one menu, this was an issue...
+            if (overlayCheck[k] != null) resetLinks(k);
           }
         }
       }
@@ -3955,12 +4422,14 @@ var HAniSF = function() {
 
     wasLooping = true;
     refLooping = null;
+    begFrameSet = false;
     cv = configValues["start_looping"];
     if (cv != null) {
       var a = cv.split(",");
       if (beginsWith(a[0], "f"))  wasLooping = false;
       if (a.length > 1) {
         begFrame = parseInt(a[1],10)-1;
+        begFrameSet = true;
         if (isNaN(begFrame)) begFrame = 0;
         curFrame = begFrame;
       }
@@ -3994,7 +4463,7 @@ var HAniSF = function() {
     if (numHotspots == 0) hotspots = new Array();
     hro = st.substr(st.indexOf("=")+1).trim();
     hro2 = hro.split(",");
-    // hotspot=x,y,w,h,pan/olay#?frame#,action,value [,tip]
+    // hotspot=x,y,w,h,pan/olay#?frame#,action,value [,tip, target]
     // x,y,w,h,pan,action,value,overlay
     // x,y,icon,filename,pan/olay#?frame#, action, value
     // x,y,sprite,index,pan/olay#?frame#,...
@@ -4018,7 +4487,8 @@ var HAniSF = function() {
       pan.toLowerCase(),
       hro2[5].trim().toLowerCase(),
       hro2[6].trim(), polay, pframe,
-      (hro2.length == 8 ? hro2[7].trim() : null)
+      (hro2.length >= 8 ? hro2[7].trim() : null),
+      (hro2.length == 9 ? hro2[8].trim() : null)
     );
 
     numHotspots = numHotspots + 1;
@@ -4122,7 +4592,7 @@ var HAniSF = function() {
 
 
   /** @constructor */
-  function Hotspot(x, y, w, h, pan, action, value, overlay, frame, tip) {
+  function Hotspot(x, y, w, h, pan, action, value, overlay, frame, tip, target) {
     this.x0= x;
     this.y0= y;
     this.icon = null;
@@ -4211,10 +4681,14 @@ var HAniSF = function() {
     } else {
       this.width = parseInt(w,10);
       this.height = parseInt(h,10);
-      this.x1 = this.width+x;
-      this.y1 = this.height+y;
       this.w2 = this.width/2;
       this.h2 = this.height/2;
+      if (centerHotspots) {
+        this.x0 = x - this.w2;
+        this.y0 = y - this.h2;
+      }
+      this.x1 = this.width+this.x0;
+      this.y1 = this.height+this.y0;
     }
 
     this.pan = pan;
@@ -4225,14 +4699,23 @@ var HAniSF = function() {
     this.overlay = overlay;
     this.frame = frame;
     this.tip = tip;
+    this.target = target;
   }
 
   this.drag = function(e) {
 
     if (isMark) return;
+    isDragging = true;
 
     xScreen = pointer.getX();
     yScreen = pointer.getY();
+
+    if (isSliding || isFading) {
+      xSlide = pointer.getX();
+      if (sfChanged != undefined) sfChanged(xSlide/canW);
+      drawIt();
+      return;
+    }
 
     if (isAnnot) {
       var anti = ants.length - 1;
@@ -4266,6 +4749,9 @@ var HAniSF = function() {
       doHide()
       xImage = Math.round(xMove + xLoc/zoomXFactor);
       yImage = Math.round(yMove + yLoc/zoomYFactor);
+      if (czChanged != undefined) {
+        czChanged( ["drag", zoomXFactor, zoomYFactor, xImage, yImage, xLoc, yLoc,xMove,yMove, wImage, hImage]);
+      }
 
     } else if (!isMark && !isExtrap && doHoverzones) {
       hoverPick = null;
@@ -4296,14 +4782,15 @@ var HAniSF = function() {
 
   function getLatLon() {
     if (locTran != null) {
-      locll = locTran.toLatLon(xImage, yImage);
+      locll = locTran.toLatLon(xImage-xInit, yImage-yInit);
     } else if (loc0 != null) {
-      locll[0] = loc0 + (loc2 - loc0)*yImage/imgHeight;
-      locll[1] = loc1 + (loc3 - loc1)*xImage/imgWidth;
+      locll[0] = loc0 + (loc2 - loc0)*(yImage-yInit)/imgHChk;
+      locll[1] = loc1 + (loc3 - loc1)*(xImage-xInit)/imgWChk;
     } else {
-      locll[0] = Math.round(xImage);
-      locll[1] = Math.round(yImage);
+      locll[0] = Math.round(xImage-xInit);
+      locll[1] = Math.round(yImage-yInit);
     }
+
   }
 
   function doAction(item, type) {
@@ -4319,17 +4806,48 @@ var HAniSF = function() {
         sitem = sitem.replace("%LATITUDE%",locll[0].toFixed(4));
         sitem = sitem.replace("%LONGITUDE%",locll[1].toFixed(4));
         sitem = sitem.replace("%FRAMENUMBER%",(curFrame+1));
-        window.open(sitem,"_blank","");
+        sitem = sitem.replace("%FRAMENUMBERINDEX%", frameIndexValues[curFrame]);
+        window.open(sitem,(item.target ? item.target : "_blank"),"");
 
       } else if (item.action == "fof") {
         imageBase = configImageBase;
-        HAniS.resetZoom();
+        HAniS.resetZoom(0);
         HAniS.newFOF(item.value, true);
         clearOverlays(type);
       }
   }
 
-  this.resetZoom = function() {
+  // capture image to local file
+  this.doCapture = function() {
+    var savCan = make("canvas");
+    savCan.height = imgCan.height;
+    savCan.width = imgCan.width;
+    var stx = savCan.getContext("2d");
+    drawPrompts = false;
+    drawLines();
+    stx.drawImage(imgCan,0,0);
+    stx.drawImage(drwCan,0,0);
+    drawPrompts = true;
+
+    var fn = captureFilename;
+    if (capturePrompt != null) {
+       fn = window.prompt(capturePrompt, fn);
+       if (fn == null) return;
+    }
+    savCan.toBlob( function(blob) {
+      var image = URL.createObjectURL(blob);
+      var alink = document.createElement("a");
+      alink.href = image;
+      alink.download = fn;
+      alink.click();
+      setTimeout( function() {
+        URL.revokeObjectURL(blob);
+      }, 30000);
+
+    });
+  }
+
+  this.resetZoom = function(ext) {
 
     zoomXFactor = zoomXBase;
     zoomYFactor = zoomYBase;
@@ -4351,6 +4869,10 @@ var HAniSF = function() {
 
     if (gotHoverzones) {
       doHoverzones = true;
+    }
+
+    if (czChanged != undefined && ext == 0) {
+      czChanged(['reset',0,0]);
     }
   }
 
@@ -4463,6 +4985,7 @@ var HAniSF = function() {
   }
 
   this.down = function() {
+    if (loadMsg && loadMsg.style.visibility == "visible") return;
     if (showTip) {
       showTip = false;
       drawLines();
@@ -4473,12 +4996,26 @@ var HAniSF = function() {
     yScreen = pointer.getY();
     yLoc = yScreen * canYScale;
 
+    if  (doFade || doSlide) {
+      pSlide = vSlide == 0 ? canH/2 : (vSlide < 0 ? (canH+vSlide) : vSlide);
+      if (Math.abs(xScreen - xSlide) < wSlide/2 &&  Math.abs(yScreen - pSlide) < hSlide/2) {
+        if (doSlide) isSliding = true;
+        if (doFade) isFading = true;
+        return;
+      }
+    }
+
     x0Dist = xLoc;
     y0Dist = yLoc;
     x1Dist = x0Dist;
     y1Dist = y0Dist;
     xImage = Math.round(xMove + xLoc/zoomXFactor);
     yImage = Math.round(yMove + yLoc/zoomYFactor);
+    if (doDistance) {
+      getLatLon();
+      loc0ll[0] = locll[0];
+      loc0ll[1] = locll[1];
+    }
     isDragging = false;
     isDown = true;
     if (isAnnot) {
@@ -4499,10 +5036,21 @@ var HAniSF = function() {
   }
 
   this.up = function(e) {
+    if (loadMsg && loadMsg.style.visibility == "visible") return;
     showTip = false;
     isDown = false;
 
     if (isAnnot) {
+      return;
+    }
+
+    if (isSliding) {
+      isSliding = false;
+      return;
+    }
+
+    if (isFading) {
+      isFading = false;
       return;
     }
 
@@ -4569,7 +5117,7 @@ var HAniSF = function() {
             var ddx = dxdt * distXScale;
             var ddy = dydt * distYScale;
             var speed = Math.round(Math.sqrt(ddx*ddx + ddy*ddy) * 60.);
-            var dir = Math.atan2(ddx, -ddy)/.0174533;
+            var dir = Math.atan2(ddx, -ddy)/DTR;
             if (dir < 0.0) dir = dir + 360.;
             dirspdLabel = dirspdPrefix+compass[Math.round(dir/22.5)]+" at "+speed+" "+dirspdSuffix;
 
@@ -4629,10 +5177,9 @@ var HAniSF = function() {
 
     }
 
-    if (showDistance) {
+    if (showDistance && !distHold) {
       showDistance = false;
       drawLines();
-      return;
 
     } else {
       if (distance != null && enableZooming) {
@@ -4648,7 +5195,7 @@ var HAniSF = function() {
     }
 
     if (e.altKey) {
-      HAniS.resetZoom();
+      HAniS.resetZoom(0);
       return;
     }
 
@@ -4749,6 +5296,7 @@ var HAniSF = function() {
   }
 
   function doHide() {
+    if (useDiv) return;
     var sv = hideLeftZoom ? hideLeft/zoomXFactor : 0;
     if (xMove + sv < hideLeft) xMove = hideLeft - sv;
 
@@ -4830,6 +5378,9 @@ var HAniSF = function() {
       if (gotHoverzones) doHoverzones = false;
     }
     setzoomFactorIndex();
+    if (czChanged != undefined) {
+        czChanged( ["zoom", zoomXFactor, zoomYFactor, xImage, yImage, xLoc, yLoc,xMove,yMove, wImage, hImage]);
+    }
   }
 
   this.toggleAutoRefresh = function() {
@@ -4890,7 +5441,7 @@ var HAniSF = function() {
         isLooping = false;
         wasZooming = enableZooming;
         enableZooming = false;
-        HAniS.resetZoom();
+        HAniS.resetZoom(0);
         initExtrap();
         drawLines();
       }
@@ -4913,18 +5464,20 @@ var HAniSF = function() {
     HAniS.toggleIsLooping();
   }
 
-  function doAutoEnhance(img, ox, oy, ow, oh, tnum) {
-    ctxae.clearRect(0,0,canW, canH);
+  function doAutoEnhance(img, ox, oy, ow, oh, iddx, iddy, tnum) {
+    aeCan.height = oh;
+    aeCan.width = ow;
+    ctxae.clearRect(0,0, ow, oh);
     ctxae.imageSmoothingEnabled = enableSmoothing;
     ctx.imageSmoothingEnabled = enableSmoothing;
-    ctxae.drawImage(img,ox,oy,ow,oh,0,0,canW, canH);
-    ctxaed = ctxae.getImageData(0,0,canW,canH)
+    ctxae.drawImage(img,ox,oy,ow,oh,0,0,ow,oh);
+    ctxaed = ctxae.getImageData(0,0,ow,oh)
     eod = ctxaed.data;
     etr = tabR[tnum];
     etg = tabG[tnum];
     etb = tabB[tnum];
     eta = tabA[tnum];
-    esd = 4 * canW * canH;
+    esd = 4 * ow * oh;
     for (ek=0; ek<esd; ek=ek+4) {
       eodk = eod[ek];
       if (eodk === eod[ek+1] && eodk === eod[ek+2]) {
@@ -4934,10 +5487,8 @@ var HAniSF = function() {
         eod[ek+3] = eta[eodk];
       }
     }
-
     ctxae.putImageData(ctxaed,0,0);
-    ctx.drawImage(aeCan,0,0,canW,canH);
-
+    ctx.drawImage(aeCan,iddx,iddy,canW,canH);
   }
 
   this.doEnhance = function(e) {
@@ -5038,20 +5589,63 @@ var HAniSF = function() {
     }
   }
 
-
-  this.toggleZooming = function() {
-    if (enableZooming) {
-      HAniS.resetZoom();
-      toggleButton(zoom, true, "zoom on");
+  this.toggleSliding = function() {
+    if (doSlide) {
+      toggleButton(slide, true, "slide on");
+      doSlide = false;
     } else {
-      toggleButton(zoom, false, "zoom off");
-      enableZooming = true;
+      toggleButton(slide, false, "slide off");
+
       if (distance != null) {
         doDistance = false;
         toggleButton(distance, true, "distance on");
       }
       if (gotHoverzones) doHoverzones = true;
       if (isExtrap) HAniS.toggleExtrap();
+      xSlide = canW/2;
+      if (sfChanged != undefined) sfChanged(.5);
+      doSlide = true;
+    }
+    isSliding = false;
+    drawIt();
+  }
+
+  this.toggleFading = function() {
+    if (doFade) {
+      toggleButton(fade, true, "fade on");
+      doFade = false;
+    } else {
+      toggleButton(fade, false, "fade off");
+      if (distance != null) {
+        doDistance = false;
+        toggleButton(distance, true, "distance on");
+      }
+      if (gotHoverzones) doHoverzones = true;
+      if (isExtrap) HAniS.toggleExtrap();
+      xSlide = canW/2;
+      if (sfChanged != undefined) sfChanged(.5);
+      doFade = true;
+    }
+    isFading = false;
+    drawIt();
+  }
+
+  this.toggleZooming = function() {
+    if (enableZooming) {
+    //if (enableZooming || (doDistance && distHold)) {
+      HAniS.resetZoom(0);
+      toggleButton(zoom, true, "zoom on");
+    } else {
+      toggleButton(zoom, false, "zoom off");
+      enableZooming = true;
+      if (gotHoverzones) doHoverzones = true;
+      if (isExtrap) HAniS.toggleExtrap();
+    }
+    if (distance != null) {
+      doDistance = false;
+      showDistance = false;
+      toggleButton(distance, true, "distance on");
+      drawLines();
     }
   }
 
@@ -5077,12 +5671,18 @@ var HAniSF = function() {
     ctxtog.fillRect(x,hTog/2, wTog, hTog);
   }
 
-  this.togclick = function(e) {
+  this.togup = function(e) {
+    togHit = -1;
+  }
+
+  this.togdown = function(e) {
     var x = togPointer.getX();
     var y = togPointer.getY();
     var xf = togstart;
     for (var i=0; i<toggleFrames.length; i++) {
+
       if (x > xf && x<xf + wTog) {
+        if (i == togHit) break;
         if (e.shiftKey) {
           if (toggleFrames[i] >= 0) {
             setIsLooping(false);
@@ -5091,8 +5691,9 @@ var HAniSF = function() {
           break;
         }
         var s = 0;
-        if (toggleFrames[i] >= 0) s = -1;
+        if (!e.ctrlKey && toggleFrames[i] >= 0) s = -1;
         setToggleState(i, s);
+        togHit = i;
         break;
       }
       xf = xf + wTog + spTog;
@@ -5125,8 +5726,101 @@ var HAniSF = function() {
 
   }
 
+  this.makeMP4 = function() {
+    var buttlab = mp4.innerHTML;
+    wasLooping = isLooping;
+    setIsLooping(false);
+    direction = +1;
+    setCurrentFrame(findFrame(begFrame));
+    mp4.innerHTML = "Working";
+
+    HME.createH264MP4Encoder().then(async encoder => {
+      encoder.width = canW;
+      encoder.height = canH;
+      encoder.frameRate = Math.max(1.,Math.round(1000./dwell));
+      encoder.quantizationParameter = mp4quant;
+      encoder.initialize();
+
+      while (true) {
+        drawIt()
+        encoder.addFrameRgba(ctx.getImageData(0,0,canW, canH).data);
+        await new Promise(resolve => window.requestAnimationFrame(resolve));
+        if (curFrame >= findFrame(numFrames-1) ) break;
+        incCurrentFrame(1)
+      }
+
+      encoder.finalize();
+      mp4.innerHTML = buttlab;
+      var movie = encoder.FS.readFile(encoder.outputFilename);
+      var mp4Prompt = configValues["mp4_prompt"];
+      var mp4Filename = configValues["mp4_filename"];
+      if (mp4Filename == null) mp4Filename = "hanimate.mp4";
+      var fn = mp4Filename;
+      if (mp4Prompt != null) {
+        fn = window.prompt(mp4Prompt, fn);
+        if (fn == null) {
+          encoder.delete();
+          setIsLooping(wasLooping);
+          return;
+        }
+      }
+      var anchor = document.createElement("a");
+      anchor.href = URL.createObjectURL(new Blob([movie], {type: "video/mp4"}));
+      anchor.download = fn;
+      anchor.click();
+      encoder.delete();
+      setIsLooping(wasLooping);
+    });
+  }
+
+  this.makeAniGIF = function() {
+    if (doanigif) return;
+    var buttlab = anigif.innerHTML;
+    gif = new GIF ({
+      workers: 4,
+      debug: false,
+      quality: 10,
+      width: canW,
+      height: canH,
+      repeat: 0
+    });
+    gif.on('finished', function(blob) {
+      anigif.innerHTML = buttlab;
+      var anigifPrompt = configValues["anigif_prompt"];
+      var anigifFilename = configValues["anigif_filename"];
+      if (anigifFilename == null) anigifFilename = "hanimate.gif";
+      var fn = anigifFilename;
+      if (anigifPrompt != null) {
+        fn = window.prompt(anigifPrompt, fn);
+        if (fn == null) return;
+      }
+      var alink = document.createElement("a");
+      alink.href = URL.createObjectURL(blob);
+      alink.download = fn;
+      alink.click();
+      setTimeout( function() { URL.revokeObjectURL(blob); }, 30000);
+    });
+
+    gif.on('progress', function(p) {
+      anigif.innerHTML = Math.round(p*100)+"%";
+    });
+
+    wasLooping = isLooping;
+    setIsLooping(false);
+    direction = +1;
+    doanigif = true;
+    setCurrentFrame(findFrame(begFrame));
+    drawIt();
+    setIsLooping(true);
+    anigif.innerHTML = "Loading";
+  }
+
   this.doneLoading = function(callback) {
     cdLoading = callback;
+  }
+
+  this.getCustomButton = function() {
+    return custom;
   }
 
   this.dwellChanged = function(callback) {
@@ -5135,6 +5829,15 @@ var HAniSF = function() {
 
   this.getDwell = function() {
     return dwell;
+  }
+
+  this.slidefadeChanged = function(callback) {
+    sfChanged = callback;
+  }
+
+  this.setSlidefade = function(xoord) {
+    xSlide = Math.round(canW * xoord);
+    drawIt();
   }
 
   this.frameChanged = function(callback) {
@@ -5147,6 +5850,33 @@ var HAniSF = function() {
 
   this.showFrame = function(f) {
      setCurrentFrame(findFrame(f));
+     drawIt();
+  }
+
+  this.zoomChanged = function(callback) {
+    // for either a zoom delta or a drag with zoom
+    czChanged = callback;
+  }
+
+  this.showZoom = function(f) {
+    if (f[0] === "reset") {
+      HAniS.resetZoom(1);
+    } else {
+      zoomXFactor = f[1];
+      zoomYFactor = f[2];
+      xImage = f[3];
+      yImage = f[4];
+      xLoc = f[5];
+      yLoc = f[6];
+      xMove = f[7];
+      yMove = f[8];
+      wImage = f[9];
+      hImage = f[10];
+      doHide();
+      drawIt();
+
+    }
+
   }
 
   function setCurrentFrame(n) {
@@ -5260,7 +5990,7 @@ var HAniSF = function() {
     if (yp < 5) yp = 5;
     if (yp + fh + 3 > canH)
              yp = canH - fh - 6;
-    if (xp + 3 + zp > canW) xp = canW - zp - 6;
+    if ((xp + 3 + zp) > canW) xp = canW - zp - 6;
 
     ctxd.save();
     ctxd.beginPath();
@@ -5370,7 +6100,7 @@ var HAniSF = function() {
 
            var rot = 0.0;
            if (Math.abs(yInc) < (timeFontSize+5)) {
-             rot = 45.*.0174533;
+             rot = 45.*DTR;
            }
 
            var yb = endY;
@@ -5420,6 +6150,7 @@ var HAniSF = function() {
     }
 
     if (isMark) {
+      showDistance = false;
       if (drawPrompts) {
         if (markMode == 0) {
           drawText(markTB, 9999, 10, markPrompts[0], 0);
@@ -5455,23 +6186,26 @@ var HAniSF = function() {
     }
 
     if (isAnnot) {
+      showDistance = false;
       for (var ia = 0; ia<ants.length; ia++) {
         var at = ants[ia].type;
         ctxd.beginPath();
         ctxd.strokeStyle = ants[ia].color;
         ctxd.lineWidth = ants[ia].width;
-        if (at == "0") { // arrow
+        if (at == "0" || at == "6") { // arrow or line
           var ang = Math.atan2( (ants[ia].xe-ants[ia].x), (ants[ia].ye-ants[ia].y));
           var xn = ants[ia].x + ants[ia].width*Math.sin(ang);
           var yn = ants[ia].y + ants[ia].width*Math.cos(ang);
           ctxd.beginPath();
           ctxd.moveTo(xn,yn);
           ctxd.lineTo(ants[ia].xe, ants[ia].ye);
-          var heads = 12+ants[ia].width/5;
-          var heada = 30*.0174533;
-          ctxd.moveTo( xn+heads*Math.sin(ang-heada), yn+heads*Math.cos(ang-heada));
-          ctxd.lineTo(xn,yn);
-          ctxd.lineTo( xn+heads*Math.sin(ang+heada), yn+heads*Math.cos(ang+heada));
+          if (at == "0") {
+            var heads = 12+ants[ia].width/5;
+            var heada = 30*DTR;
+            ctxd.moveTo( xn+heads*Math.sin(ang-heada), yn+heads*Math.cos(ang-heada));
+            ctxd.lineTo(xn,yn);
+            ctxd.lineTo( xn+heads*Math.sin(ang+heada), yn+heads*Math.cos(ang+heada));
+          }
 
         } else if (at == "1") {  // circle
           ctxd.arc(ants[ia].x, ants[ia].y, ants[ia].size,0.,2.0*Math.PI);
@@ -5504,11 +6238,13 @@ var HAniSF = function() {
 
     if (showDistance) {
 
-      var dx = distXScale *(x0Dist - x1Dist)/zoomXFactor;
-      var dy = distYScale *(y0Dist - y1Dist)/zoomYFactor;
-      var distVal = " "+(Math.sqrt(dx*dx + dy*dy)).toFixed(distDigits)+" "+distUnit+" ";
+      xScreen = pointer.getX();
+      xLoc = xScreen * canXScale;
+      xImage = (xMove + xLoc/zoomXFactor);
 
-      drawText(distBox, x1Dist/canXScale, y1Dist/canYScale, distVal, -1);
+      yScreen = pointer.getY();
+      yLoc = yScreen * canYScale;
+      yImage = (yMove + yLoc/zoomYFactor);
 
       ctxd.beginPath();
       ctxd.strokeStyle = distLineColor;
@@ -5517,13 +6253,65 @@ var HAniSF = function() {
       ctxd.lineTo(x1Dist/canXScale, y1Dist/canYScale);
       ctxd.stroke();
       ctxd.closePath();
+
+      if (isDragging) {
+        getLatLon();
+        locll0 = locll[0];
+        locll1 = locll[1];
+      }
+      var distVal = "";
+      if (!hasCoords) {
+        var dx = distXScale*(loc0ll[0] - locll0);
+        var dy = distYScale*(loc0ll[1] - locll1);
+        distVal = " "+(Math.sqrt(dx*dx + dy*dy)).toFixed(distDigits)+" "+distUnit+" ";
+        if (showBearing) {
+          var ang = Math.atan2(-dx, dy)/DTR;
+          if (ang < 0.0) ang = ang + 360.;
+          if (beginsWith(showBearing,"f")) ang = ang+180.;
+          if (ang > 360.) ang = ang - 360.;
+          distVal = distVal+" ("+ang.toFixed(0)+"\xb0)";
+
+        }
+      } else {
+        begLat = DTR*loc0ll[0];
+        endLat = DTR*locll0;
+        begLon = DTR*loc0ll[1];
+        endLon = DTR*locll1;
+
+        dist = Math.pow(Math.sin( (endLat-begLat)/2.),2) +
+            Math.cos(begLat)*Math.cos(endLat) *
+            Math.pow(Math.sin( (endLon-begLon)/2.),2) ;
+
+        dist= distMult*6371.01 * 2. * Math.asin(Math.min(1.0, Math.sqrt(dist)));
+        distVal = " "+dist.toFixed(distDigits)+" "+distUnit+" ";
+
+        if (showBearing) {
+          var ang = 0;
+          if (beginsWith(showBearing, "t")) {
+            ang = ( Math.atan2( Math.sin(endLon - begLon)*
+               Math.cos(endLat), Math.cos(begLat)*Math.sin(endLat) -
+               Math.sin(begLat)*Math.cos(endLat) *
+               Math.cos(endLon - begLon)) / DTR + 360.) % 360.;
+
+          } else {
+            ang = ( Math.atan2( Math.sin(begLon - endLon)*
+               Math.cos(begLat), Math.cos(endLat)*Math.sin(begLat) -
+               Math.sin(endLat)*Math.cos(begLat) *
+               Math.cos(begLon - endLon)) / DTR + 360.) % 360.;
+          }
+          distVal = distVal + " ("+ang.toFixed(0)+"\xb0)";
+        }
+
+      }
+
+      drawText(distBox, x1Dist/canXScale+10, y1Dist/canYScale, distVal, -1);
     }
 
     if (showTip) {
       drawText(tipBox, tipX, tipY, tipText, -1);
     }
 
-    if (showProbe || showLocation) {
+    if (showProbe || showLocation || showHotspots) {
       xScreen = pointer.getX();
       xLoc = xScreen * canXScale;
       yScreen = pointer.getY();
@@ -5535,41 +6323,79 @@ var HAniSF = function() {
 
         if (showLocation) {
           getLatLon();
-          llstr = locLatPrefix + locll[0].toFixed(locDigits)+"  "+ locLonPrefix+locll[1].toFixed(locDigits);
+          var lon = locll[1];
+          if (hasCoords && lon > 180.0) lon = lon - 360.;
+          if (hasCoords && lon > 360.) lon = lon - 360;
+
+          llstr = locLatPrefix + locll[0].toFixed(locDigits)+"  " +
+             locLonPrefix+lon.toFixed(locDigits);
           var ypos = yScreen;
           if (showDistance || showTip) ypos = yScreen + locBox.fontHeight+6;
           drawText(locBox, xScreen+10, ypos, llstr, -1);
         }
 
+        if (showHotspots) {
+          ctxd.fillStyle = hotspotsColor;
+          var hs,k;
+          for (k = 0; k<numHotspots; k++) {
+            hs = hotspots[k];
+            if (hs.isPan) {
+              if (xImage >= hs.x0 && xImage <= hs.x1 && yImage >= hs.y0 && yImage <= hs.y1) {
+                if (hs.overlay === -1 || overlayCheck[hs.overlay].checked) ctxd.fillRect( (hs.x0-xMove)*zoomXFactor, (hs.y0-yMove)*zoomYFactor, hs.width*zoomXFactor, hs.height*zoomYFactor);
+                break;
+              }
+            } else {
+              if (xLoc > hs.x0 && xLoc < hs.x1 && yLoc > hs.y0 && yLoc < hs.y1) {
+                if (hs.overlay === -1 || overlayCheck[hs.overlay].checked) ctxd.fillRect( hs.x0, hs.y0, hs.width, hs.height);
+                break;
+              }
+            }
+          }
+        }
+
         if (showProbe && gotTable && gotImages) {
           xImage = Math.round(xImage);
           yImage = Math.round(yImage);
+          var xImgInit = xImage - xInit;
+          var yImgInit = yImage - yInit;
           if (doBaseProbe) {
             ctx1.clearRect(0,0,1,1);
-            ctx1.drawImage(backImages[curFrame],xImage,yImage,1,1,0,0,1,1);
+            ctx1.drawImage(backImages[curFrame],xImgInit,yImgInit,1,1,0,0,1,1);
             rgb = ctx1.getImageData(0,0,1,1).data;
             tn = 0;
             probeScale(false);
 
           } else {
-            var mk,k
-            for (mk=0; mk<numOverlays; mk++) {
-              k = numOverlays - mk - 1;
-              if (overlayImages[curFrame][k].gotit &&
-                  overlayCheck[k].checked && (k == overlayEnhNum ||
-                  (overlayProbe[k] != null && overlayProbe[k] >= 0))) {
+            var k,kk;
+            var kp = -1;
+            for (kk=numOverlays-1; kk >= 0; kk--) {
 
-                ctx1.clearRect(0,0,1,1);
-                if (k == overlayEnhNum) {
-                  ctx1.drawImage(origCan[curFrame],xImage,yImage,1,1,0,0,1,1);
-                } else {
-                  ctx1.drawImage(overlayImages[curFrame][k],xImage,yImage,1,1,0,0,1,1);
+              // honor the overlay_order
+              k = (overlayOrder != null) ? overlayOrder[kk] : kk;
+
+              // first check is this overlay is enabled
+              if (overlayImages[curFrame][k].gotit && overlayCheck[k].checked) {
+
+                // keep the preserve data for highest stacked overlay
+                if (preserveIndex != null && preserveIndex[k] && kp ==-1) kp = k;
+                // now see if this is probe-able
+                if (k == overlayEnhNum || (overlayProbe[k] != null && overlayProbe[k] >= 0)) {
+                  // check to see if probe should be displayed
+                  if (!hideProbe || (kp == -1) || (xScreen < preservePoints[kp][0][4] || xScreen > preservePoints[kp][0][6] || yScreen < preservePoints[kp][0][5] || yScreen > preservePoints[kp][0][7])) {
+
+                    ctx1.clearRect(0,0,1,1);
+                    if (k == overlayEnhNum) {
+                      ctx1.drawImage(origCan[curFrame],xImgInit,yImgInit,1,1,0,0,1,1);
+                    } else {
+                      ctx1.drawImage(overlayImages[curFrame][k],xImgInit,yImgInit,1,1,0,0,1,1);
+                    }
+                    rgb = ctx1.getImageData(0,0,1,1).data;
+                    tn = overlayProbe[k];
+                    if (tn != null) probeScale(( k == overlayEnhNum) || tabEnh);
+
+                    break;
+                  }
                 }
-                rgb = ctx1.getImageData(0,0,1,1).data;
-                tn = overlayProbe[k];
-                if (tn != null) probeScale(( k == overlayEnhNum) || tabEnh);
-
-                break;
               }
             }
           }
@@ -5641,8 +6467,11 @@ var HAniSF = function() {
         if (tabDecimal[tn][diffInx] != -1) {
           dbzz = tabVal[tn][diffInx];
           if (diffPct != 0) dbzz = dbzz + diffPct*(tabVal[tn][diffInx+1] - tabVal[tn][diffInx]);
-          pValue = pValue+" "+ dbzz.toFixed(tabDecimal[tn][diffInx])+
-                  " "+tabUnit[tn][diffInx];
+          if (dbzz == undefined) {
+            pValue = "hide";
+          } else {
+            pValue = pValue+" "+ dbzz.toFixed(tabDecimal[tn][diffInx])+ " "+tabUnit[tn][diffInx];
+          }
         }
 
       }  else if (pt || (probeTest > 0)) {
@@ -5674,6 +6503,23 @@ var HAniSF = function() {
 
   function drawIt() {
     var i;
+    idx = xMove-xInit;
+    if (idx < 0) {
+      idsx = 0;
+      iddx = -idx * canW / wImage;
+    } else {
+      idsx = idx;
+      iddx = 0;
+    }
+    idy = yMove - yInit;
+    if (idy < 0) {
+      idsy = 0;
+      iddy = -idy * canH / hImage;
+    } else {
+      idsy = idy;
+      iddy = 0;
+    }
+
     if (!gotImages) return;
     try {
       ctx.clearRect(0,0,canW, canH);
@@ -5688,9 +6534,9 @@ var HAniSF = function() {
         } else {
           if (backImages[curFrame].gotit) {
              if (autoEnhanceBg != null) {
-               doAutoEnhance(backImages[curFrame],xMove,yMove,wImage,hImage,autoEnhanceBg);
+               doAutoEnhance(backImages[curFrame],idsx,idsy,wImage,hImage,iddx, iddy, autoEnhanceBg);
              } else {
-               ctx.drawImage(backImages[curFrame],xMove,yMove,wImage,hImage,0,0,canW, canH);
+               ctx.drawImage(backImages[curFrame],idsx,idsy,wImage,hImage,iddx,iddy,canW,canH);
              }
            }
 
@@ -5715,6 +6561,7 @@ var HAniSF = function() {
       if (numOverlays > 0) {
         for (var ii=0; ii<numOverlays; ii++) {
           i = (overlayOrder != null) ? overlayOrder[ii] : ii;
+          ctx.imageSmoothingEnabled = overlaySmoothing[i];
           if (overlayTop[i]) continue;
           if (overlayCheck[i].checked && overlayCheck[i].showMe) {
             if (overlayAlpha != null) ctx.globalAlpha = overlayAlpha[i];
@@ -5725,14 +6572,71 @@ var HAniSF = function() {
 
             } else {
               if (overlayImages[curFrame][i].gotit) {
-                if (olayZoomIndex == null || olayZoomIndex[i] === 1) {
+                if (doSlide || doFade) {
+                    pSlide = vSlide == 0 ? canH/2 : (vSlide < 0 ? (canH+vSlide) : vSlide);
+                    ctx.save();
+                    if (doSlide) {
+                      ctx.beginPath()
+                      ctx.strokeStyle = "#00000000";
+                      ctx.lineWidth = 1;
+                      ctx.rect(xSlide, 0, canW-xSlide, canH);
+                      ctx.closePath();
+                      ctx.clip();
+                    } else {
+                      pct = 1.0 - xSlide/canW;
+                      if (pct > 1.0) pct = 1.0;
+                      if (pct < 0.) pct = 0.
+                      ctx.globalAlpha = pct;
+                    }
+                    ctx.drawImage(overlayImages[curFrame][i],idsx,idsy,wImage,hImage,iddx,iddy,canW, canH);
+                    ctx.restore();
+
+                    ctx.beginPath()
+                    ctx.strokeStyle = colSlide;
+                    ctx.fillStyle = colSlide;
+                    ctx.lineWidth = widSlide;
+                    if (doSlide) {
+                      ctx.moveTo(xSlide,0)
+                      ctx.lineTo(xSlide,canH);
+                    }
+                    if (shSlide == 0) {
+                      ctx.rect(xSlide - wSlide/2, pSlide - hSlide/2, wSlide, hSlide);
+                    } else if (shSlide == 1) {
+                      ctx.moveTo(xSlide, pSlide - hSlide/2);
+                      ctx.lineTo(xSlide + wSlide/2, pSlide);
+                      ctx.lineTo(xSlide, pSlide+hSlide/2);
+                      ctx.lineTo(xSlide - wSlide/2, pSlide);
+                      ctx.lineTo(xSlide, pSlide - hSlide/2);
+
+                    } else if (shSlide == 2) {
+                      var sloff = widSlide*2 + 2;
+                      ctx.moveTo(xSlide + sloff, pSlide - hSlide/2);
+                      ctx.lineTo(xSlide + wSlide/2, pSlide);
+                      ctx.lineTo(xSlide + sloff, pSlide+hSlide/2);
+                      ctx.lineTo(xSlide + sloff, pSlide - hSlide/2);
+
+                      ctx.moveTo(xSlide - sloff, pSlide - hSlide/2);
+                      ctx.lineTo(xSlide - wSlide/2, pSlide);
+                      ctx.lineTo(xSlide - sloff, pSlide+hSlide/2);
+                      ctx.lineTo(xSlide - sloff, pSlide - hSlide/2);
+
+                    } else if (shSlide == 3) {
+                      ctx.ellipse(xSlide,pSlide,wSlide,hSlide,0,0,2.*Math.PI);
+                    }
+                    // value of 4 is "none";
+
+                    ctx.closePath();
+                    ctx.stroke();
+                    if (fillSlide) ctx.fill();
+
+                } else if (olayZoomIndex == null || olayZoomIndex[i] === 1) {
                   if (autoEnhanceList != null && autoEnhanceList[i] >= 0) {
-                    doAutoEnhance(overlayImages[curFrame][i],xMove,yMove,wImage,hImage, autoEnhanceList[i]);
+                    doAutoEnhance(overlayImages[curFrame][i],idsx, idsy,wImage,hImage,iddx, iddy, autoEnhanceList[i]);
 
                   } else {
-                    ctx.drawImage(overlayImages[curFrame][i],xMove,yMove,wImage,hImage,0,0,canW, canH);
+                    ctx.drawImage(overlayImages[curFrame][i],idsx,idsy,wImage,hImage,iddx,iddy,canW, canH);
                   }
-                } else if (olayZoomIndex[i] === 0) {
+                } else if (olayZoomIndex != null && olayZoomIndex[i] === 0) {
                     ctx.drawImage(overlayImages[curFrame][i],0,0, imgWidth, imgHeight, 0, 0, canW, canH);
                 }
               }
@@ -5810,6 +6714,15 @@ var HAniSF = function() {
 
       }
 
+      if (doanigif) {
+        gif.addFrame(ctx, {copy: true, delay: delay});
+        if (curFrame == findFrame(numFrames-1)) {
+          doanigif = false;
+          setIsLooping(wasLooping);
+          gif.render();
+        }
+      }
+
     } catch (errx) {
       info("Error:"+errx);
     }
@@ -5840,8 +6753,18 @@ var HAniSF = function() {
         loadMsg.style.visibility = "hidden";
       }
     }
-    if (imgGotCount >= imgCount && !isLooping) setCurrentFrame(findFrame(curFrame));
-    if (cdLoading != undefined && imgGotCount >= imgCount) cdLoading(true);
+    if (imgGotCount >= imgCount) {
+      if (!isLooping) setCurrentFrame(findFrame(curFrame));
+      if (enhInitIndex != null) {
+        enhance.value = enhInitIndex;
+        HAniS.doEnhance(null);
+        enhInitIndex = null;
+      }
+      if (cdLoading != undefined) cdLoading(true);
+      if (anigif != null) anigif.disabled = false;
+      if (mp4 != null) mp4.disabled = false;
+      if (begFrameSet) drawIt();
+    }
   }
 
   function info(s) {
@@ -5855,11 +6778,16 @@ var HAniSF = function() {
 
 
   function run() {
-      if (isLooping) incCurrentFrame(direction);
-      if (curFrame == findFrame(numFrames-1)) {
-        delay = lastDwell+dwell;
+      if (initDwell != 0) {
+        delay = initDwell;
+        initDwell = 0;
       } else {
-        delay = dwell;
+        if (isLooping) incCurrentFrame(direction);
+        if (curFrame == findFrame(numFrames-1)) {
+          delay = lastDwell+dwell;
+        } else {
+          delay = dwell;
+        }
       }
       drawIt();
       setTimeout( function() {
@@ -6152,4 +7080,3 @@ var HAniSF = function() {
   }
 
 }
-

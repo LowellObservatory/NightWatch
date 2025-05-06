@@ -113,7 +113,7 @@ function refreshAllImgs() {
         value.img.src = value.url + "?t=" + new Date().getTime();
     });
     setTimeout("refreshAllImgs()", refreshInterval);
-    console.log("Updated all images! Timer reset.");
+    console.log("Updated all webcam images! Timer reset.");
 }
 
 // Actually start the update process

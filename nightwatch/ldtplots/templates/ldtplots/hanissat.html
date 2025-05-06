@@ -1,15 +1,47 @@
 {% load static %}
 
+<!DOCTYPE html>
+<html lang="en" >
+
 <head>
+  <!-- Overall page styling -->
+  <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
+
+  <!-- Utilities -->
+  <script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+
   <!-- HAniS stuff -->
+  <!--
   <script type="text/javascript" src="{% static 'js/hanis_min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'conf/hanis_goes.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hanis.js' %}"></script>
+  -->
+  <script type="text/javascript" src="{% static 'js/pointerEvents.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/hanisf.js' %}"></script>
 </head>
 
-<body onload="HAniS.setup(hansat, 'hansatdiv')" style="margin:0; padding:0;">
+<body>
   <!-- HAniS weather sequence displayer -->
   <!-- https://www.ssec.wisc.edu/hanis/ -->
-  <div id="hansatdiv" style="position:relative;
-                             height: 100%;
-                             width: 100%;"></div>
+  <!--
+  <div id="handiv" style="display: inline-block; width: 500px; outline: none;" 
+       align="center" tabindex="0"> 
+  </div>
+  -->
+
+  <div class="element-item weather" id="hanraddiv" align="center" tabindex="0" 
+       style="padding:0px; width:620px; height:620px; border:none; position:relative;">
+  </div>
+
+  <script>
+      var hradObj = new HAniSF();
+
+      function init() {
+        hradObj.setup('../static/conf/hanis_goes.txt', 'hanraddiv')
+        console.log("HAniS GOES loaded");
+      }
+      window.onload = init();
+      console.log("HAniS init complete")
+  </script>
+
 </body>
+</html>

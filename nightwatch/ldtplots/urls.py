@@ -12,4 +12,7 @@ urlpatterns = [
     path('hanissat/',
          TemplateView.as_view(template_name="ldtplots/hanissat.html"),
          name='hanissat'),
+    path('hanisboth/',
+         TemplateView.as_view(template_name="ldtplots/hanisboth.html"),
+         name='hanisboth'),
 ]

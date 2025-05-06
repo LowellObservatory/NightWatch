@@ -12,16 +12,7 @@
   <title>NightWatch - LDT</title>
 
   <!-- Favicon crap -->
-  <!-- Used https://realfavicongenerator.net -->
-  <!-- <link rel="apple-touch-icon" sizes="180x180"
-        href="{% static 'images/apple-touch-icon.png' %}">
-  <link rel="icon" type="image/png" sizes="32x32"
-        href="{% static 'images/favicon-32x32.png' %}">
-  <link rel="icon" type="image/png" sizes="16x16"
-        href="{% static 'images/favicon-16x16.png' %}"> -->
   <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
-  <!-- <link rel="mask-icon"
-        href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5"> -->
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="theme-color" content="#ffffff">
 
@@ -29,32 +20,19 @@
   <link rel="stylesheet" href="{% static 'css/nightwatch.css' %}">
 
   <!-- Utilities -->
-  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-
-  <!-- Bokeh stuff -->
-  <script src="{% static 'js/bokeh.min.js' %}"></script>
-  <script src="{% static 'js/bokeh-gl.min.js' %}"></script>
-  <script src="{% static 'js/bokeh-widgets.min.js' %}"></script>
-  <script src="{% static 'js/bokeh-tables.min.js' %}"></script>
-
-  <script type="text/javascript">
-    Bokeh.set_log_level("info");
-  </script>
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 
   <!-- HAniS stuff -->
-  <!-- <script type="text/javascript"
-          src="{% static 'js/hanisf_min.js' %}"></script> -->
+  <!--
+  <script type="text/javascript"
+          src="{% static 'js/hanisf_min.js' %}"></script>
+  -->
 
   <!-- If using the non minified hanis, need to include pointerEvents too -->
   <script type="text/javascript"
           src="{% static 'js/hanisf.js' %}"></script>
   <script type="text/javascript"
           src="{% static 'js/pointerEvents.js' %}"></script>
-
-  <script type="text/javascript"
-          src="{% static 'conf/hanis_radar.js' %}"></script>
-  <script type="text/javascript"
-          src="{% static 'conf/hanis_goes.js' %}"></script>
 
   <!-- 7/14/16 Segment display clock -->
   <!-- http://www.3quarks.com/en/SegmentDisplay/index.html -->
@@ -73,12 +51,10 @@
     display.segmentWidth    = 3.0;
     display.segmentDistance = 0.2;
 
-    // display.pattern         = "##:##:## ####";
     display.pattern         = "#############:##:## ####";
     display.colorOn         = "#3498db";
     display.colorOff        = "#0a1e2b";
     display.draw();
-
     animate();
 
     function animate() {
@@ -152,9 +128,9 @@
             <button class="btn btn--primary" data-filter="weather">
               Weather</button>
             <button class="btn btn--primary" data-filter="telescopeStatus">
-              LDT Status</button>
+              Telescope Status</button>
             <button class="btn btn--primary" data-filter="webcam">
-              LDT Webcams</button>
+              Site Webcams</button>
             <button class="btn btn--primary" data-filter="instruments">
               Instruments</button>
             <button class="btn btn--primary" data-filter="*">Show All</button>
@@ -177,60 +153,88 @@
          style="padding:0px; width:620px; height:620px; border:none; position:relative;"
          id="hanraddiv">
     </div>
-    <script>
-      function sleep(ms) {
+  <script type="text/javascript">
+    var hradObj = new HAniSF();
+    var hsatObj = new HAniSF();
+
+    function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
-      async function init() {
-        // NOTE: the name of the variable here MUST match what's in the
-        //   config file/JS blob because it's used to refresh the right
-        //   file.  This is a hack to work around a bug in 4.28 thru 4.30
-        hsatObj = new HAniSF();
-        hsatObj.setup(hansat, 'hansatdiv');
+    function refreshHanii() {
+        var refreshInterval = 300000;
+        hradObj.reloadFOF();
+	hsatObj.reloadFOF();
+        setTimeout("refreshHanii()", refreshInterval);
+        console.log("Updated all Hanii! Timer reset.");
+	console.log(refreshInterval);
+      }
+    async function init() {
+      hsatObj.setup('../static/conf/hanis_goes.txt', 'hansatdiv', aready);
+      console.log("HAniS GOES loaded with callback aready");
 
-        hradObj = new HAniSF();
-        hradObj.setup(hanrad, 'hanraddiv');
-        await sleep(1500);
-        console.log("Slept for 1500 msec to init")
-      };
-      window.onload = init();
-      console.log("HAniS init complete")
+      hradObj.setup('../static/conf/hanis_radar.txt', 'hanraddiv');
+      console.log("HAniS radar loaded");
+
+      await sleep(15000);
+      console.log("Slept for 15000 msec to init")
 
       hsatObj.toggleIsLooping();
-      hradObj.toggleIsLooping();
-      console.log("hsat/hrad toggled")
-    </script>
-
+      console.log("GOES image looping toggled");
+      
+      refreshHanii();
+    }
+    function aready() {
+      hsatObj.frameChanged(changb);
+      hsatObj.zoomChanged(zchangb);
+    }
+    function changb(frm) {
+      hradObj.showFrame(frm);
+    }
+    function zchangb(z) {
+      hradObj.showZoom(z);
+    }
+    window.onload = init();
+    console.log("HAniS init complete");
+  </script>
     <div class="element-item weather"
          data-groups='["home", "tv1", "weather"]'>
-        <canvas id="allsky" height=600px width=600px></canvas>
+        <canvas id="allsky" height=590px width=590px></canvas>
     </div>
 
-    <div class="element-item bokeh"
-         data-groups='["home", "tv2", "weather", "instruments"]'
-         style="height:525px;width:515px">
-      <div class='bokeh-embed plot'>{{ ldtweatherplot | safe }}</div>
-      <div class='bokeh-embed table'>{{ ldtweathertable | safe }}</div>
-    </div>
-
-    <div class="element-item bokeh"
-         data-groups='["home", "tv2", "weather"]'
-         style="height:525px;width:515px">
-      <div class='bokeh-embed plot'>{{ ldtwind | safe }}</div>
-      <div class='bokeh-embed table'>{{ ldtwindtable | safe }}</div>
-    </div>
-
+    <!--
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
          style="height:420px;width:400px">
       <div class='bokeh-embed table'>{{ facsum_tcs | safe }}</div>
     </div>
+    -->
 
+       <!-- Grafana embed tests -->
+    <div class="element-item bokeh"
+         data-groups='["home", "tv2", "telescopeStatus"]'>
+         <object class="grafana-iframe"
+            data="http://dctsleeperservice.lowell.edu:3000/d-solo/af558cc3-c025-4420-8ede-b32f1bc9ec44/ldt-status?orgId=2&panelId=1&refresh=1m&theme=dark&output=embed"
+            width="400"
+            height="420"
+            frameborder="0"></object>
+    </div>
+
+    <div class="element-item bokeh"
+         data-groups='["home", "tv2", "telescopeStatus"]'>
+         <object class="grafana-iframe"
+            data="http://dctsleeperservice.lowell.edu:3000/d-solo/af558cc3-c025-4420-8ede-b32f1bc9ec44/ldt-status?orgId=2&panelId=2&refresh=1m&theme=dark&output=embed"
+            width="400"
+            height="420"
+            frameborder="0"></object>
+    </div>
+
+<!--
     <div class="element-item bokeh"
          data-groups='["home", "tv2", "telescopeStatus", "instruments"]'
          style="height:280px;width:400px">
       <div class='bokeh-embed table'>{{ facsum_lpi | safe }}</div>
     </div>
+-->
 
     <!-- LDT Webcams -->
     <!-- (Yes, I know I can template these in django) -->
@@ -250,8 +254,9 @@
     </div>
 
     <div class="element-item webcam"
-         data-groups='["webcam"]'>
-      <canvas id="mezzanine" height=235px width=400px></canvas>
+         data-groups='["home", "tv2", "webcam", "instruments"]'>
+      <canvas id="obsrot" height=235px width=400px></canvas>
+      <!-- <canvas id="mezzanine" height=235px width=400px></canvas> -->
       <!-- <canvas id="heliumcomp" height=235px width=400px></canvas> -->
     </div>
 
@@ -267,11 +272,21 @@
 
     <!-- Grafana embed tests -->
     <div class="element-item bokeh"
-         data-groups='["weather"]'>
-         <iframe src="http://dctsleeperservice.lowell.edu:3000/d-solo/dTf7Gm1Mk/facility-overview?orgId=2&refresh=1m&theme=dark&panelId=22"
-         width="450"
-         height="200"
-         frameborder="0"></iframe>
+         data-groups='["home", "tv2", "weather"]'>
+	 <object class="grafana-iframe"
+            data="http://dctsleeperservice.lowell.edu:3000/d-solo/a0627370-8189-4f75-8e13-d69138983383/ldt-weather?orgId=2&panelId=2&refresh=1m&theme=dark&output=embed" 
+            width="815"
+            height="290"
+            frameborder="0"></object>
+    </div>
+
+    <div class="element-item bokeh"
+         data-groups='["home", "tv2", "weather"]'>
+	 <object class="grafana-iframe"
+            data="http://dctsleeperservice.lowell.edu:3000/d-solo/a0627370-8189-4f75-8e13-d69138983383/ldt-weather?orgId=2&panelId=3&refresh=1m&theme=dark&output=embed" 
+            width="815"
+            height="290"
+            frameborder="0"></object>
     </div>
 
   </div>
