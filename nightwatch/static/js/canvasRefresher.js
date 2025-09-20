@@ -1,14 +1,14 @@
 var uradict = {
-    gate: "http://dctsleeperservice:9876/webcams/dct/thumb_gate.jpg",
-    genset: "http://dctsleeperservice:9876/webcams/dct/thumb_genset.jpg",
-    heliumcomp: "http://dctsleeperservice:9876/webcams/dct/thumb_heliumcomp.jpg",
-    mezzanine: "http://dctsleeperservice:9876/webcams/dct/thumb_mezzanine.jpg",
-    obslevel: "http://dctsleeperservice:9876/webcams/dct/thumb_obs_level.jpg",
-    obsrot: "http://dctsleeperservice:9876/webcams/dct/thumb_obs_level_rot.jpg",
-    telbldg: "http://dctsleeperservice:9876/webcams/dct/thumb_tel_bldg.jpg",
-    domeroof: "http://dctsleeperservice:9876/webcams/dct/thumb_dome_roof.jpg",
-    utilyard: "http://dctsleeperservice:9876/webcams/dct/thumb_util_yard.jpg",
-    allsky: "http://dctsleeperservice:9876/webcams/dct/allsky.jpg",
+    gate: "http://nightwatch.lowell.local/webcams/dct/thumb_gate.jpg",
+    genset: "http://nightwatch.lowell.local/webcams/dct/thumb_genset.jpg",
+    heliumcomp: "http://nightwatch.lowell.local/webcams/dct/thumb_heliumcomp.jpg",
+    mezzanine: "http://nightwatch.lowell.local/webcams/dct/thumb_mezzanine.jpg",
+    obslevel: "http://nightwatch.lowell.local/webcams/dct/thumb_obs_level.jpg",
+    obsrot: "http://nightwatch.lowell.local/webcams/dct/thumb_obs_level_rot.jpg",
+    telbldg: "http://nightwatch.lowell.local/webcams/dct/thumb_tel_bldg.jpg",
+    domeroof: "http://nightwatch.lowell.local/webcams/dct/thumb_dome_roof.jpg",
+    utilyard: "http://nightwatch.lowell.local/webcams/dct/thumb_util_yard.jpg",
+    allsky: "http://nightwatch.lowell.local/webcams/dct/allsky.jpg",
 }
 
 var refreshInterval = 30000;
